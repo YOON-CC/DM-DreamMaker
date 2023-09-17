@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fabric } from 'fabric';
 import '../style/editor.css';
-import DownloadButton from '../components/DownloadButton'; // 파일 경로에 따라 실제 경로를 설정하세요.
-
+import DownloadButton from '../components/DownloadButton';
+import { addRectToCanvas, addCircleToCanvas, addTriangleToCanvas, addTextboxToCanvas } from '../utils/AddCanvasUtils'; 
+import { handleScalingRect, handleScalingCircle, handleScalingTriangle, handleScalingTextbox } from '../utils/ScalingCanvasUtils';
 
 const Editor = () => {
   type ObjectSize = {
@@ -12,7 +13,7 @@ const Editor = () => {
     ry?: number;
     // 더 많은 프로퍼티를 여기에 추가
   };
-  // const canvasRef = useRef(null);
+
   const [objectCoordinates, setObjectCoordinates] = useState({ x: 0, y: 0 });
   const [objectSize, setObjectSize] = useState<ObjectSize>({});
 
@@ -23,154 +24,31 @@ const Editor = () => {
     if (canvasRef.current) {
       const canvas = new fabric.Canvas(canvasRef.current);
 
+      //도형 생성
+      const handleAddRect = () => {if (canvas) {addRectToCanvas(canvas);}};
+      const handleAddCircle = () => {if (canvas) { addCircleToCanvas(canvas);}};
+      const handleAddTriangle = () => {if (canvas) {addTriangleToCanvas(canvas);}};
+      const handleAddTextbox = () => {if (canvas) {addTextboxToCanvas(canvas);}};
       
-      //크기 상태값 변화
+      //도형 스케일링
       canvas.on('object:scaling', (e) => {
         const activeObject = e.target as fabric.Rect;
-      
-        if (activeObject instanceof fabric.Rect) {
-          const scaleX = activeObject.scaleX ?? 1;
-          const scaleY = activeObject.scaleY ?? 1;
-          const width = activeObject.width ?? 0;
-          const height = activeObject.height ?? 0;
-          const left = activeObject.left ?? 0;
-          const top = activeObject.top ?? 0;
-      
-          activeObject.set({
-            width: width * scaleX,
-            height: height * scaleY,
-            scaleX: 1,
-            scaleY: 1
-          });
-
-
-      
-          setObjectCoordinates({ x: left, y: top });
-          setObjectSize({ width, height });
-      
-          canvas.renderAll();
-        }
-        
+        handleScalingRect(activeObject, setObjectCoordinates, setObjectSize, canvas);
       });
 
       canvas.on('object:scaling', (e) => {
         const activeObject = e.target as fabric.Ellipse;
-      
-        if (activeObject instanceof fabric.Ellipse) {
-          const scaleX = activeObject.scaleX ?? 1;
-          const scaleY = activeObject.scaleY ?? 1;
-          const width = activeObject.width ?? 0;
-          const height = activeObject.height ?? 0;
-          const rx = activeObject.rx ?? 0;
-          const ry = activeObject.ry ?? 0;
-          const left = activeObject.left ?? 0;
-          const top = activeObject.top ?? 0;
-      
-          console.log(width*scaleX, height*scaleY, rx, ry, scaleX, scaleY)
-          activeObject.set({
-            width: width * scaleX,
-            height: height * scaleY,
-            rx : rx*scaleX,
-            ry : ry*scaleY,
-            scaleX: 1,
-            scaleY: 1
-          });
-      
-          setObjectCoordinates({ x: left, y: top });
-          setObjectSize({ width, height , rx, ry});
-      
-          canvas.renderAll();
-        }
-        
+        handleScalingCircle(activeObject, setObjectCoordinates, setObjectSize, canvas);
       });
 
       canvas.on('object:scaling', (e) => {
         const activeObject = e.target as fabric.Triangle;
-      
-        if (activeObject instanceof fabric.Triangle) {
-          const scaleX = activeObject.scaleX ?? 1;
-          const scaleY = activeObject.scaleY ?? 1;
-          const width = activeObject.width ?? 0;
-          const height = activeObject.height ?? 0;
-          const left = activeObject.left ?? 0;
-          const top = activeObject.top ?? 0;
-
-          activeObject.set({
-            width: width * scaleX,
-            height: height * scaleY,
-            scaleX: 1,
-            scaleY: 1
-          });
-      
-          setObjectCoordinates({ x: left, y: top });
-          setObjectSize({ width, height });
-      
-          canvas.renderAll();
-        }
-        
+        handleScalingTriangle(activeObject, setObjectCoordinates, setObjectSize, canvas); 
       });
       canvas.on('object:scaling', (e) => {
         const activeObject = e.target as fabric.Textbox;
-      
-        if (activeObject instanceof fabric.Textbox) {
-          const scaleX = activeObject.scaleX ?? 1;
-          const scaleY = activeObject.scaleY ?? 1;
-          const width = activeObject.width ?? 0;
-          const height = activeObject.height ?? 0;
-          const left = activeObject.left ?? 0;
-          const top = activeObject.top ?? 0;
-
-          activeObject.set({
-            width: width * scaleX,
-            height: height * scaleY,
-            scaleX: 1,
-            scaleY: 1
-          });
-      
-          setObjectCoordinates({ x: left, y: top });
-          setObjectSize({ width, height });
-      
-          canvas.renderAll();
-        }
-        
+        handleScalingTextbox(activeObject, setObjectCoordinates, setObjectSize, canvas);
       });
-      
-      const handleAddRect = () => {
-        const newRect = new fabric.Rect({
-          left: Math.random() * 400,
-          top: Math.random() * 400,
-          width: 100,
-          height: 100,
-          fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
-          
-        });
-
-        canvas.add(newRect);
-      };
-
-      const handleAddCircle = () => {
-        const newCircle = new fabric.Ellipse({
-          left: Math.random() * 400,
-          top: Math.random() * 400,
-          rx: 50, // 가로 반지름
-          ry: 50, // 세로 반지름
-          fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
-        });
-
-        canvas.add(newCircle);
-      };
-
-      const handleAddTriangle = () => {
-        const newTriangle = new fabric.Triangle({
-          left: Math.random() * 400,
-          top: Math.random() * 400,
-          width: 100,
-          height: 100,
-          fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
-        });
-
-        canvas.add(newTriangle);
-      };
 
       const handleChangeColor = () => {
         const activeObject = canvas.getActiveObject();
@@ -182,22 +60,6 @@ const Editor = () => {
           }
         }
       };
-
-      const handleAddTextbox = () => {
-        const newTextbox = new fabric.Textbox('Enter your text', {
-          left: Math.random() * 400,
-          top: Math.random() * 400,
-          width: 150, 
-          fontSize: 20,
-          fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
-          editable: true, 
-        });
-
-        canvas.add(newTextbox);
-        canvas.setActiveObject(newTextbox); 
-        canvas.renderAll(); 
-      };
-
 
       const handleDeleteSelectedObjects = () => {
         const selectedObjects = canvas.getActiveObjects();
@@ -310,11 +172,7 @@ const Editor = () => {
         addImageShapeButton?.removeEventListener('click', handleAddImageShape);
 
         document.removeEventListener('keydown', handleKeyboardDelete);
-        addButton?.removeEventListener('click', handleAddRect);
-        // changeRadiusIncreaseButton?.removeEventListener('click', () => handleChangeRadius(true));
-        // changeRadiusDecreaseButton?.removeEventListener('click', () => handleChangeRadius(false));
-
-        
+        addButton?.removeEventListener('click', handleAddRect);        
         addCircleButton?.removeEventListener('click', handleAddCircle);
         addTriangleButton?.removeEventListener('click', handleAddTriangle);
         changeColorButton?.removeEventListener('click', handleChangeColor);
@@ -336,8 +194,8 @@ const Editor = () => {
         <button id="add-button">Add Rectangle</button>
         <button id="add-circle-button">Add Circle</button>
         <button id="add-triangle-button">Add Triangle</button>
-        <button id="change-color-button">Change Color</button>
         <button id="add-textbox-button">Add Textbox</button>
+        <button id="change-color-button">Change Color</button>
         <button id="delete-button">Delete Selected Objects</button>
         <button id="send-backwards-button">Send Backwards</button>
         <button id="bring-forward-button">Bring Forward</button>
