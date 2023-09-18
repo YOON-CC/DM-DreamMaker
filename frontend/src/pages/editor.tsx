@@ -23,6 +23,7 @@ const Editor = () => {
   useEffect(() => { 
     if (canvasRef.current) {
       const canvas = new fabric.Canvas(canvasRef.current);
+      
 
       //도형 생성
       const handleAddRect = () => {if (canvas) {addRectToCanvas(canvas);}};
@@ -166,6 +167,7 @@ const Editor = () => {
 
       setCanvas(canvas);
 
+
       return () => {
         canvas.dispose();
         canvas.off('object:moving');
@@ -185,27 +187,53 @@ const Editor = () => {
   }, []);
 
   return (
-    <div className='editor_body'>
-      <div className='tool_container_left'>
-
+    <div className='body'>
+      <div className='editor_header'>
+        <div className='editor_header_logo_container'></div>
+        <div className='editor_header_tool_container'>
+          <div className='editor_header_tool_container_btn'>
+            <img src="../images/figures.png" style={{ width: "60%", height: "80%", marginTop:"8%", marginLeft:"19%"}} />
+              {/* <button id="add-button">Add Rectangle</button>
+              <button id="add-circle-button">Add Circle</button>
+              <button id="add-triangle-button">Add Triangle</button>
+              <button id="add-textbox-button">Add Textbox</button> */}
+          </div>
+          <div className='editor_header_tool_container_btn'>
+            <img src="../images/text.png" style={{ width: "67%", height: "80%", marginTop:"8.2%", marginLeft:"17%"}} />
+              {/* <button id="add-button">Add Rectangle</button>
+              <button id="add-circle-button">Add Circle</button>
+              <button id="add-triangle-button">Add Triangle</button>
+              <button id="add-textbox-button">Add Textbox</button> */}
+          </div>
+          <div className='editor_header_tool_container_btn'>
+            <img src="../images/photo.png" style={{ width: "67%", height: "80%", marginTop:"8%", marginLeft:"16%"}} />
+              {/* <button id="add-button">Add Rectangle</button>
+              <button id="add-circle-button">Add Circle</button>
+              <button id="add-triangle-button">Add Triangle</button>
+              <button id="add-textbox-button">Add Textbox</button> */}
+          </div>
+        </div>
+          {/* <button id="change-color-button">Change Color</button>
+          <button id="delete-button">Delete Selected Objects</button>
+          <button id="send-backwards-button">Send Backwards</button>
+          <button id="bring-forward-button">Bring Forward</button>
+          <button id="add-image-shape-button">Add Image Shape</button>
+          <button id="change-radius-input-button">Change Radius (Input)</button>
+          <div>Object Coordinates: X: {objectCoordinates.x.toFixed(2)}, Y: {objectCoordinates.y.toFixed(2)}</div>
+          <div> Object size: Width: {objectSize.width !== undefined ? objectSize.width.toFixed(2) : "N/A"}, Height: {objectSize.height !== undefined ? objectSize.height.toFixed(2) : "N/A"}</div> */}
+        <div className='editor_header_download_container'>
+          <DownloadButton canvas={canvas}></DownloadButton>
+        </div>
       </div>
-      <div className='canvas_container'>
-        <canvas ref={canvasRef} width={1000} height={500}></canvas>
-        <button id="add-button">Add Rectangle</button>
-        <button id="add-circle-button">Add Circle</button>
-        <button id="add-triangle-button">Add Triangle</button>
-        <button id="add-textbox-button">Add Textbox</button>
-        <button id="change-color-button">Change Color</button>
-        <button id="delete-button">Delete Selected Objects</button>
-        <button id="send-backwards-button">Send Backwards</button>
-        <button id="bring-forward-button">Bring Forward</button>
-        <button id="add-image-shape-button">Add Image Shape</button>
-        <button id="change-radius-input-button">Change Radius (Input)</button>
-        <p>Object Coordinates: X: {objectCoordinates.x.toFixed(2)}, Y: {objectCoordinates.y.toFixed(2)}</p>
-        <p> Object size: Width: {objectSize.width !== undefined ? objectSize.width.toFixed(2) : "N/A"}, Height: {objectSize.height !== undefined ? objectSize.height.toFixed(2) : "N/A"}</p>
-        <DownloadButton canvas={canvas}></DownloadButton>
+      <div className='editor_body'>
+        <div className='editor_body_left'></div>
+        <div className='editor_body_center'>
+          <div className='canvas_container'>
+            <canvas ref={canvasRef}  width={1000} height={500}></canvas>
+          </div>
+        </div>
+        <div className='editor_body_right'></div>
       </div>
-      <div className='tool_container_right'></div>
     </div>
   );
 };
