@@ -4,17 +4,21 @@ import '../style/editor.css';
 import SaveButton from '../components/savebutton';
 import LoadButton from '../components/loadbutton';
 import DownloadButton from '../components/DownloadButton';
-import { addRectToCanvas, addCircleToCanvas, addTriangleToCanvas, addTextboxToCanvas } from '../utils/AddCanvasUtils'; 
-import { handleScalingRect, handleScalingCircle, handleScalingTriangle, handleScalingTextbox } from '../utils/ScalingCanvasUtils';
+import { addRectToCanvas, addCircleToCanvas, addTriangleToCanvas, addTextboxToCanvas, addImageToCanvas } from '../utils/AddCanvasUtils'; 
+import { handleScalingRect, handleScalingCircle, handleScalingTriangle, handleScalingTextbox, handleScalingImage } from '../utils/ScalingCanvasUtils';
+
+type ObjectSize = {
+  width?: number;
+  height?: number;
+  rx?: number;
+  ry?: number;
+  // 더 많은 프로퍼티를 여기에 추가
+};
 
 const Editor = () => {
-  type ObjectSize = {
-    width?: number;
-    height?: number;
-    rx?: number;
-    ry?: number;
-    // 더 많은 프로퍼티를 여기에 추가
-  };
+
+  //도형 툴바
+  const [showTool, setShowTool] = useState(true);
 
   const [objectCoordinates, setObjectCoordinates] = useState({ x: 0, y: 0 });
   const [objectSize, setObjectSize] = useState<ObjectSize>({});
@@ -31,6 +35,7 @@ const Editor = () => {
       const handleAddCircle = () => {if (canvas) { addCircleToCanvas(canvas);}};
       const handleAddTriangle = () => {if (canvas) {addTriangleToCanvas(canvas);}};
       const handleAddTextbox = () => {if (canvas) {addTextboxToCanvas(canvas);}};
+      const handleAddImageShape = () => { if(canvas) {addImageToCanvas(canvas);}};
       
       //도형 스케일링
       canvas.on('object:scaling', (e) => {
@@ -50,6 +55,10 @@ const Editor = () => {
       canvas.on('object:scaling', (e) => {
         const activeObject = e.target as fabric.Textbox;
         handleScalingTextbox(activeObject, setObjectCoordinates, setObjectSize, canvas);
+      });
+      canvas.on('object:scaling', (e) => {
+        const activeObject = e.target as fabric.Image;
+        handleScalingImage(activeObject, setObjectCoordinates, setObjectSize, canvas);
       });
 
       const handleChangeColor = () => {
@@ -90,20 +99,6 @@ const Editor = () => {
         const activeObject = canvas.getActiveObject();
         if (activeObject) {
           canvas.bringForward(activeObject);
-        }
-      };
-
-      const handleAddImageShape = () => {
-        const imageUrl = prompt('Enter image URL:');
-        if (imageUrl) {
-          fabric.Image.fromURL(imageUrl, (img) => {
-            img.set({
-              left: Math.random() * 200,
-              top: Math.random() * 200,
-            });
-
-            canvas.add(img);
-          });
         }
       };
    
@@ -193,30 +188,20 @@ const Editor = () => {
       <div className='editor_header'>
         <div className='editor_header_logo_container'></div>
         <div className='editor_header_tool_container'>
-          <div className='editor_header_tool_container_btn'>
+          <div className='editor_header_tool_container_btn' onClick={() =>setShowTool(!showTool)}>
             <img src="../images/figures.png" style={{ width: "60%", height: "80%", marginTop:"8%", marginLeft:"19%"}} />
-
           </div>
-          <div className='editor_header_tool_container_btn'>
+          <div id="add-textbox-button" onClick={() => !showTool && setShowTool(true)}>
             <img src="../images/text.png" style={{ width: "67%", height: "80%", marginTop:"8.2%", marginLeft:"17%"}} />
-              {/* <button id="add-button">Add Rectangle</button>
-              <button id="add-circle-button">Add Circle</button>
-              <button id="add-triangle-button">Add Triangle</button>
-              <button id="add-textbox-button">Add Textbox</button> */}
           </div>
-          <div className='editor_header_tool_container_btn'>
+          <div id='add-image-shape-button'>
             <img src="../images/photo.png" style={{ width: "67%", height: "80%", marginTop:"8%", marginLeft:"16%"}} />
-              {/* <button id="add-button">Add Rectangle</button>
-              <button id="add-circle-button">Add Circle</button>
-              <button id="add-triangle-button">Add Triangle</button>
-              <button id="add-textbox-button">Add Textbox</button> */}
           </div>
         </div>
           {/* <button id="change-color-button">Change Color</button>
           <button id="delete-button">Delete Selected Objects</button>
           <button id="send-backwards-button">Send Backwards</button>
           <button id="bring-forward-button">Bring Forward</button>
-          <button id="add-image-shape-button">Add Image Shape</button>
           <button id="change-radius-input-button">Change Radius (Input)</button>
           <div>Object Coordinates: X: {objectCoordinates.x.toFixed(2)}, Y: {objectCoordinates.y.toFixed(2)}</div>
           <div> Object size: Width: {objectSize.width !== undefined ? objectSize.width.toFixed(2) : "N/A"}, Height: {objectSize.height !== undefined ? objectSize.height.toFixed(2) : "N/A"}</div> */}
@@ -227,11 +212,14 @@ const Editor = () => {
         </div>
       </div>
       <div className='editor_body'>
+        <div className='editor_body_toolbox'>
+          <button id="add-button"></button>
+          <button id="add-circle-button"></button>
+          <img id="add-triangle-button"  src="../images/triangle.png"/>
+        </div>
+        {showTool && (<div className='editor_body_toolbox_cover'></div>)}
         <div className='editor_body_left'>
-          <button id="add-button">Add Rectangle</button>
-              <button id="add-circle-button">Add Circle</button>
-              <button id="add-triangle-button">Add Triangle</button>
-              <button id="add-textbox-button">Add Textbox</button>
+          
         </div>
         <div className='editor_body_center'>
           <div className='canvas_container'>

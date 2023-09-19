@@ -103,3 +103,19 @@ export function handleScalingTextbox(activeObject: fabric.Object | null, setObje
         canvas.renderAll();
     }
 }
+
+export function handleScalingImage(activeObject: fabric.Object | null, setObjectCoordinates: React.Dispatch<React.SetStateAction<{ x: number; y: number }>>, setObjectSize: React.Dispatch<React.SetStateAction<ObjectSize>>, canvas: fabric.Canvas) {
+    if (activeObject instanceof fabric.Image) {
+        const scaleX = activeObject.scaleX ?? 1;
+        const scaleY = activeObject.scaleY ?? 1;
+        const width = activeObject.width ?? 0;
+        const height = activeObject.height ?? 0;
+        const left = activeObject.left ?? 0;
+        const top = activeObject.top ?? 0;
+    
+        setObjectCoordinates({ x: left, y: top });
+        setObjectSize({ width, height });
+    
+        canvas.renderAll();
+    }
+}

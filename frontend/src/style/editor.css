@@ -49,6 +49,30 @@
     filter: brightness(120%);
     background-color: #2c2c2c;
 }
+#add-textbox-button{
+    height : 100%;
+    width : 33.3%;
+    border-left: 1px solid #232323; /* 왼쪽 테두리 색상 및 두께 설정 */
+    border-right: 1px solid #232323; /* 오른쪽 테두리 색상 및 두께 설정 */
+    cursor: pointer;
+}
+#add-textbox-button:hover{
+    /* background-color: aqua; */
+    filter: brightness(120%);
+    background-color: #2c2c2c;
+}
+#add-image-shape-button{
+    height : 100%;
+    width : 33.3%;
+    border-left: 1px solid #232323; /* 왼쪽 테두리 색상 및 두께 설정 */
+    border-right: 1px solid #232323; /* 오른쪽 테두리 색상 및 두께 설정 */
+    cursor: pointer;
+}
+#add-image-shape-button:hover{
+    /* background-color: aqua; */
+    filter: brightness(120%);
+    background-color: #2c2c2c;
+}
 .editor_body{
     position: relative;
     /* background-color: red; */
@@ -56,6 +80,51 @@
     width: 100%;  
     display: flex;
 }
+.editor_body_toolbox{
+    position: absolute;
+
+    background-color: rgba(255, 255, 255, 0.112);
+    width: 28%;
+    height : 11%;
+    top: 5.6%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display : flex;
+}
+.editor_body_toolbox_cover{
+    position: absolute;
+    background-color: #232323;
+    width: 30%;
+    height : 12%;
+    top: 6%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#add-button{
+    background-color: rgb(205, 205, 205);
+    border: none;
+    width: 14%;
+    height: 80%;
+    margin-top: 1.7%;
+    margin-left: 2%;
+    cursor: pointer;
+}
+#add-circle-button{
+    background-color: rgb(205, 205, 205);
+    border: none;
+    width: 14%;
+    height: 80%;
+    margin-top: 1.7%;
+    margin-left: 4%;
+    cursor: pointer;
+    border-radius: 50%;
+}
+#add-triangle-button{
+    width: 19%;
+    height: 100%;
+    cursor: pointer;
+}
+
 .editor_body_left{
     background-color: #2c2c2c;
     height: 100%;

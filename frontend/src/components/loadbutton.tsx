@@ -30,7 +30,17 @@ const LoadButton: React.FC<LoadButtonProps> = ({ canvas }) => {
                         break;
                     case 'textbox':
                         fabricObject = new fabric.Textbox(objInfo.text, objInfo);
-                        break;
+                        break;      
+                    case 'image':
+                        const imgElement = new Image();
+                        imgElement.src = objInfo.src;
+                        imgElement.onload = () => {
+                            fabricObject = new fabric.Image(imgElement, objInfo);
+                            if (canvas) {
+                                canvas.add(fabricObject);
+                            }
+                        };
+                        break;      
                     default:
                         break;
                 }

@@ -118,6 +118,33 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           const TextboxHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; transform: rotate(${object.angle}deg);">${object.text}</div>`;
           htmlContent += TextboxHtml;
         }       
+        if (object instanceof fabric.Image) {
+          // Fabric.js에서 image 객체인 경우
+          const imageUrl = object.getSrc(); // 이미지 URL 가져오기
+
+          const originalLeft = object.left?? 0; // 부모 태그로부터의 left
+          const originalTop = object.top ?? 0; // 부모 태그로부터의 top
+          
+          const angleInDegrees = - (object.angle?? 0); // 회전 각도
+          const angleInRadians = (angleInDegrees * Math.PI) / 180;
+
+          const centerX = object.getCenterPoint().x;
+          const centerY = object.getCenterPoint().y;
+          
+          // 회전 변환 후의 left와 top 계산
+          const newX = centerX + (originalLeft - centerX) * Math.cos(angleInRadians) - (originalTop - centerY) * Math.sin(angleInRadians);
+          const newY = centerY + (originalLeft - centerX) * Math.sin(angleInRadians) + (originalTop - centerY) * Math.cos(angleInRadians);
+          
+          const ol = (newX ?? 0) / 1000 * 100
+          const ot = (newY ?? 0) / 500 * 100
+          const ow = ((object.width?? 0)*(object.scaleX?? 0)) / 1000 * 100
+          const oh = ((object.height?? 0) * (object.scaleY?? 0)) / 500 * 100
+
+          console.log("dd", (object.width?? 0)*(object.scaleX?? 0), (object.height?? 0) * (object.scaleY?? 0))
+
+          const ImgHtml = `<img src="${imageUrl}" alt="Fabric.js Image" style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; transform: rotate(${object.angle}deg);"></img>`;
+          htmlContent += ImgHtml;
+        }   
         // 다른 객체 유형처리 ▼▼▼▼
       });
   
