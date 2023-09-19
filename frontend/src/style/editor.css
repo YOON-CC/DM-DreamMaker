@@ -28,12 +28,11 @@
     border-right: 1px solid #232323; /* 오른쪽 테두리 색상 및 두께 설정 */
     display: flex;
 }
-.editor_header_download_container{
+.editor_header_button_container{
     /* background-color: aqua; */
     height : 100%;
     width : 18%;
-    border-left: 1px solid #232323; /* 왼쪽 테두리 색상 및 두께 설정 */
-    border-right: 1px solid #232323; /* 오른쪽 테두리 색상 및 두께 설정 */
+
     display: flex;
     justify-content: end;
 }

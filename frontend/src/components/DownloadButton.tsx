@@ -1,17 +1,18 @@
 import React from 'react';
 import { fabric } from 'fabric';
+import '../style/downloadbutton.css';
 
 interface DownloadButtonProps {
   canvas: fabric.Canvas | null;
 }
 
 const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
-  const handleDownloadCanvasAsImage = () => {
+  const handleDownloadCanvasAsHtml = () => {
     if (canvas) {
       const canvasObjects = canvas.getObjects();
     // console.log(canvasWidth, canvasHeight)
-      
-      // Canvas 내용을 저장할 HTML 문자열 초기화
+
+    // Canvas 내용을 저장할 HTML 문자열 초기화
       let htmlContent = '<!DOCTYPE html><html><head><title>Canvas Content</title></head><body>';
   
       // 각 객체를 순회하면서 HTML로 변환
@@ -138,7 +139,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
   };
 
   return (
-    <button onClick={handleDownloadCanvasAsImage}>Canvas 다운로드</button>
+    <button className='downloadbutton' onClick={handleDownloadCanvasAsHtml}>다운로드</button>
   );
 };
 

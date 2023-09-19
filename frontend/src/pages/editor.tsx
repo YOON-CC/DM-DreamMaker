@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fabric } from 'fabric';
 import '../style/editor.css';
+import SaveButton from '../components/savebutton';
+import LoadButton from '../components/loadbutton';
 import DownloadButton from '../components/DownloadButton';
 import { addRectToCanvas, addCircleToCanvas, addTriangleToCanvas, addTextboxToCanvas } from '../utils/AddCanvasUtils'; 
 import { handleScalingRect, handleScalingCircle, handleScalingTriangle, handleScalingTextbox } from '../utils/ScalingCanvasUtils';
@@ -24,7 +26,6 @@ const Editor = () => {
     if (canvasRef.current) {
       const canvas = new fabric.Canvas(canvasRef.current);
       
-
       //도형 생성
       const handleAddRect = () => {if (canvas) {addRectToCanvas(canvas);}};
       const handleAddCircle = () => {if (canvas) { addCircleToCanvas(canvas);}};
@@ -182,6 +183,7 @@ const Editor = () => {
         deleteButton?.removeEventListener('click', handleDeleteSelectedObjects);
         sendBackwardsButton?.removeEventListener('click', handleSendBackwards);
         bringForwardButton?.removeEventListener('click', handleBringForward);
+
       };
     }
   }, []);
@@ -193,10 +195,7 @@ const Editor = () => {
         <div className='editor_header_tool_container'>
           <div className='editor_header_tool_container_btn'>
             <img src="../images/figures.png" style={{ width: "60%", height: "80%", marginTop:"8%", marginLeft:"19%"}} />
-              {/* <button id="add-button">Add Rectangle</button>
-              <button id="add-circle-button">Add Circle</button>
-              <button id="add-triangle-button">Add Triangle</button>
-              <button id="add-textbox-button">Add Textbox</button> */}
+
           </div>
           <div className='editor_header_tool_container_btn'>
             <img src="../images/text.png" style={{ width: "67%", height: "80%", marginTop:"8.2%", marginLeft:"17%"}} />
@@ -221,12 +220,19 @@ const Editor = () => {
           <button id="change-radius-input-button">Change Radius (Input)</button>
           <div>Object Coordinates: X: {objectCoordinates.x.toFixed(2)}, Y: {objectCoordinates.y.toFixed(2)}</div>
           <div> Object size: Width: {objectSize.width !== undefined ? objectSize.width.toFixed(2) : "N/A"}, Height: {objectSize.height !== undefined ? objectSize.height.toFixed(2) : "N/A"}</div> */}
-        <div className='editor_header_download_container'>
+        <div className='editor_header_button_container'>
+          <LoadButton canvas={canvas}></LoadButton>
+          <SaveButton canvas={canvas}></SaveButton>
           <DownloadButton canvas={canvas}></DownloadButton>
         </div>
       </div>
       <div className='editor_body'>
-        <div className='editor_body_left'></div>
+        <div className='editor_body_left'>
+          <button id="add-button">Add Rectangle</button>
+              <button id="add-circle-button">Add Circle</button>
+              <button id="add-triangle-button">Add Triangle</button>
+              <button id="add-textbox-button">Add Textbox</button>
+        </div>
         <div className='editor_body_center'>
           <div className='canvas_container'>
             <canvas ref={canvasRef}  width={1000} height={500}></canvas>
