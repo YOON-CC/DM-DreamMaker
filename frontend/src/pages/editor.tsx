@@ -103,8 +103,9 @@ const Editor = () => {
       };
    
       const handleChangeRadiusInput = () => {
-        const borderRadiusInput = prompt('Enter border-radius value:');
-        const borderRadius = borderRadiusInput !== null ? parseFloat(borderRadiusInput) : 0;
+        const radiusInput = document.getElementById("radius-input") as HTMLInputElement;
+        const borderRadiusInput = radiusInput.value;
+        const borderRadius = parseFloat(borderRadiusInput) || 0;
       
         const activeObject = canvas.getActiveObject();
         if (activeObject instanceof fabric.Rect) {
@@ -113,17 +114,14 @@ const Editor = () => {
       
           const scaledWidth = activeObject.getScaledWidth();
           const scaledHeight = activeObject.getScaledHeight();
-
-          console.log("맞아?", scaledWidth)
+      
           const newRx = Math.min(borderRadius * scaleX, scaledWidth / 2);
           const newRy = Math.min(borderRadius * scaleY, scaledHeight / 2);
-
-          console.log("최종 rx, ry", newRx,)
+      
           activeObject.set('rx', newRx);
           activeObject.set('ry', newRy);
           canvas.renderAll();
         }
-        
       };
       const changeRadiusInputButton = document.getElementById('change-radius-input-button');
       changeRadiusInputButton?.addEventListener('click', handleChangeRadiusInput);
@@ -200,15 +198,12 @@ const Editor = () => {
         </div>
           {/* <button id="change-color-button">Change Color</button>
           <button id="delete-button">Delete Selected Objects</button>
-          <button id="send-backwards-button">Send Backwards</button>
-          <button id="bring-forward-button">Bring Forward</button>
-          <button id="change-radius-input-button">Change Radius (Input)</button>
-          <div>Object Coordinates: X: {objectCoordinates.x.toFixed(2)}, Y: {objectCoordinates.y.toFixed(2)}</div>
-          <div> Object size: Width: {objectSize.width !== undefined ? objectSize.width.toFixed(2) : "N/A"}, Height: {objectSize.height !== undefined ? objectSize.height.toFixed(2) : "N/A"}</div> */}
+           */}
         <div className='editor_header_button_container'>
           <LoadButton canvas={canvas}></LoadButton>
           <SaveButton canvas={canvas}></SaveButton>
           <DownloadButton canvas={canvas}></DownloadButton>
+           
         </div>
       </div>
       <div className='editor_body'>
@@ -226,7 +221,43 @@ const Editor = () => {
             <canvas ref={canvasRef}  width={1000} height={500}></canvas>
           </div>
         </div>
-        <div className='editor_body_right'></div>
+        <div className='editor_body_right'>
+          <div className='editor_body_right_size_container'>
+            <div className='editor_body_right_size_container_title'>사이즈</div>
+            <div className='editor_body_right_size_container_info_container'>
+              <div className='editor_body_right_size_container_info_container_title_1'>W</div>
+              <div className='editor_body_right_size_container_info_container_info_1'>{objectSize.width !== undefined ? objectSize.width.toFixed(2) : "N/A"}</div>
+              <div className='editor_body_right_size_container_info_container_title_2'>H</div>
+              <div className='editor_body_right_size_container_info_container_info_2'>{objectSize.height !== undefined ? objectSize.height.toFixed(2) : "N/A"}</div>
+            </div>
+          </div>
+          <div className='editor_body_right_location_container'>
+            <div className='editor_body_right_location_container_title'>위치</div>
+            <div className='editor_body_right_location_container_info_container'>
+              <div className='editor_body_right_location_container_info_container_title_1'>X</div>
+              <div className='editor_body_right_location_container_info_container_info_1'>{objectCoordinates.x.toFixed(2)}</div>
+              <div className='editor_body_right_location_container_info_container_title_2'>Y</div>
+              <div className='editor_body_right_location_container_info_container_info_2'>{objectCoordinates.y.toFixed(2)}</div>
+            </div>
+          </div>
+          <div className='editor_body_right_order_container'>
+            <div className='editor_body_right_order_container_title'>레이어 순서</div>
+            <div className='editor_body_right_order_container_info_container'>
+              <button id="bring-forward-button">앞으로 보내기</button>
+              <button id="send-backwards-button">뒤로 보내기</button>
+            </div>
+          </div>
+          <div className='editor_body_right_style_container'>
+            <div className='editor_body_right_style_container_title'>스타일</div>
+            <div className='editor_body_right_style_container_info_container'>
+              <div className='editor_body_right_style_container_info_container_title'>border radius</div>
+              <div className='editor_body_right_style_container_info_container_btn'>
+                <input id="radius-input" maxLength={2}/>
+                <button id="change-radius-input-button">적용</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
