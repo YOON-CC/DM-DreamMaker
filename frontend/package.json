@@ -11,7 +11,10 @@
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "fabric": "^5.3.0",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
+    "react-color": "^2.19.3",
+    "react-colorful": "^5.6.1",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
@@ -42,6 +45,8 @@
     ]
   },
   "devDependencies": {
-    "@types/fabric": "^5.3.4"
+    "@types/fabric": "^5.3.4",
+    "@types/lodash": "^4.14.198",
+    "@types/react-color": "^3.0.6"
   }
 }

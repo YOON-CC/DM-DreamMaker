@@ -350,7 +350,7 @@
 .editor_body_right_style_container{
     /* background-color: blue; */
     width: 90%;
-    height : 8%;
+    height : 40%;
     margin-left : 5%;
     margin-top: 5%;
     border-bottom: 2px solid #232323;
@@ -360,22 +360,22 @@
     font-size: 13px;
     color: #ffffff;
 }
-.editor_body_right_style_container_info_container{
+.editor_body_right_style_container_1_info_container{
     /* background-color: red; */
     width: 100%;
-    height:40%;
+    height:8%;
     margin-top: 5%;
     display: flex;
     justify-content: space-between;
 }
-.editor_body_right_style_container_info_container_title{
+.editor_body_right_style_container_1_info_container_title{
     font-size: 10px;
     color : #626262;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.editor_body_right_style_container_info_container_btn{
+.editor_body_right_style_container_1_info_container_btn{
     width: 40%;
     height:100%;
     display: flex;
@@ -405,4 +405,75 @@
 
     font-size: 10px;
     color: #ffffff;
+}
+.editor_body_right_style_container_info_container_2{
+    /* background-color: red; */
+    width: 100%;
+    height:90%;
+    margin-top: 5%;
+}
+.color_controller{
+    /* background-color: rgb(106, 255, 0); */
+    width: 100%;
+    height: 60%;
+    margin-top: 3%;
+}
+.editor_body_right_style_container_2_info_container{
+    display: flex;
+    /* background-color: aqua; */
+    height: 8%;
+    margin-top: 4%;
+    justify-content: space-between;
+    
+}
+.editor_body_right_style_container_2_info_container_title{
+    font-size: 10px;
+    color : #626262;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.editor_body_right_style_container_2_info_container_info{
+    position: relative;
+    width: 30%;
+    border: none;
+
+    text-align: center;
+    background-color: #232323;
+    font-size: 10px;
+    color: #ffffff;
+    border-radius: 5px;
+}
+.color_controller .react-colorful {
+    padding: 6%;
+    border-radius: 10px;
+    background: #232323;
+    width: 88%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.color_controller .react-colorful__saturation {
+    margin: 5% 0;
+    border-radius: 5px;
+    border-bottom: none;
+}
+
+.color_controller .react-colorful__hue {
+    order: -1;
+}
+.color_controller .react-colorful__saturation-pointer {
+    width: 15px;
+    height: 15px;
+}
+.color_controller .react-colorful__hue,
+.color_controller .react-colorful__alpha {
+    height: 10%;
+    border-radius: 5px;
+}
+
+.color_controller .react-colorful__hue-pointer,
+.color_controller .react-colorful__alpha-pointer {
+    width: 10%;
+    height: 100%;
 }

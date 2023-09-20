@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fabric } from 'fabric';
+import { SketchPicker } from 'react-color';
+import { HexColorPicker, HexColorInput   } from 'react-colorful';
+
 import '../style/editor.css';
 import SaveButton from '../components/savebutton';
 import LoadButton from '../components/loadbutton';
@@ -17,6 +20,8 @@ type ObjectSize = {
 
 const Editor = () => {
 
+  const [color, setColor] = useState('#000');
+  console.log(color)
   //도형 툴바
   const [showTool, setShowTool] = useState(true);
 
@@ -25,6 +30,18 @@ const Editor = () => {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
+
+  const handleChangeComplete = (newColor: string) => {
+    const activeObject = canvas?.getActiveObject();
+  
+    if (activeObject) {
+      setColor(newColor);
+  
+      // 캔버스에 선택된 객체의 색상을 업데이트
+      activeObject.set('fill', newColor);
+      canvas?.renderAll();
+    }
+  };
 
   useEffect(() => { 
     if (canvasRef.current) {
@@ -61,16 +78,7 @@ const Editor = () => {
         handleScalingImage(activeObject, setObjectCoordinates, setObjectSize, canvas);
       });
 
-      const handleChangeColor = () => {
-        const activeObject = canvas.getActiveObject();
-        if (activeObject) {
-          const newColor = prompt('Enter RGB color (e.g. "255, 0, 0"):');
-          if (newColor) {
-            activeObject.set('fill', `rgb(${newColor})`);
-            canvas.renderAll();
-          }
-        }
-      };
+
 
       const handleDeleteSelectedObjects = () => {
         const selectedObjects = canvas.getActiveObjects();
@@ -140,9 +148,6 @@ const Editor = () => {
       const addTriangleButton = document.getElementById('add-triangle-button');
       addTriangleButton?.addEventListener('click', handleAddTriangle);
 
-      const changeColorButton = document.getElementById('change-color-button');
-      changeColorButton?.addEventListener('click', handleChangeColor);
-
       const addTextboxButton = document.getElementById('add-textbox-button');
       addTextboxButton?.addEventListener('click', handleAddTextbox);
 
@@ -171,7 +176,6 @@ const Editor = () => {
         addButton?.removeEventListener('click', handleAddRect);        
         addCircleButton?.removeEventListener('click', handleAddCircle);
         addTriangleButton?.removeEventListener('click', handleAddTriangle);
-        changeColorButton?.removeEventListener('click', handleChangeColor);
         addTextboxButton?.removeEventListener('click', handleAddTextbox);
         deleteButton?.removeEventListener('click', handleDeleteSelectedObjects);
         sendBackwardsButton?.removeEventListener('click', handleSendBackwards);
@@ -196,7 +200,7 @@ const Editor = () => {
             <img src="../images/photo.png" style={{ width: "67%", height: "80%", marginTop:"8%", marginLeft:"16%"}} />
           </div>
         </div>
-          {/* <button id="change-color-button">Change Color</button>
+          {/*
           <button id="delete-button">Delete Selected Objects</button>
            */}
         <div className='editor_header_button_container'>
@@ -249,16 +253,27 @@ const Editor = () => {
           </div>
           <div className='editor_body_right_style_container'>
             <div className='editor_body_right_style_container_title'>스타일</div>
-            <div className='editor_body_right_style_container_info_container'>
-              <div className='editor_body_right_style_container_info_container_title'>border radius</div>
-              <div className='editor_body_right_style_container_info_container_btn'>
-                <input id="radius-input" maxLength={2}/>
+            <div className='editor_body_right_style_container_1_info_container'>
+              <div className='editor_body_right_style_container_1_info_container_title'>border radius</div>
+              <div className='editor_body_right_style_container_1_info_container_btn'>
+                <input id="radius-input" maxLength={3}/>
                 <button id="change-radius-input-button">적용</button>
               </div>
             </div>
+            <div className='editor_body_right_style_container_2_info_container'>
+              <div className='editor_body_right_style_container_2_info_container_title'>color</div>
+              <HexColorInput className="editor_body_right_style_container_2_info_container_info" color={color} onChange={handleChangeComplete} />
+            </div>
+            <section className="color_controller">
+              <HexColorPicker color={color} onChange={handleChangeComplete} />
+            </section>
           </div>
+
         </div>
       </div>
+
+
+
     </div>
   );
 };
