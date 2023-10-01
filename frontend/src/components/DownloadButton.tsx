@@ -25,25 +25,50 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           
           const angleInDegrees = - (object.angle?? 0); // 회전 각도
           const angleInRadians = (angleInDegrees * Math.PI) / 180;
-          
+
+          const strokeWidth = object.strokeWidth ?? 0; // 두께
+          console.log("경계선 두께",strokeWidth, "높이 넓이", object.width, object.height)
+          const strokeColor = object.stroke ?? 'transparent'; // 색상 (기본값: 투명)
           // 회전 중심을 div 태그의 중심으로 설정
           const centerX = object.getCenterPoint().x;
           const centerY = object.getCenterPoint().y;
-          
           // 회전 변환 후의 left와 top 계산
           const newX = centerX + (originalLeft - centerX) * Math.cos(angleInRadians) - (originalTop - centerY) * Math.sin(angleInRadians);
           const newY = centerY + (originalLeft - centerX) * Math.sin(angleInRadians) + (originalTop - centerY) * Math.cos(angleInRadians);
-          
-          console.log(`회전 후의 left: ${newX}, top: ${newY}`);
+
           const ol = (newX ?? 0) / 1000 * 100
           const ot = (newY ?? 0) / 500 * 100
-          const ow = (object.width ?? 0) / 1000 * 100
-          const oh = (object.height ?? 0) / 500 * 100
+          
+          const ow = ((object.width ?? 0) + strokeWidth) / 1000 * 100
+          const oh = ((object.height ?? 0) + strokeWidth) / 500 * 100
+          const obr =  ((object.rx ?? 0)) * 1.5;
+          const obrI =  ((object.rx ?? 0));
+          const oinnerw = ((object.width ?? 0) - strokeWidth*1.76) / (object.width ?? 0) * 100 // 경계선 있을시 내부 도형
+          const oinnerh = ((object.height ?? 0) - strokeWidth*1.76) / (object.height ?? 0) * 100 // 경계선 있을시 내부 도형
+          const osw = (strokeWidth ?? 0) / 500 * 100
+          
 
-          console.log("사각형", originalLeft, originalTop)
+          if (strokeWidth === 0){
+            const rectHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  border-radius: ${obr}px; background-color: ${object.fill}; transform: rotate(${object.angle}deg);"></div>`;          
+            htmlContent += rectHtml;
+          }else{
+            const rectHtml = `
+              <div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  border-radius: ${obr}px; background-color: ${strokeColor}; transform: rotate(${object.angle}deg);">
+                <div style="
+                position: absolute; 
+                left: 50%; 
+                top: 50%;
+                transform : translate(-50%, -50%); 
+                width: ${oinnerw}%;
+                height: ${oinnerh}%;  
+                border-radius: ${obrI}px;
+                background-color: ${object.fill}; 
+                rotate(${object.angle}deg)">
+                </div>
+              </div>`;          
+            htmlContent += rectHtml;
+          }
 
-          const rectHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; background-color: ${object.fill}; transform: rotate(${object.angle}deg);"></div>`;          
-          htmlContent += rectHtml;
         }
         if (object instanceof fabric.Ellipse && typeof object.rx !== 'undefined' && typeof object.ry !== 'undefined') {
           // Fabric.js에서 원 객체인 경우

@@ -21,6 +21,10 @@ type ObjectSize = {
 const Editor = () => {
 
   const [color, setColor] = useState('#000');
+  const [borderColor, setBorderColor] = useState('#000');
+
+  const [backgroundColorToggle, setBackgroundColorToggle] = useState(false);
+  const [borderColorToggle, setBorderColorToggle] = useState(false);
   console.log(color)
   //도형 툴바
   const [showTool, setShowTool] = useState(true);
@@ -36,12 +40,21 @@ const Editor = () => {
   
     if (activeObject) {
       setColor(newColor);
-  
-      // 캔버스에 선택된 객체의 색상을 업데이트
       activeObject.set('fill', newColor);
       canvas?.renderAll();
     }
   };
+
+  const handleChangeBorderColor = (newBorderColor: string) => {
+    const activeObject = canvas?.getActiveObject();
+  
+    if (activeObject) {
+      setBorderColor(newBorderColor)
+      activeObject.set('stroke', newBorderColor);
+      canvas?.renderAll();
+    }
+  };
+  
 
   useEffect(() => { 
     if (canvasRef.current) {
@@ -131,8 +144,41 @@ const Editor = () => {
           canvas.renderAll();
         }
       };
+
+      const handleChangeBorderWidthInput = () => {
+        // 입력한 경계선 두께를 가져옵니다.
+        const borderWidthInput = document.getElementById("borderwidth-input") as HTMLInputElement;
+        const borderWidthValue = parseInt(borderWidthInput.value);
+      
+        if (isNaN(borderWidthValue)) {
+          // 유효하지 않은 입력이면 알림이나 처리를 추가할 수 있습니다.
+          console.log("유효하지 않은 경계선 두께입니다.");
+          return;
+        }
+      
+        // 선택된 객체를 가져옵니다.
+        const activeObject = canvas?.getActiveObject();
+      
+        if (activeObject) {
+          // 선택된 객체가 있는 경우 경계선 두께를 설정합니다.
+          // 이때, 도형의 크기가 변경되지 않도록 설정합니다.
+          activeObject.set('strokeWidth', borderWidthValue);
+          const currentScaleX = activeObject.scaleX ?? 1;
+          const currentScaleY = activeObject.scaleY ?? 1;
+          const scaledWidth = activeObject.getScaledWidth();
+          const scaledHeight = activeObject.getScaledHeight();
+          activeObject.set('width', scaledWidth / currentScaleX);
+          activeObject.set('height', scaledHeight / currentScaleY);
+          canvas?.renderAll();
+        }
+      };
+
+
       const changeRadiusInputButton = document.getElementById('change-radius-input-button');
       changeRadiusInputButton?.addEventListener('click', handleChangeRadiusInput);
+
+      const changeBorderWidthInputButton = document.getElementById('change-borderwidth-input-button');
+      changeBorderWidthInputButton?.addEventListener('click', handleChangeBorderWidthInput);
     
 
       
@@ -260,13 +306,41 @@ const Editor = () => {
                 <button id="change-radius-input-button">적용</button>
               </div>
             </div>
-            <div className='editor_body_right_style_container_2_info_container'>
-              <div className='editor_body_right_style_container_2_info_container_title'>color</div>
-              <HexColorInput className="editor_body_right_style_container_2_info_container_info" color={color} onChange={handleChangeComplete} />
+            <div className='editor_body_right_style_container_1_info_container'>
+              <div className='editor_body_right_style_container_1_info_container_title'>border width</div>
+              <div className='editor_body_right_style_container_1_info_container_btn'>
+                <input id="borderwidth-input" maxLength={3}/>
+                <button id="change-borderwidth-input-button">적용</button>
+              </div>
             </div>
-            <section className="color_controller">
-              <HexColorPicker color={color} onChange={handleChangeComplete} />
-            </section>
+
+            <div className='editor_body_right_style_container_2_info_container'>
+              <div className='editor_body_right_style_container_2_info_container_title'>border color</div>
+              <div className='editor_body_right_style_container_2_info_container_frame'>
+                <HexColorInput className="editor_body_right_style_container_2_info_container_info" color={borderColor} onChange={handleChangeBorderColor} />
+                <div className='editor_select_color_btn' onClick={()=> setBorderColorToggle(!borderColorToggle)}></div>
+              </div>
+            </div>
+            {borderColorToggle && (
+              <section className="color_controller1">
+                <HexColorPicker color={borderColor} onChange={handleChangeBorderColor}/>
+              </section>
+            )}
+
+
+            <div className='editor_body_right_style_container_2_info_container'>
+              <div className='editor_body_right_style_container_2_info_container_title'>background color</div>
+              <div className='editor_body_right_style_container_2_info_container_frame'>
+                <HexColorInput className="editor_body_right_style_container_2_info_container_info" color={color} onChange={handleChangeComplete} />
+                <div className='editor_select_color_btn' onClick={()=> setBackgroundColorToggle(!backgroundColorToggle)}></div>
+              </div>
+            </div>
+            {backgroundColorToggle && (
+              <section className="color_controller2">
+                <HexColorPicker color={color} onChange={handleChangeComplete} />
+              </section>
+            )}
+
           </div>
 
         </div>

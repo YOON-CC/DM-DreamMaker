@@ -7,6 +7,7 @@ export const addRectToCanvas = (canvas: fabric.Canvas) => {
         width: 100,
         height: 100,
         fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        strokeWidth: 0, 
     });
 
     canvas.add(newRect);
