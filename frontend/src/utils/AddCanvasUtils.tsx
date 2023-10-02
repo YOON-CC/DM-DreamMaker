@@ -20,6 +20,8 @@ export const addCircleToCanvas = (canvas: fabric.Canvas) => {
         rx: 50, // 가로 반지름
         ry: 50, // 세로 반지름
         fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        // strokeWidth: 0, 
+
     });
 
     canvas.add(newCircle);

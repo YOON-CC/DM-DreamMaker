@@ -87,11 +87,41 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           
           const ol = (newX ?? 0) / 1000 * 100
           const ot = (newY ?? 0) / 500 * 100
-          const ow = (object.width ?? 0) / 1000 * 100
-          const oh = (object.height ?? 0) / 500 * 100
+          // const ow = (object.width ?? 0) / 1000 * 100
+          // const oh = (object.height ?? 0) / 500 * 100
 
-          const circleHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; background-color: ${object.fill}; border-radius: 50%;" transform: rotate(${object.angle}deg);"></div>`;
-          htmlContent += circleHtml;
+          const strokeWidth = object.strokeWidth ?? 0; // 두께
+          console.log("경계선 두께",strokeWidth, "높이 넓이", object.width, object.height)
+          const strokeColor = object.stroke ?? 'transparent'; // 색상 (기본값: 투명)
+
+          const ow = ((object.width ?? 0) + strokeWidth) / 1000 * 100
+          const oh = ((object.height ?? 0) + strokeWidth) / 500 * 100
+          const oinnerw = ((object.width ?? 0) - strokeWidth*1.76) / (object.width ?? 0) * 100 // 경계선 있을시 내부 도형
+          const oinnerh = ((object.height ?? 0) - strokeWidth*1.76) / (object.height ?? 0) * 100 // 경계선 있을시 내부 도형
+          const osw = (strokeWidth ?? 0) / 500 * 100
+
+          console.log(object.width, object.height, strokeWidth)
+
+          if (strokeWidth === 0){
+            const rectHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; background-color: ${object.fill}; border-radius: 50%;" transform: rotate(${object.angle}deg);"></div>>`;          
+            htmlContent += rectHtml;
+          }else{
+            const rectHtml = `
+              <div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  border-radius: 50%; background-color: ${strokeColor}; transform: rotate(${object.angle}deg);">
+                <div style="
+                position: absolute; 
+                left: 50%; 
+                top: 50%;
+                transform : translate(-50%, -50%); 
+                width: ${oinnerw}%;
+                height: ${oinnerh}%;  
+                border-radius: 50%;
+                background-color: ${object.fill}; 
+                rotate(${object.angle}deg)">
+                </div>
+              </div>`;          
+            htmlContent += rectHtml;
+          }
         }
         if (object instanceof fabric.Triangle) {
           // Fabric.js에서 원 객체인 경우
@@ -113,6 +143,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           const ow = (object.width ?? 0) / 1000 * 100
           const oh = (object.height ?? 0) / 500 * 100
 
+          
           console.log("삼각형", originalLeft, originalTop)
           console.log("삼각형의 중심", centerX, centerY)
           console.log("삼각형의 각도", angleInDegrees)
