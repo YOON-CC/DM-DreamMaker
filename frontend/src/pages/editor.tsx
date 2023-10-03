@@ -9,6 +9,8 @@ import LoadButton from '../components/loadbutton';
 import DownloadButton from '../components/DownloadButton';
 import { addRectToCanvas, addCircleToCanvas, addTriangleToCanvas, addTextboxToCanvas, addImageToCanvas } from '../utils/AddCanvasUtils'; 
 import { handleScalingRect, handleScalingCircle, handleScalingTriangle, handleScalingTextbox, handleScalingImage } from '../utils/ScalingCanvasUtils';
+import { ChangeBorderWidthUtils } from '../utils/ChangeBorderWidthUtils';
+
 
 type ObjectSize = {
   width?: number;
@@ -146,70 +148,16 @@ const Editor = () => {
       };
 
       const handleChangeBorderWidthInput = () => {
-        // 입력한 경계선 두께를 가져옵니다.
         const borderWidthInput = document.getElementById("borderwidth-input") as HTMLInputElement;
         const borderWidthValue = parseInt(borderWidthInput.value);
         if (isNaN(borderWidthValue)) {
-          // 유효하지 않은 입력이면 알림이나 처리를 추가할 수 있습니다.
           console.log("유효하지 않은 경계선 두께입니다.");
           return;
         }
-      
-        // 선택된 객체를 가져옵니다.
-        const activeObject = canvas?.getActiveObject();
-      
-        if (activeObject && activeObject.type === "rect") {
-          // 선택된 객체가 있는 경우 경계선 두께를 설정합니다.
-          // 이때, 도형의 크기가 변경되지 않도록 설정합니다.
-          activeObject.set('strokeWidth', borderWidthValue);
-          const currentScaleX = activeObject.scaleX ?? 1;
-          const currentScaleY = activeObject.scaleY ?? 1;
-          const scaledWidth = activeObject.getScaledWidth();
-          const scaledHeight = activeObject.getScaledHeight();
-          activeObject.set('width', scaledWidth+borderWidthValue  / currentScaleX);
-          activeObject.set('height', scaledHeight+borderWidthValue / currentScaleY);
-          console.log(scaledWidth, scaledHeight)
-          canvas?.renderAll();
-        }
-        if (activeObject && activeObject.type === "ellipse") {
-          // 원을 선택한 경우에만 작동하도록 조건을 추가합니다.
-      
-          // 현재 원의 위치 및 크기를 가져옵니다.
-          const left = activeObject.left;
-          const top = activeObject.top;
-          const rx = (activeObject.width?? 0)/2;
-          const ry = (activeObject.height?? 0)/2;
-      
-          // 기존 원을 제거합니다.
-          canvas?.remove(activeObject);
-      
-          // 경계선 두께와 색상을 설정한 새로운 원을 그립니다.
-          const newEllipse = new fabric.Ellipse({
-            left: left,
-            top: top,
-            rx: rx + borderWidthValue / 2, // 반지름에 경계선 두께의 절반을 더합니다.
-            ry: ry + borderWidthValue / 2, // 반지름에 경계선 두께의 절반을 더합니다.
-            fill: activeObject.fill, // 채우기를 투명으로 설정하여 내부 원을 보이게 합니다.
-            strokeWidth: borderWidthValue,
-            stroke: 'white', // 빨간색으로 설정
-          });
-      
-          canvas?.add(newEllipse);
-          canvas?.renderAll();
-        }
+        ChangeBorderWidthUtils(canvas, borderWidthValue); // 함수 호출
       };
-      // const handleChangeBorderWidthInput = () => {
-      //   const borderWidthInput = document.getElementById("borderwidth-input") as HTMLInputElement;
-      //   const borderWidthValue = parseInt(borderWidthInput.value);
-      //   if (isNaN(borderWidthValue)) {
-      //     console.log("유효하지 않은 경계선 두께입니다.");
-      //     return;
-      //   }
-      
-      //   const activeObject = canvas?.getActiveObject();
-      
 
-      // };
+
 
       const changeRadiusInputButton = document.getElementById('change-radius-input-button');
       changeRadiusInputButton?.addEventListener('click', handleChangeRadiusInput);
