@@ -152,6 +152,8 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           htmlContent += TriangleHtml;
         }
         if (object instanceof fabric.Textbox) {
+
+        
           // Fabric.js에서 원 객체인 경우
           const originalLeft = object.left?? 0; // 부모 태그로부터의 left
           const originalTop = object.top ?? 0; // 부모 태그로부터의 top
@@ -171,7 +173,14 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           const ow = (object.width ?? 0) / 1000 * 100
           const oh = (object.height ?? 0) / 500 * 100
 
-          const TextboxHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; transform: rotate(${object.angle}deg);">${object.text}</div>`;
+          const fontSize = object.get('fontSize') as number;
+          const newFontSize = fontSize;
+          const fontFamily = object.get('fontFamily');
+          const fontColor = object.get('fill');
+          const ff = object.fontSize ?? 0 / 1000 * 100
+          console.log(fontSize, fontFamily, object.fontSize)
+
+          const TextboxHtml = `<div style="position: absolute; background : red; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; display : flex; justify-content : center; align-items : center; font-family : ${fontFamily}; font-size : ${ff}px ; color : ${fontColor};  transform: rotate(${object.angle}deg);">${object.text}</div>`;
           htmlContent += TextboxHtml;
         }       
         if (object instanceof fabric.Image) {

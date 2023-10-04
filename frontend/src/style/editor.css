@@ -560,3 +560,93 @@
     width: 10%;
     height: 100%;
 }
+.font-family-frame{
+    width: 100%;
+    border-radius: 5px;
+    color : white;
+    background-color: rgb(63, 63, 63);
+    border : none;
+
+    font-size: 12px;
+}
+
+#fontsize-input{
+    background-color: #232323;
+    width: 50%;
+    text-align : center;
+
+    outline: none;
+    border: none;
+    border-radius: 5px 0px 0px 5px;
+    color: #ffffff;
+
+    font-size: 10px;
+}
+#change-fontsize-input-button{
+    background-color: rgb(63, 63, 63);
+    width: 50%;
+    text-align : center;
+
+    outline: none;
+    border: 1px solid #232323;
+    border-radius: 0px 5px 5px 0px;
+    cursor: pointer;
+
+    font-size: 10px;
+    color: #ffffff;
+}
+.editor_body_right_style_container_1_info_container_font_btn{
+    /* background-color: aqua; */
+    height : 100%;
+    width: 45%;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+#change-fontWeight-button{
+    background-color: #232323;
+    height : 100%;
+    width: 30%;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 17px;
+    font-weight: bold;
+}
+#change-fontItalic-button{
+    background-color: #232323;
+    height : 100%;
+    width: 30%;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 17px;
+    font-style: italic;
+}
+#change-fontShadow-button{
+    background-color: #232323;
+    height : 100%;
+    width: 30%;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 17px;
+
+    text-shadow: 1px 1px rgb(71, 71, 71);
+}

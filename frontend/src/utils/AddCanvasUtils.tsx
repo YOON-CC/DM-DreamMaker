@@ -40,13 +40,21 @@ export const addTriangleToCanvas = (canvas: fabric.Canvas) => {
 };
 
 export const addTextboxToCanvas = (canvas: fabric.Canvas) => {
-    const newTextbox = new fabric.Textbox('Enter your text', {
+    const newTextbox = new fabric.Textbox('DreamMaker', {
     left: Math.random() * 400,
     top: Math.random() * 400,
     width: 150, 
     fontSize: 20,
     fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
     editable: true, 
+    fontFamily: 'Arial', // 글꼴을 지정합니다.
+    textAlign: 'center', // 가운데 정렬 설정
+    // shadow: new fabric.Shadow({
+    //     color: 'rgba(0, 0, 0, 0.5)', // 그림자 색상
+    //     offsetX: 2, // X 좌표 오프셋
+    //     offsetY: 2, // Y 좌표 오프셋
+    //     blur: 5, // 그림자 흐림 정도
+    //   }),
   });
 
   canvas.add(newTextbox);

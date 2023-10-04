@@ -21,7 +21,15 @@ type ObjectSize = {
 };
 
 const Editor = () => {
-
+  const [fontFamily, setFontFamily] = useState('Arial'); // 초기 글꼴 설정
+  const handleFontChange = (newFontFamily: string) => {
+    const activeObject = canvas?.getActiveObject();
+    if (activeObject instanceof fabric.Textbox) {
+      setFontFamily(newFontFamily);
+      activeObject.set('fontFamily', newFontFamily);
+      canvas?.renderAll();
+    }
+  };
   const [color, setColor] = useState('#000');
   const [borderColor, setBorderColor] = useState('#000');
 
@@ -157,7 +165,62 @@ const Editor = () => {
         ChangeBorderWidthUtils(canvas, borderWidthValue); // 함수 호출
       };
 
+      const handleChangeFontSizeInput = () => {
+        const fontSizeInput = document.getElementById("fontsize-input") as HTMLInputElement;
+        const newSize = parseInt(fontSizeInput.value);
+      
+        const activeObject = canvas.getActiveObject();
+        if (activeObject instanceof fabric.Textbox) {
+          activeObject.set('fontSize', newSize);
+          canvas.renderAll();
+        }
+      };
 
+      const handleFontWeightChange = () => {
+        const activeObject = canvas?.getActiveObject();
+        if (activeObject instanceof fabric.Textbox) {
+          const currentFontWeight = activeObject.get('fontWeight');
+          const newFontWeight = currentFontWeight === 'bold' ? 'normal' : 'bold';
+          activeObject.set('fontWeight', newFontWeight);
+          canvas?.renderAll();
+        }
+      };
+
+      const handleFontToItalicChange = () => {
+        const activeObject = canvas?.getActiveObject();
+        if (activeObject instanceof fabric.Textbox) {
+          const currentFontStyle = activeObject.get('fontStyle');
+          const newFontStyle = currentFontStyle === 'italic' ? 'normal' : 'italic';
+          activeObject.set('fontStyle', newFontStyle);
+          canvas?.renderAll();
+        }
+      };
+
+      const handleFontShadowChange = () => {
+        const activeObject = canvas?.getActiveObject();
+        if (activeObject instanceof fabric.Textbox) {
+          const existingShadow = activeObject.get('shadow');
+      
+          if (existingShadow) {
+            // 이미 그림자가 적용된 경우 그림자 제거
+            activeObject.set({ shadow: undefined }); // 여기서 null 대신 undefined를 사용
+          } else {
+            // 그림자가 없는 경우 그림자 적용
+            activeObject.set({
+              shadow: new fabric.Shadow({
+                color: 'rgba(0, 0, 0, 0.8)',
+                offsetX: 1, 
+                offsetY: 1, 
+              }),
+            });
+          }
+      
+          canvas?.renderAll();
+        }
+      };
+
+      const changeFontSizeInputButton = document.getElementById('change-fontsize-input-button');
+      changeFontSizeInputButton?.addEventListener('click', handleChangeFontSizeInput);
 
       const changeRadiusInputButton = document.getElementById('change-radius-input-button');
       changeRadiusInputButton?.addEventListener('click', handleChangeRadiusInput);
@@ -194,6 +257,14 @@ const Editor = () => {
       const addImageShapeButton = document.getElementById('add-image-shape-button');
       addImageShapeButton?.addEventListener('click', handleAddImageShape);
 
+      const fontWeightButton = document.getElementById('change-fontWeight-button');
+      fontWeightButton?.addEventListener('click', handleFontWeightChange);
+
+      const fontItalicButton = document.getElementById('change-fontItalic-button');
+      fontItalicButton?.addEventListener('click', handleFontToItalicChange);
+
+      const fontShadowButton = document.getElementById('change-fontShadow-button');
+      fontShadowButton?.addEventListener('click', handleFontShadowChange);
 
       setCanvas(canvas);
 
@@ -211,7 +282,9 @@ const Editor = () => {
         deleteButton?.removeEventListener('click', handleDeleteSelectedObjects);
         sendBackwardsButton?.removeEventListener('click', handleSendBackwards);
         bringForwardButton?.removeEventListener('click', handleBringForward);
-
+        fontWeightButton?.removeEventListener('click', handleFontWeightChange);
+        fontItalicButton?.removeEventListener('click', handleFontToItalicChange);
+        fontShadowButton?.removeEventListener('click', handleFontShadowChange);
       };
     }
   }, []);
@@ -325,6 +398,40 @@ const Editor = () => {
                 <HexColorPicker color={color} onChange={handleChangeComplete} />
               </section>
             )}
+
+            <div className='editor_body_right_style_container_2_info_container'>
+              <div className='editor_body_right_style_container_2_info_container_title'>font family</div>
+              <div className='editor_body_right_style_container_2_info_container_frame'>
+                <select className = "font-family-frame" value={fontFamily} onChange={(e) => handleFontChange(e.target.value)}>
+                  <option value='Arial'>Arial</option>
+                  <option value='Times New Roman'>Times New Roman</option>
+                  <option value='Verdana'>Verdana</option>
+                  <option value='Georgia'>Georgia</option>
+                  <option value='Courier New'>Courier New</option>
+                  <option value='Calibri'>Calibri</option>
+                  <option value='Tahoma'>Tahoma</option>
+                  <option value='Trebuchet MS'>Trebuchet MS</option>
+                  <option value='Palatino'>Palatino</option>
+                  <option value='Comic Sans MS'>Comic Sans MS</option>
+                </select>
+              </div>
+            </div>
+
+            <div className='editor_body_right_style_container_1_info_container'>
+              <div className='editor_body_right_style_container_1_info_container_title'>font size</div>
+              <div className='editor_body_right_style_container_1_info_container_btn'>
+                <input id="fontsize-input" />
+                <button id="change-fontsize-input-button">적용</button>
+              </div>
+            </div>
+            <div className='editor_body_right_style_container_1_info_container'>
+              <div className='editor_body_right_style_container_1_info_container_title'>font options</div>
+              <div className='editor_body_right_style_container_1_info_container_font_btn'>
+                <button id="change-fontWeight-button">A</button>
+                <button id="change-fontItalic-button">A</button>
+                <button id="change-fontShadow-button">A</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
