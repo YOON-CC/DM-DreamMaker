@@ -186,7 +186,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           const fontShadow = (object.shadow as unknown as Shadow).color
           console.log(fontSize, fontFamily, object.fontSize)
           
-          const TextboxHtml = `<div style="position: absolute; background : red; text-shadow: 1.2px 1.2px ${fontShadow};
+          const TextboxHtml = `<div style="position: absolute; text-shadow: 1.2px 1.2px ${fontShadow};
            left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; display : flex; justify-content : center; align-items : center; font-family : ${fontFamily}; font-weight : ${object.fontWeight}; font-size : ${newFontSize}px; font-style : ${object.fontStyle};color : ${fontColor};  transform: rotate(${object.angle}deg);">${object.text}</div>`;
           htmlContent += TextboxHtml;
         }       

@@ -9,6 +9,8 @@ import LoadButton from '../components/loadbutton';
 import DownloadButton from '../components/DownloadButton';
 import { addRectToCanvas, addCircleToCanvas, addTriangleToCanvas, addTextboxToCanvas, addImageToCanvas } from '../utils/AddCanvasUtils'; 
 import { handleScalingRect, handleScalingCircle, handleScalingTriangle, handleScalingTextbox, handleScalingImage } from '../utils/ScalingCanvasUtils';
+import { handleChangeFontSizeInput, handleFontWeightChange, handleFontToItalicChange, handleFontShadowChange } from '../utils/FontOptionUtils';
+
 import { ChangeBorderWidthUtils } from '../utils/ChangeBorderWidthUtils';
 
 
@@ -21,6 +23,163 @@ type ObjectSize = {
 };
 
 const Editor = () => {
+  const handleApplyShadow_0_0 = () => {
+    const activeObject = canvas?.getActiveObject();
+  
+    if (activeObject) {
+
+      activeObject.set({
+        shadow: new fabric.Shadow({
+          color: '#000000', // 그림자 색상 (투명도 포함)
+          blur: 3, // 그림자 블러 정도
+          offsetX: -5, // 그림자 X축 이동
+          offsetY: -5, // 그림자 Y축 이동
+        }),
+      });
+      // 변경 사항을 캔버스에 적용
+      canvas?.renderAll();
+    }
+  };
+  const handleApplyShadow_0_1 = () => {
+    const activeObject = canvas?.getActiveObject();
+  
+    if (activeObject) {
+
+      activeObject.set({
+        shadow: new fabric.Shadow({
+          color: '#000000', // 그림자 색상 (투명도 포함)
+          blur: 3, // 그림자 블러 정도
+          offsetX: 0, // 그림자 X축 이동
+          offsetY: -4, // 그림자 Y축 이동
+        }),
+      });
+      // 변경 사항을 캔버스에 적용
+      canvas?.renderAll();
+    }
+  };
+  const handleApplyShadow_0_2 = () => {
+    const activeObject = canvas?.getActiveObject();
+  
+    if (activeObject) {
+
+      activeObject.set({
+        shadow: new fabric.Shadow({
+          color: '#000000', // 그림자 색상 (투명도 포함)
+          blur: 3, // 그림자 블러 정도
+          offsetX: 5, // 그림자 X축 이동
+          offsetY: -5, // 그림자 Y축 이동
+        }),
+      });
+      // 변경 사항을 캔버스에 적용
+      canvas?.renderAll();
+    }
+  };
+  const handleApplyShadow_1_0 = () => {
+    const activeObject = canvas?.getActiveObject();
+  
+    if (activeObject) {
+
+      activeObject.set({
+        shadow: new fabric.Shadow({
+          color: '#000000', // 그림자 색상 (투명도 포함)
+          blur: 3, // 그림자 블러 정도
+          offsetX: -4, // 그림자 X축 이동
+          offsetY: 0, // 그림자 Y축 이동
+        }),
+      });
+      // 변경 사항을 캔버스에 적용
+      canvas?.renderAll();
+    }
+  };
+  const handleApplyShadow_1_1 = () => {
+    const activeObject = canvas?.getActiveObject();
+  
+    if (activeObject) {
+
+      activeObject.set({
+        shadow: new fabric.Shadow({
+          color: '#000000', // 그림자 색상 (투명도 포함)
+          blur: 10, // 그림자 블러 정도
+          offsetX: 0, // 그림자 X축 이동
+          offsetY: 0, // 그림자 Y축 이동
+        }),
+      });
+      // 변경 사항을 캔버스에 적용
+      canvas?.renderAll();
+    }
+  };
+  const handleApplyShadow_1_2 = () => {
+    const activeObject = canvas?.getActiveObject();
+  
+    if (activeObject) {
+
+      activeObject.set({
+        shadow: new fabric.Shadow({
+          color: '#000000', // 그림자 색상 (투명도 포함)
+          blur: 3, // 그림자 블러 정도
+          offsetX: 4, // 그림자 X축 이동
+          offsetY: 0, // 그림자 Y축 이동
+        }),
+      });
+      // 변경 사항을 캔버스에 적용
+      canvas?.renderAll();
+    }
+  };
+  const handleApplyShadow_2_0 = () => {
+    const activeObject = canvas?.getActiveObject();
+  
+    if (activeObject) {
+
+      activeObject.set({
+        shadow: new fabric.Shadow({
+          color: '#000000', // 그림자 색상 (투명도 포함)
+          blur: 3, // 그림자 블러 정도
+          offsetX: -5, // 그림자 X축 이동
+          offsetY: 5, // 그림자 Y축 이동
+        }),
+      });
+      // 변경 사항을 캔버스에 적용
+      canvas?.renderAll();
+    }
+  };
+  const handleApplyShadow_2_1 = () => {
+    const activeObject = canvas?.getActiveObject();
+  
+    if (activeObject) {
+
+      activeObject.set({
+        shadow: new fabric.Shadow({
+          color: '#000000', // 그림자 색상 (투명도 포함)
+          blur: 3, // 그림자 블러 정도
+          offsetX: 0, // 그림자 X축 이동
+          offsetY: 4, // 그림자 Y축 이동
+        }),
+      });
+      // 변경 사항을 캔버스에 적용
+      canvas?.renderAll();
+    }
+  };
+  const handleApplyShadow_2_2 = () => {
+    const activeObject = canvas?.getActiveObject();
+  
+    if (activeObject) {
+
+      activeObject.set({
+        shadow: new fabric.Shadow({
+          color: '#000000', // 그림자 색상 (투명도 포함)
+          blur: 3, // 그림자 블러 정도
+          offsetX: 5, // 그림자 X축 이동
+          offsetY: 5, // 그림자 Y축 이동
+        }),
+      });
+      // 변경 사항을 캔버스에 적용
+      canvas?.renderAll();
+    }
+  };
+  //도형 shadow 버튼
+  const [shadowToggle, setShadowToggle] = useState(false);
+
+
   const [fontFamily, setFontFamily] = useState('Arial'); // 초기 글꼴 설정
   const handleFontChange = (newFontFamily: string) => {
     const activeObject = canvas?.getActiveObject();
@@ -165,62 +324,25 @@ const Editor = () => {
         ChangeBorderWidthUtils(canvas, borderWidthValue); // 함수 호출
       };
 
-      const handleChangeFontSizeInput = () => {
-        const fontSizeInput = document.getElementById("fontsize-input") as HTMLInputElement;
-        const newSize = parseInt(fontSizeInput.value);
-      
-        const activeObject = canvas.getActiveObject();
-        if (activeObject instanceof fabric.Textbox) {
-          activeObject.set('fontSize', newSize);
-          canvas.renderAll();
-        }
+      //폰트 컨트롤
+      const handleChangeFontSize = () => {
+        handleChangeFontSizeInput(canvas);
       };
-
-      const handleFontWeightChange = () => {
-        const activeObject = canvas?.getActiveObject();
-        if (activeObject instanceof fabric.Textbox) {
-          const currentFontWeight = activeObject.get('fontWeight');
-          const newFontWeight = currentFontWeight === 'bold' ? 'normal' : 'bold';
-          activeObject.set('fontWeight', newFontWeight);
-          canvas?.renderAll();
-        }
+    
+      const handleFontWeight = () => {
+        handleFontWeightChange(canvas);
       };
-
-      const handleFontToItalicChange = () => {
-        const activeObject = canvas?.getActiveObject();
-        if (activeObject instanceof fabric.Textbox) {
-          const currentFontStyle = activeObject.get('fontStyle');
-          const newFontStyle = currentFontStyle === 'italic' ? 'normal' : 'italic';
-          activeObject.set('fontStyle', newFontStyle);
-          canvas?.renderAll();
-        }
+    
+      const handleFontToItalic = () => {
+        handleFontToItalicChange(canvas);
       };
-
-      const handleFontShadowChange = () => {
-        const activeObject = canvas?.getActiveObject();
-        if (activeObject instanceof fabric.Textbox) {
-          const existingShadow = activeObject.get('shadow');
-      
-          if (existingShadow) {
-            // 이미 그림자가 적용된 경우 그림자 제거
-            activeObject.set({ shadow: undefined }); // 여기서 null 대신 undefined를 사용
-          } else {
-            // 그림자가 없는 경우 그림자 적용
-            activeObject.set({
-              shadow: new fabric.Shadow({
-                color: 'rgba(0, 0, 0, 0.8)',
-                offsetX: 1, 
-                offsetY: 1, 
-              }),
-            });
-          }
-      
-          canvas?.renderAll();
-        }
+    
+      const handleFontShadow = () => {
+        handleFontShadowChange(canvas);
       };
 
       const changeFontSizeInputButton = document.getElementById('change-fontsize-input-button');
-      changeFontSizeInputButton?.addEventListener('click', handleChangeFontSizeInput);
+      changeFontSizeInputButton?.addEventListener('click', handleChangeFontSize);
 
       const changeRadiusInputButton = document.getElementById('change-radius-input-button');
       changeRadiusInputButton?.addEventListener('click', handleChangeRadiusInput);
@@ -258,13 +380,13 @@ const Editor = () => {
       addImageShapeButton?.addEventListener('click', handleAddImageShape);
 
       const fontWeightButton = document.getElementById('change-fontWeight-button');
-      fontWeightButton?.addEventListener('click', handleFontWeightChange);
+      fontWeightButton?.addEventListener('click', handleFontWeight);
 
       const fontItalicButton = document.getElementById('change-fontItalic-button');
-      fontItalicButton?.addEventListener('click', handleFontToItalicChange);
+      fontItalicButton?.addEventListener('click', handleFontToItalic);
 
       const fontShadowButton = document.getElementById('change-fontShadow-button');
-      fontShadowButton?.addEventListener('click', handleFontShadowChange);
+      fontShadowButton?.addEventListener('click', handleFontShadow);
 
       setCanvas(canvas);
 
@@ -282,9 +404,10 @@ const Editor = () => {
         deleteButton?.removeEventListener('click', handleDeleteSelectedObjects);
         sendBackwardsButton?.removeEventListener('click', handleSendBackwards);
         bringForwardButton?.removeEventListener('click', handleBringForward);
-        fontWeightButton?.removeEventListener('click', handleFontWeightChange);
-        fontItalicButton?.removeEventListener('click', handleFontToItalicChange);
-        fontShadowButton?.removeEventListener('click', handleFontShadowChange);
+        fontWeightButton?.removeEventListener('click', handleFontWeight);
+        fontItalicButton?.removeEventListener('click', handleFontToItalic);
+        fontShadowButton?.removeEventListener('click', handleFontShadow);
+        // applyShadowButton_2_2?.removeEventListener('click', handleApplyShadow_2_2);
       };
     }
   }, []);
@@ -399,6 +522,26 @@ const Editor = () => {
               </section>
             )}
 
+            <div className='editor_body_right_style_container_1_info_container'>
+              <div className='editor_body_right_style_container_1_info_container_title'>shadow</div>
+              <div className='editor_body_right_style_container_1_info_container_btn'>
+                <button id="select-shadow-button" onClick={()=> setShadowToggle(!shadowToggle)}>select</button>
+              </div>
+            </div>
+            {shadowToggle && (
+              <div className='shadow_Frame'>
+                <button id="apply-shadow-button_0_0" onClick={handleApplyShadow_0_0}></button>
+                <button id="apply-shadow-button_0_1" onClick={handleApplyShadow_0_1}></button>
+                <button id="apply-shadow-button_0_2" onClick={handleApplyShadow_0_2}></button>
+                <button id="apply-shadow-button_1_0" onClick={handleApplyShadow_1_0}></button>
+                <button id="apply-shadow-button_1_1" onClick={handleApplyShadow_1_1}></button>
+                <button id="apply-shadow-button_1_2" onClick={handleApplyShadow_1_2}></button>
+                <button id="apply-shadow-button_2_0" onClick={handleApplyShadow_2_0}></button>
+                <button id="apply-shadow-button_2_1" onClick={handleApplyShadow_2_1}></button>
+                <button id="apply-shadow-button_2_2" onClick={handleApplyShadow_2_2}></button>
+              </div>
+            )}
+
             <div className='editor_body_right_style_container_2_info_container'>
               <div className='editor_body_right_style_container_2_info_container_title'>font family</div>
               <div className='editor_body_right_style_container_2_info_container_frame'>
@@ -432,6 +575,8 @@ const Editor = () => {
                 <button id="change-fontShadow-button">A</button>
               </div>
             </div>
+            
+
           </div>
         </div>
       </div>
