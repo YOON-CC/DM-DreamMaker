@@ -6,10 +6,10 @@ interface DownloadButtonProps {
   canvas: fabric.Canvas | null;
 }
 interface Shadow {
+  blur: number;
   color: string;
   offsetX: number;
   offsetY: number;
-  id: number;
 }
 
 const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
@@ -52,10 +52,13 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           const oinnerw = ((object.width ?? 0) - strokeWidth*1.76) / (object.width ?? 0) * 100 // 경계선 있을시 내부 도형
           const oinnerh = ((object.height ?? 0) - strokeWidth*1.76) / (object.height ?? 0) * 100 // 경계선 있을시 내부 도형
           const osw = (strokeWidth ?? 0) / 500 * 100
-          
+          const osx = ((object.shadow as unknown as Shadow).offsetX)*2
+          const osy = ((object.shadow as unknown as Shadow).offsetY)*2
+          const osb = ((object.shadow as unknown as Shadow).blur) * 2
+          const osc = (object.shadow as unknown as Shadow).color
 
           if (strokeWidth === 0){
-            const rectHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  border-radius: ${obr}px; background-color: ${object.fill}; transform: rotate(${object.angle}deg);"></div>`;          
+            const rectHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc};  border-radius: ${obr}px; background-color: ${object.fill}; transform: rotate(${object.angle}deg);"></div>`;          
             htmlContent += rectHtml;
           }else{
             const rectHtml = `
