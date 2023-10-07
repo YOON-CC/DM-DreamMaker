@@ -24,6 +24,11 @@ type ObjectSize = {
 };
 
 const Editor = () => {
+  const copiedObjectRef = useRef<fabric.Object | null>(null);
+
+
+
+
   const [shadowOptionToggle, setShadowOptionToggle] = useState(false);
 
   const [shadowColor, setShadowColor] = useState<string>('#000'); // Initial shadow color
@@ -51,7 +56,6 @@ const Editor = () => {
       canvas?.renderAll();
     }
   };
-  
   
   
   const handleApplyShadow_0_0 = () => {
@@ -252,6 +256,7 @@ const Editor = () => {
           handleDeleteSelectedObjects();
         }
       };
+
       const handleSendBackwards = () => {
         const activeObject = canvas.getActiveObject();
         if (activeObject) {
@@ -314,6 +319,42 @@ const Editor = () => {
       const handleFontShadow = () => {
         handleFontShadowChange(canvas);
       };
+      
+      //복사 붙여넣기
+      const handleCopyObject = () => {
+        const activeObject = canvas?.getActiveObject();
+        if (activeObject) {
+          activeObject.clone((clonedObject: fabric.Object) => {
+            clonedObject.set({
+              left: (activeObject.left?? 0)+20, // 복사된 도형의 위치를 이동하여 겹치지 않게 함
+              top: (activeObject.top ?? 0)+0,
+            });
+            copiedObjectRef.current = clonedObject; // 복사된 객체를 저장
+          });
+        }
+      };
+      const handlePasteObject = () => {
+        const copiedObject = copiedObjectRef.current;
+        if (copiedObject) {
+          canvas?.add(copiedObject); // 복사된 도형을 캔버스에 추가
+          canvas?.setActiveObject(copiedObject); // 복사된 도형을 선택 상태로 설정
+          canvas?.renderAll(); // 캔버스 업데이트
+          copiedObjectRef.current = null; // 붙여넣기 후에 초기화
+        }
+      };
+      const handleCopy = (event: KeyboardEvent) => {
+        if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
+          handleCopyObject()
+        }
+      };
+      const handlePaste = (event: KeyboardEvent) => {
+        if ((event.ctrlKey || event.metaKey) && event.key === 'v') {
+          handlePasteObject()
+        }
+      };
+
+      document.addEventListener('keydown', handleCopy);
+      document.addEventListener('keydown', handlePaste);
 
       const changeFontSizeInputButton = document.getElementById('change-fontsize-input-button');
       changeFontSizeInputButton?.addEventListener('click', handleChangeFontSize);
@@ -371,6 +412,10 @@ const Editor = () => {
         addImageShapeButton?.removeEventListener('click', handleAddImageShape);
 
         document.removeEventListener('keydown', handleKeyboardDelete);
+        document.removeEventListener('keydown', handleCopy);
+        document.removeEventListener('keydown', handlePaste);
+
+
         addButton?.removeEventListener('click', handleAddRect);        
         addCircleButton?.removeEventListener('click', handleAddCircle);
         addTriangleButton?.removeEventListener('click', handleAddTriangle);
@@ -615,6 +660,7 @@ const Editor = () => {
                 <button id="change-fontShadow-button">A</button>
               </div>
             </div>
+
 
           </div>
         </div>
