@@ -24,8 +24,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
       // 각 객체를 순회하면서 HTML로 변환
       canvasObjects.forEach(object => {
         if (object instanceof fabric.Rect) {
-          // Fabric.js에서 사각형 객체인 경우
-
+          // Fabric.js에서 사각형 객체인 경우'
           const originalLeft = object.left?? 0; // 부모 태그로부터의 left
           const originalTop = object.top ?? 0; // 부모 태그로부터의 top
           
@@ -57,12 +56,19 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           const osb = ((object.shadow as unknown as Shadow).blur) * 2
           const osc = (object.shadow as unknown as Shadow).color
 
+          //색상 오류 해결
+          if (typeof object.fill === 'string') {
+            if (object.fill.length < 7){
+              object.fill = '#000000';
+            }
+          }
+
           if (strokeWidth === 0){
             const rectHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc};  border-radius: ${obr}px; background-color: ${object.fill}; transform: rotate(${object.angle}deg);"></div>`;          
             htmlContent += rectHtml;
           }else{
             const rectHtml = `
-              <div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  border-radius: ${obr}px; background-color: ${strokeColor}; transform: rotate(${object.angle}deg);">
+              <div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: ${obr}px; background-color: ${strokeColor}; transform: rotate(${object.angle}deg);">
                 <div style="
                 position: absolute; 
                 left: 50%; 
@@ -109,14 +115,26 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           const oinnerh = ((object.height ?? 0) - strokeWidth*1.76) / (object.height ?? 0) * 100 // 경계선 있을시 내부 도형
           const osw = (strokeWidth ?? 0) / 500 * 100
 
+          const osx = ((object.shadow as unknown as Shadow).offsetX)*2
+          const osy = ((object.shadow as unknown as Shadow).offsetY)*2
+          const osb = ((object.shadow as unknown as Shadow).blur) * 2
+          const osc = (object.shadow as unknown as Shadow).color
+
           console.log(object.width, object.height, strokeWidth)
 
+          //색상 오류 해결
+          if (typeof object.fill === 'string') {
+            if (object.fill.length < 7){
+              object.fill = '#000000';
+            }
+          }
+
           if (strokeWidth === 0){
-            const rectHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; background-color: ${object.fill}; border-radius: 50%;" transform: rotate(${object.angle}deg);"></div>>`;          
+            const rectHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; background-color: ${object.fill}; border-radius: 50%;" transform: rotate(${object.angle}deg);"></div>>`;          
             htmlContent += rectHtml;
           }else{
             const rectHtml = `
-              <div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  border-radius: 50%; background-color: ${strokeColor}; transform: rotate(${object.angle}deg);">
+              <div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: 50%; background-color: ${strokeColor}; transform: rotate(${object.angle}deg);">
                 <div style="
                 position: absolute; 
                 left: 50%; 
@@ -152,12 +170,26 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           const ow = (object.width ?? 0) / 1000 * 100
           const oh = (object.height ?? 0) / 500 * 100
 
+          const osx = ((object.shadow as unknown as Shadow).offsetX)*2
+          const osy = ((object.shadow as unknown as Shadow).offsetY)*2
+          const osb = ((object.shadow as unknown as Shadow).blur)
+          const osc = (object.shadow as unknown as Shadow).color
           
           console.log("삼각형", originalLeft, originalTop)
           console.log("삼각형의 중심", centerX, centerY)
           console.log("삼각형의 각도", angleInDegrees)
+          //색상 오류 해결
+          if (typeof object.fill === 'string') {
+            if (object.fill.length < 7){
+              object.fill = '#000000';
+            }
+          }
 
-          const TriangleHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; background-color: ${object.fill}; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); transform: rotate(${object.angle}deg);"></div>`;
+          const TriangleHtml = `
+          <div style = "position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; filter: drop-shadow(${osx}px ${osy}px ${osb}px ${osc});">
+          <div style=" width: 100%; height: 100%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; background-color: ${object.fill}; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); transform: rotate(${object.angle}deg);"></div>
+          </div>
+          `;
           htmlContent += TriangleHtml;
         }
         if (object instanceof fabric.Textbox) {
@@ -188,6 +220,13 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           const fontColor = object.get('fill');
           const fontShadow = (object.shadow as unknown as Shadow).color
           console.log(fontSize, fontFamily, object.fontSize)
+
+          //색상 오류 해결
+          if (typeof object.fill === 'string') {
+            if (object.fill.length < 7){
+              object.fill = '#000000';
+            }
+          }
           
           const TextboxHtml = `<div style="position: absolute; text-shadow: 1.2px 1.2px ${fontShadow};
            left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; display : flex; justify-content : center; align-items : center; font-family : ${fontFamily}; font-weight : ${object.fontWeight}; font-size : ${newFontSize}px; font-style : ${object.fontStyle};color : ${fontColor};  transform: rotate(${object.angle}deg);">${object.text}</div>`;

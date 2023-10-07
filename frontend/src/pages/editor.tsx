@@ -10,6 +10,7 @@ import DownloadButton from '../components/DownloadButton';
 import { addRectToCanvas, addCircleToCanvas, addTriangleToCanvas, addTextboxToCanvas, addImageToCanvas } from '../utils/AddCanvasUtils'; 
 import { handleScalingRect, handleScalingCircle, handleScalingTriangle, handleScalingTextbox, handleScalingImage } from '../utils/ScalingCanvasUtils';
 import { handleChangeFontSizeInput, handleFontWeightChange, handleFontToItalicChange, handleFontShadowChange } from '../utils/FontOptionUtils';
+import { applyShadow_0_0, applyShadow_0_1, applyShadow_0_2, applyShadow_1_0, applyShadow_1_1, applyShadow_1_2, applyShadow_2_0, applyShadow_2_1, applyShadow_2_2} from '../utils/ShadowUtils';
 
 import { ChangeBorderWidthUtils } from '../utils/ChangeBorderWidthUtils';
 
@@ -23,159 +24,131 @@ type ObjectSize = {
 };
 
 const Editor = () => {
-  const handleApplyShadow_0_0 = () => {
-    const activeObject = canvas?.getActiveObject();
-  
-    if (activeObject) {
+  const [shadowOptionToggle, setShadowOptionToggle] = useState(false);
 
-      activeObject.set({
-        shadow: new fabric.Shadow({
-          color: '#000000', // 그림자 색상 (투명도 포함)
-          blur: 3, // 그림자 블러 정도
-          offsetX: -5, // 그림자 X축 이동
-          offsetY: -5, // 그림자 Y축 이동
-        }),
-      });
-      // 변경 사항을 캔버스에 적용
+  const [shadowColor, setShadowColor] = useState<string>('#000'); // Initial shadow color
+
+  const handleShadowColorChange = (newShadowColor: string) => {
+    const activeObject = canvas?.getActiveObject();
+    if (activeObject) {
+      setShadowColor(newShadowColor);
+  
+      // Check if there is a shadow applied to the object
+      if (activeObject.shadow instanceof fabric.Shadow) {
+        // Get the current blur value
+        const currentBlur = activeObject.shadow.blur;
+        const currentoffsetX = activeObject.shadow.offsetX;
+        const currentoffsetY = activeObject.shadow.offsetY;
+        activeObject.set({
+          shadow: new fabric.Shadow({
+            color: newShadowColor, // 그림자 색상 (투명도 포함)
+            blur: currentBlur, // 그림자 블러 정도
+            offsetX: currentoffsetX, // 그림자 X축 이동
+            offsetY: currentoffsetY, // 그림자 Y축 이동
+          }),
+        });
+      }
       canvas?.renderAll();
     }
   };
-  const handleApplyShadow_0_1 = () => {
-    const activeObject = canvas?.getActiveObject();
   
-    if (activeObject) {
+  
+  
+  const handleApplyShadow_0_0 = () => {
+    applyShadow_0_0(canvas);
+  };
 
-      activeObject.set({
-        shadow: new fabric.Shadow({
-          color: '#000000', // 그림자 색상 (투명도 포함)
-          blur: 3, // 그림자 블러 정도
-          offsetX: 0, // 그림자 X축 이동
-          offsetY: -4, // 그림자 Y축 이동
-        }),
-      });
-      // 변경 사항을 캔버스에 적용
-      canvas?.renderAll();
-    }
+  const handleApplyShadow_0_1 = () => {
+    applyShadow_0_1(canvas);
   };
   const handleApplyShadow_0_2 = () => {
-    const activeObject = canvas?.getActiveObject();
-  
-    if (activeObject) {
-
-      activeObject.set({
-        shadow: new fabric.Shadow({
-          color: '#000000', // 그림자 색상 (투명도 포함)
-          blur: 3, // 그림자 블러 정도
-          offsetX: 5, // 그림자 X축 이동
-          offsetY: -5, // 그림자 Y축 이동
-        }),
-      });
-      // 변경 사항을 캔버스에 적용
-      canvas?.renderAll();
-    }
+    applyShadow_0_2(canvas);
   };
   const handleApplyShadow_1_0 = () => {
-    const activeObject = canvas?.getActiveObject();
-  
-    if (activeObject) {
+    applyShadow_1_0(canvas);
 
-      activeObject.set({
-        shadow: new fabric.Shadow({
-          color: '#000000', // 그림자 색상 (투명도 포함)
-          blur: 3, // 그림자 블러 정도
-          offsetX: -4, // 그림자 X축 이동
-          offsetY: 0, // 그림자 Y축 이동
-        }),
-      });
-      // 변경 사항을 캔버스에 적용
-      canvas?.renderAll();
-    }
   };
   const handleApplyShadow_1_1 = () => {
-    const activeObject = canvas?.getActiveObject();
-  
-    if (activeObject) {
-
-      activeObject.set({
-        shadow: new fabric.Shadow({
-          color: '#000000', // 그림자 색상 (투명도 포함)
-          blur: 10, // 그림자 블러 정도
-          offsetX: 0, // 그림자 X축 이동
-          offsetY: 0, // 그림자 Y축 이동
-        }),
-      });
-      // 변경 사항을 캔버스에 적용
-      canvas?.renderAll();
-    }
+    applyShadow_1_1(canvas);
   };
   const handleApplyShadow_1_2 = () => {
-    const activeObject = canvas?.getActiveObject();
-  
-    if (activeObject) {
-
-      activeObject.set({
-        shadow: new fabric.Shadow({
-          color: '#000000', // 그림자 색상 (투명도 포함)
-          blur: 3, // 그림자 블러 정도
-          offsetX: 4, // 그림자 X축 이동
-          offsetY: 0, // 그림자 Y축 이동
-        }),
-      });
-      // 변경 사항을 캔버스에 적용
-      canvas?.renderAll();
-    }
+    applyShadow_1_2(canvas);
   };
   const handleApplyShadow_2_0 = () => {
-    const activeObject = canvas?.getActiveObject();
-  
-    if (activeObject) {
-
-      activeObject.set({
-        shadow: new fabric.Shadow({
-          color: '#000000', // 그림자 색상 (투명도 포함)
-          blur: 3, // 그림자 블러 정도
-          offsetX: -5, // 그림자 X축 이동
-          offsetY: 5, // 그림자 Y축 이동
-        }),
-      });
-      // 변경 사항을 캔버스에 적용
-      canvas?.renderAll();
-    }
+    applyShadow_2_0(canvas);
   };
   const handleApplyShadow_2_1 = () => {
-    const activeObject = canvas?.getActiveObject();
-  
-    if (activeObject) {
+    applyShadow_2_1(canvas);
 
-      activeObject.set({
-        shadow: new fabric.Shadow({
-          color: '#000000', // 그림자 색상 (투명도 포함)
-          blur: 3, // 그림자 블러 정도
-          offsetX: 0, // 그림자 X축 이동
-          offsetY: 4, // 그림자 Y축 이동
-        }),
-      });
-      // 변경 사항을 캔버스에 적용
-      canvas?.renderAll();
-    }
   };
   const handleApplyShadow_2_2 = () => {
-    const activeObject = canvas?.getActiveObject();
-  
-    if (activeObject) {
+    applyShadow_2_2(canvas);
+  };
 
-      activeObject.set({
-        shadow: new fabric.Shadow({
-          color: '#000000', // 그림자 색상 (투명도 포함)
-          blur: 3, // 그림자 블러 정도
-          offsetX: 5, // 그림자 X축 이동
-          offsetY: 5, // 그림자 Y축 이동
-        }),
-      });
-      // 변경 사항을 캔버스에 적용
-      canvas?.renderAll();
+  /*조정*/
+  const [shadowSize, setShadowSize] = useState<number>(10); // Initial shadow size
+  const [shadowOffsetX, setShadowOffsetX] = useState<number>(0); // Initial offsetX
+  const [shadowOffsetY, setShadowOffsetY] = useState<number>(0); // Initial offsetY
+  const handleShadowSizeChange = (newShadowSize: number) => {
+    const activeObject = canvas?.getActiveObject();
+    if (activeObject) {
+      setShadowSize(newShadowSize);
+
+      // Check if there is a shadow applied to the object
+      if (activeObject.shadow instanceof fabric.Shadow) {
+        activeObject.set({
+          shadow: new fabric.Shadow({
+            color: activeObject.shadow.color, // 그림자 색상 (투명도 포함)
+            blur: newShadowSize, // 그림자 블러 정도를 새로운 값으로 설정
+            offsetX: activeObject.shadow.offsetX, // 그림자 X축 이동
+            offsetY: activeObject.shadow.offsetY, // 그림자 Y축 이동
+          }),
+        });
+        canvas?.renderAll();
+      }
     }
   };
+  const handleShadowOffsetXChange = (newShadowOffsetX: number) => {
+    const activeObject = canvas?.getActiveObject();
+    if (activeObject) {
+      setShadowOffsetX(newShadowOffsetX);
+
+      // Check if there is a shadow applied to the object
+      if (activeObject.shadow instanceof fabric.Shadow) {
+        activeObject.set({
+          shadow: new fabric.Shadow({
+            color: activeObject.shadow.color, // 그림자 색상 (투명도 포함)
+            blur: activeObject.shadow.blur, // 그림자 블러 정도
+            offsetX: newShadowOffsetX, // 새로운 offsetX 값 설정
+            offsetY: activeObject.shadow.offsetY, // 그림자 Y축 이동
+          }),
+        });
+        canvas?.renderAll();
+      }
+    }
+  };
+
+  const handleShadowOffsetYChange = (newShadowOffsetY: number) => {
+    const activeObject = canvas?.getActiveObject();
+    if (activeObject) {
+      setShadowOffsetY(newShadowOffsetY);
+
+      // Check if there is a shadow applied to the object
+      if (activeObject.shadow instanceof fabric.Shadow) {
+        activeObject.set({
+          shadow: new fabric.Shadow({
+            color: activeObject.shadow.color, // 그림자 색상 (투명도 포함)
+            blur: activeObject.shadow.blur, // 그림자 블러 정도
+            offsetX: activeObject.shadow.offsetX, // 그림자 X축 이동
+            offsetY: newShadowOffsetY, // 새로운 offsetY 값 설정
+          }),
+        });
+        canvas?.renderAll();
+      }
+    }
+  };
+
+
   //도형 shadow 버튼
   const [shadowToggle, setShadowToggle] = useState(false);
 
@@ -194,6 +167,7 @@ const Editor = () => {
 
   const [backgroundColorToggle, setBackgroundColorToggle] = useState(false);
   const [borderColorToggle, setBorderColorToggle] = useState(false);
+  const [shadowColorToggle, setShadowColorToggle] = useState(false);
   console.log(color)
   //도형 툴바
   const [showTool, setShowTool] = useState(true);
@@ -495,6 +469,78 @@ const Editor = () => {
               </div>
             </div>
 
+            <div className='editor_body_right_style_container_1_info_container'>
+              <div className='editor_body_right_style_container_1_info_container_title'>shadow</div>
+              <div className='editor_body_right_style_container_1_info_container_btn'>
+                <button id="select-shadow-button" onClick={()=> setShadowToggle(!shadowToggle)}>select</button>
+              </div>
+            </div>
+
+            <div className='editor_body_right_style_container_1_info_container'>
+              <div className='editor_body_right_style_container_1_info_container_title'>shadow option</div>
+              <div className='editor_body_right_style_container_1_info_container_btn'>
+                <button id="select-shadow-button" onClick={() => setShadowOptionToggle(!shadowOptionToggle)}>select</button>
+              </div>
+            </div>
+            
+
+            {/* 버튼 클릭시 토글*/}
+            {shadowOptionToggle && (
+            <>
+              <div className='shadow_size_controll_container'>
+                <div className='shadow_size_controll_container_frame'>
+                  <label>shadow Size:</label>
+                  <div>{shadowSize}px</div>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="50"
+                  value={shadowSize}
+                  onChange={(e) => handleShadowSizeChange(parseInt(e.target.value))}
+                />
+
+                <div className='shadow_size_controll_container_frame'>
+                  <label>offsetX:</label>
+                  <div>{shadowOffsetX}px</div>
+                </div>
+                <input
+                  type="range"
+                  min="-50"
+                  max="50"
+                  value={shadowOffsetX}
+                  onChange={(e) => handleShadowOffsetXChange(parseInt(e.target.value))}
+                />
+                <div className='shadow_size_controll_container_frame'>
+                  <label>offsetY:</label>
+                  <div>{shadowOffsetY}px</div>
+                </div>
+                <input
+                  type="range"
+                  min="-50"
+                  max="50"
+                  value={shadowOffsetY}
+                  onChange={(e) => handleShadowOffsetYChange(parseInt(e.target.value))}
+                />
+              </div>
+            </>
+            )}
+
+
+            {shadowToggle && (
+              <div className='shadow_Frame'>
+                <button id="apply-shadow-button_0_0" onClick={handleApplyShadow_0_0}></button>
+                <button id="apply-shadow-button_0_1" onClick={handleApplyShadow_0_1}></button>
+                <button id="apply-shadow-button_0_2" onClick={handleApplyShadow_0_2}></button>
+                <button id="apply-shadow-button_1_0" onClick={handleApplyShadow_1_0}></button>
+                <button id="apply-shadow-button_1_1" onClick={handleApplyShadow_1_1}></button>
+                <button id="apply-shadow-button_1_2" onClick={handleApplyShadow_1_2}></button>
+                <button id="apply-shadow-button_2_0" onClick={handleApplyShadow_2_0}></button>
+                <button id="apply-shadow-button_2_1" onClick={handleApplyShadow_2_1}></button>
+                <button id="apply-shadow-button_2_2" onClick={handleApplyShadow_2_2}></button>
+              </div>
+            )}
+
             <div className='editor_body_right_style_container_2_info_container'>
               <div className='editor_body_right_style_container_2_info_container_title'>border color</div>
               <div className='editor_body_right_style_container_2_info_container_frame'>
@@ -522,24 +568,18 @@ const Editor = () => {
               </section>
             )}
 
-            <div className='editor_body_right_style_container_1_info_container'>
-              <div className='editor_body_right_style_container_1_info_container_title'>shadow</div>
-              <div className='editor_body_right_style_container_1_info_container_btn'>
-                <button id="select-shadow-button" onClick={()=> setShadowToggle(!shadowToggle)}>select</button>
+
+            <div className='editor_body_right_style_container_2_info_container'>
+              <div className='editor_body_right_style_container_2_info_container_title'>shadow color</div>
+              <div className='editor_body_right_style_container_2_info_container_frame'>
+                <HexColorInput className="editor_body_right_style_container_2_info_container_info" color={borderColor} onChange={handleShadowColorChange} />
+                <div className='editor_select_color_btn' onClick={()=> setShadowColorToggle(!shadowColorToggle)}></div>
               </div>
             </div>
-            {shadowToggle && (
-              <div className='shadow_Frame'>
-                <button id="apply-shadow-button_0_0" onClick={handleApplyShadow_0_0}></button>
-                <button id="apply-shadow-button_0_1" onClick={handleApplyShadow_0_1}></button>
-                <button id="apply-shadow-button_0_2" onClick={handleApplyShadow_0_2}></button>
-                <button id="apply-shadow-button_1_0" onClick={handleApplyShadow_1_0}></button>
-                <button id="apply-shadow-button_1_1" onClick={handleApplyShadow_1_1}></button>
-                <button id="apply-shadow-button_1_2" onClick={handleApplyShadow_1_2}></button>
-                <button id="apply-shadow-button_2_0" onClick={handleApplyShadow_2_0}></button>
-                <button id="apply-shadow-button_2_1" onClick={handleApplyShadow_2_1}></button>
-                <button id="apply-shadow-button_2_2" onClick={handleApplyShadow_2_2}></button>
-              </div>
+            {shadowColorToggle && (
+              <section className="color_controller1">
+                <HexColorPicker color={shadowColor} onChange={handleShadowColorChange}/>
+              </section>
             )}
 
             <div className='editor_body_right_style_container_2_info_container'>
@@ -575,7 +615,6 @@ const Editor = () => {
                 <button id="change-fontShadow-button">A</button>
               </div>
             </div>
-            
 
           </div>
         </div>

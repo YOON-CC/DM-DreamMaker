@@ -8,6 +8,12 @@ export const addRectToCanvas = (canvas: fabric.Canvas) => {
         height: 100,
         fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
         strokeWidth: 0, 
+        shadow: new fabric.Shadow({
+            color: 'rgba(0, 0, 0, 0)', // 그림자의 색상
+            offsetX: 0, // 그림자의 가로 오프셋
+            offsetY: 0, // 그림자의 세로 오프셋
+            blur: 0, // 그림자의 흐릿함 정도
+        }),
     });
 
     canvas.add(newRect);
@@ -20,8 +26,13 @@ export const addCircleToCanvas = (canvas: fabric.Canvas) => {
         rx: 50, // 가로 반지름
         ry: 50, // 세로 반지름
         fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
-        // strokeWidth: 0, 
-
+        strokeWidth: 0, 
+        shadow: new fabric.Shadow({
+            color: 'rgba(0, 0, 0, 0)', // 그림자의 색상
+            offsetX: 0, // 그림자의 가로 오프셋
+            offsetY: 0, // 그림자의 세로 오프셋
+            blur: 0, // 그림자의 흐릿함 정도
+        }),
     });
 
     canvas.add(newCircle);
@@ -34,6 +45,12 @@ export const addTriangleToCanvas = (canvas: fabric.Canvas) => {
         width: 100,
         height: 100,
         fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        shadow: new fabric.Shadow({
+            color: 'rgba(0, 0, 0, 0)', // 그림자의 색상
+            offsetX: 0, // 그림자의 가로 오프셋
+            offsetY: 0, // 그림자의 세로 오프셋
+            blur: 0, // 그림자의 흐릿함 정도
+        }),
     });
 
     canvas.add(newTriangle);

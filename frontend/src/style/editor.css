@@ -673,7 +673,7 @@
     background-color: rgb(88, 88, 88);
     width: 11.6%;
     height: 25%;
-    margin-top: -12.8%;
+    margin-top: -15%;
     border-radius: 5px;
     flex-wrap: wrap; 
 }
@@ -787,4 +787,40 @@
 #apply-shadow-button_2_2:hover{
     background-color: rgb(77, 77, 77);
     cursor: pointer;
+}
+.shadow_size_controll_container{
+    background-color: red;
+    position: absolute;
+    background-color: rgb(88, 88, 88);
+    width: 11.6%;
+    height: 25%;
+    margin-top: -12.8%;
+    border-radius: 5px;
+}
+.shadow_size_controll_container label{
+    font-size: 10px;
+    color : #ffffff;
+}
+.shadow_size_controll_container input{
+    width: 90%;
+    /* background: linear-gradient(to right, #FFE283 0%, #FFE283 50%, #ececec 50%, #ececec 100%); */
+    border-radius: 10px;
+    outline: none;
+    accent-color: #ffffff;
+    margin-left: 5%;
+    height: 10%;
+}
+.shadow_size_controll_container div{
+    font-size: 10px;
+    color : #ffffff;
+}
+.shadow_size_controll_container_frame{
+    /* background-color: red; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8%;
+    padding-left: 6%;
+    padding-right: 6%;
+    height: 10%;
 }
