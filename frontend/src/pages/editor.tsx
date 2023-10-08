@@ -26,7 +26,15 @@ type ObjectSize = {
 const Editor = () => {
   const copiedObjectRef = useRef<fabric.Object | null>(null);
 
+  const [backgroundColorToggleBtn, setBackgroundColorToggleBtn] = useState(false); // 초기 배경색 설정
 
+  const [backgroundColor, setBackgroundColor] = useState('#ffffff'); // 초기 배경색 설정
+  const handleBackgroundColorChange = (newBackgroundColor: string) => {
+    setBackgroundColor(newBackgroundColor);
+    if (canvas) {
+      canvas.setBackgroundColor(newBackgroundColor, canvas.renderAll.bind(canvas));
+    }
+  };
 
 
   const [shadowOptionToggle, setShadowOptionToggle] = useState(false);
@@ -345,16 +353,50 @@ const Editor = () => {
       const handleCopy = (event: KeyboardEvent) => {
         if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
           handleCopyObject()
+          console.log("복사")
         }
       };
       const handlePaste = (event: KeyboardEvent) => {
         if ((event.ctrlKey || event.metaKey) && event.key === 'v') {
           handlePasteObject()
+          console.log("붙여넣기")
         }
       };
 
+      const handleKeyDown = (event: KeyboardEvent) => {
+        const activeObject = canvas?.getActiveObject();
+        if (activeObject) {
+          const moveDistance = 2;
+      
+          switch (event.key) {
+            case 'ArrowUp':
+              activeObject.set('top', (activeObject.top ?? 0) - moveDistance);
+              break;
+            case 'ArrowDown':
+              activeObject.set('top', (activeObject.top ?? 0) + moveDistance);
+              break;
+            case 'ArrowLeft':
+              activeObject.set('left', (activeObject.left ?? 0) - moveDistance);
+              break;
+            case 'ArrowRight':
+              activeObject.set('left', (activeObject.left ?? 0) + moveDistance);
+              break;
+            default:
+              return; 
+          }
+      
+          canvas?.renderAll();
+        }
+      };
+      
+          
+      
+      
+      
+
       document.addEventListener('keydown', handleCopy);
       document.addEventListener('keydown', handlePaste);
+      document.addEventListener('keydown', handleKeyDown);
 
       const changeFontSizeInputButton = document.getElementById('change-fontsize-input-button');
       changeFontSizeInputButton?.addEventListener('click', handleChangeFontSize);
@@ -414,7 +456,7 @@ const Editor = () => {
         document.removeEventListener('keydown', handleKeyboardDelete);
         document.removeEventListener('keydown', handleCopy);
         document.removeEventListener('keydown', handlePaste);
-
+        document.removeEventListener('keydown', handleKeyDown);
 
         addButton?.removeEventListener('click', handleAddRect);        
         addCircleButton?.removeEventListener('click', handleAddCircle);
@@ -456,6 +498,7 @@ const Editor = () => {
            
         </div>
       </div>
+
       <div className='editor_body'>
         <div className='editor_body_toolbox'>
           <button id="add-button"></button>
@@ -464,9 +507,21 @@ const Editor = () => {
         </div>
         {showTool && (<div className='editor_body_toolbox_cover'></div>)}
         <div className='editor_body_left'>
-          
+
         </div>
         <div className='editor_body_center'>
+          <div className='editor_body_style_container_info_container'>
+            <div className='editor_body_style_container_info_container_title'>background color</div>
+            <div className='editor_body_style_container_info_container_frame'>
+              <HexColorInput className="editor_body_style_container_info_container_container_info" color={backgroundColor} onChange={handleBackgroundColorChange} />
+              <div className='editor_select_color_btn' onClick={()=> setBackgroundColorToggleBtn(!backgroundColorToggleBtn)}></div>
+            </div>
+          </div>
+            {backgroundColorToggleBtn && (
+              <section className="background_color_controller">
+                <HexColorPicker color={backgroundColor} onChange={handleBackgroundColorChange} />
+              </section>
+            )}
           <div className='canvas_container'>
             <canvas ref={canvasRef}  width={1000} height={500}></canvas>
           </div>

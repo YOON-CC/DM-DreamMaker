@@ -16,10 +16,11 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
   const handleDownloadCanvasAsHtml = () => {
     if (canvas) {
       const canvasObjects = canvas.getObjects();
+      console.log("현재 켄버스의 메인 색상입니다.",canvas.backgroundColor)
     // console.log(canvasWidth, canvasHeight)
 
     // Canvas 내용을 저장할 HTML 문자열 초기화
-      let htmlContent = '<!DOCTYPE html><html><head><title>Canvas Content</title></head><body>';
+      let htmlContent = `<!DOCTYPE html><html><head><title>Canvas Content</title></head><body style="background:${canvas.backgroundColor}">`;
   
       // 각 객체를 순회하면서 HTML로 변환
       canvasObjects.forEach(object => {
@@ -194,7 +195,6 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
         }
         if (object instanceof fabric.Textbox) {
 
-        
           // Fabric.js에서 원 객체인 경우
           const originalLeft = object.left?? 0; // 부모 태그로부터의 left
           const originalTop = object.top ?? 0; // 부모 태그로부터의 top
@@ -217,7 +217,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           const fontSize = object.get('fontSize') as number;
           const newFontSize = fontSize*1.5;
           const fontFamily = object.get('fontFamily');
-          const fontColor = object.get('fill');
+          const fontColor = object.fill;
           const fontShadow = (object.shadow as unknown as Shadow).color
           console.log(fontSize, fontFamily, object.fontSize)
 
@@ -229,7 +229,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           }
           
           const TextboxHtml = `<div style="position: absolute; text-shadow: 1.2px 1.2px ${fontShadow};
-           left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; display : flex; justify-content : center; align-items : center; font-family : ${fontFamily}; font-weight : ${object.fontWeight}; font-size : ${newFontSize}px; font-style : ${object.fontStyle};color : ${fontColor};  transform: rotate(${object.angle}deg);">${object.text}</div>`;
+          left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; display : flex; justify-content : center; align-items : center; font-family : ${fontFamily}; font-weight : ${object.fontWeight}; font-size : ${newFontSize}px; font-style : ${object.fontStyle};color : ${fontColor};  transform: rotate(${object.angle}deg);">${object.text}</div>`;
           htmlContent += TextboxHtml;
         }       
         if (object instanceof fabric.Image) {

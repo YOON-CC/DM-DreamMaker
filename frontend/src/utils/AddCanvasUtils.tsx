@@ -66,12 +66,12 @@ export const addTextboxToCanvas = (canvas: fabric.Canvas) => {
     editable: true, 
     fontFamily: 'Arial', // 글꼴을 지정합니다.
     textAlign: 'center', // 가운데 정렬 설정
-    // shadow: new fabric.Shadow({
-    //     color: 'rgba(0, 0, 0, 0.5)', // 그림자 색상
-    //     offsetX: 2, // X 좌표 오프셋
-    //     offsetY: 2, // Y 좌표 오프셋
-    //     blur: 5, // 그림자 흐림 정도
-    //   }),
+    shadow: new fabric.Shadow({
+        color: 'rgba(0, 0, 0, 0)', // 그림자의 색상
+        offsetX: 0, // 그림자의 가로 오프셋
+        offsetY: 0, // 그림자의 세로 오프셋
+        blur: 0, // 그림자의 흐릿함 정도
+    }),
   });
 
   canvas.add(newTextbox);
