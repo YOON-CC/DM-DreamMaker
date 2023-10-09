@@ -919,3 +919,28 @@
     border-radius: 0px 5px 5px 0px;
     cursor: pointer;
 }
+.X_line{
+    position: absolute;
+    height : 5px;
+    width: 1000px;
+    background-color: rgb(48, 48, 48);
+    margin-top: -34%;
+}
+.X_value{
+    background-color: rgb(255, 0, 0);
+    height: 100%;
+    width: 2px;
+}
+.Y_line{
+    position: absolute;
+    height : 500px;
+    width: 5px;
+    background-color: rgb(48, 48, 48);
+    /* margin-top: -34%; */
+    margin-right:66.5%;
+}
+.Y_value{
+    background-color: rgb(255, 0, 0);
+    width: 100%;
+    height: 2px;
+}

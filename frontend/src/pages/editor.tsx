@@ -185,6 +185,8 @@ const Editor = () => {
   const [showTool, setShowTool] = useState(true);
 
   const [objectCoordinates, setObjectCoordinates] = useState({ x: 0, y: 0 });
+  const [objectCoordinates_center, setObjectCoordinates_center] = useState({ center_x: 0, center_y: 0 });
+
   const [objectSize, setObjectSize] = useState<ObjectSize>({});
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -215,8 +217,34 @@ const Editor = () => {
     if (canvasRef.current) {
       const canvas = new fabric.Canvas(canvasRef.current);
 
-
-      
+      const canvasWidth = 1000;
+      const canvasHeight = 500;
+      const grid = 10;
+  
+      // create grid
+      for (let i = 0; i <= canvasWidth / grid; i++) {
+        canvas.add(
+          new fabric.Line([i * grid, 0, i * grid, canvasHeight], {
+            stroke: '#f1f1f1',
+            selectable: false,
+          })
+        );
+      }
+      for (let i = 0; i <= canvasHeight / grid; i++) {
+        canvas.add(
+          new fabric.Line([0, i * grid, canvasWidth, i * grid], {
+            stroke: '#f1f1f1',
+            selectable: false,
+          })
+        );
+      }
+      canvas.on('object:moving', (options) => {
+        const target = options.target as fabric.Object;
+        target.set({
+          left: Math.round(target.left! / grid) * grid,
+          top: Math.round(target.top! / grid) * grid,
+        });
+      });
       canvas.on('object:moving', (e: fabric.IEvent) => {
         const movedObject = e.target as fabric.Object;
         const x = movedObject.left ?? 0;
@@ -224,15 +252,13 @@ const Editor = () => {
         const centerX = (movedObject.left ?? 0) + (movedObject.width ?? 0) / 2;
         const centerY = (movedObject.top ?? 0) + (movedObject.height ?? 0) / 2;
         setObjectCoordinates({ x, y });
-      
+        setObjectCoordinates_center({ center_x: centerX, center_y: centerY });
         console.log(centerX, centerY);
       
         if ((centerX % 5 >= -2 && centerX % 5 <= 2) && (centerY % 5 >= -2 && centerY % 5 <= 2)) {
           console.log("도형이 5의 배수 좌표 부근에 있습니다.");
-          canvas.setBackgroundColor('aqua', canvas.requestRenderAll.bind(canvas));
         } else {
           console.log("도형이 5의 배수 좌표 부근에 없습니다.");
-          canvas.setBackgroundColor('', canvas.requestRenderAll.bind(canvas));
         }
       });
       
@@ -387,9 +413,15 @@ const Editor = () => {
 
       const handleKeyDown = (event: KeyboardEvent) => {
         const activeObject = canvas?.getActiveObject();
+
+
+
         if (activeObject) {
           const moveDistance = 2;
-      
+          const centerX = (activeObject.left ?? 0) + (activeObject.width ?? 0) / 2;
+          const centerY = (activeObject.top ?? 0) + (activeObject.height ?? 0) / 2;
+          setObjectCoordinates({ x : activeObject.left??0 , y : activeObject.top??0});
+          setObjectCoordinates_center({ center_x: centerX, center_y: centerY });
           switch (event.key) {
             case 'ArrowUp':
               activeObject.set('top', (activeObject.top ?? 0) - moveDistance);
@@ -406,7 +438,6 @@ const Editor = () => {
             default:
               return; 
           }
-      
           canvas?.renderAll();
         }
       };
@@ -544,6 +575,13 @@ const Editor = () => {
                 <HexColorPicker color={backgroundColor} onChange={handleBackgroundColorChange} />
               </section>
             )}
+
+            <div className='X_line'>
+              <div className='X_value' style={{ marginLeft: `${objectCoordinates_center.center_x}px` }}></div>
+            </div>
+            <div className='Y_line'>
+              <div className='Y_value' style={{ marginTop: `${objectCoordinates_center.center_y}px` }}></div>
+            </div>
           <div className='canvas_container'>
             <canvas ref={canvasRef}  width={1000} height={500}></canvas>
           </div>
@@ -562,9 +600,9 @@ const Editor = () => {
             <div className='editor_body_right_location_container_title'>위치</div>
             <div className='editor_body_right_location_container_info_container'>
               <div className='editor_body_right_location_container_info_container_title_1'>X</div>
-              <div className='editor_body_right_location_container_info_container_info_1'>{objectCoordinates.x.toFixed(2)}</div>
+              <div className='editor_body_right_location_container_info_container_info_1'>{objectCoordinates_center.center_x.toFixed(2)}</div>
               <div className='editor_body_right_location_container_info_container_title_2'>Y</div>
-              <div className='editor_body_right_location_container_info_container_info_2'>{objectCoordinates.y.toFixed(2)}</div>
+              <div className='editor_body_right_location_container_info_container_info_2'>{objectCoordinates_center.center_y.toFixed(2)}</div>
             </div>
           </div>
           <div className='editor_body_right_order_container'>
