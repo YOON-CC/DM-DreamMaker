@@ -214,7 +214,29 @@ const Editor = () => {
   useEffect(() => { 
     if (canvasRef.current) {
       const canvas = new fabric.Canvas(canvasRef.current);
+
+
       
+      canvas.on('object:moving', (e: fabric.IEvent) => {
+        const movedObject = e.target as fabric.Object;
+        const x = movedObject.left ?? 0;
+        const y = movedObject.top ?? 0;
+        const centerX = (movedObject.left ?? 0) + (movedObject.width ?? 0) / 2;
+        const centerY = (movedObject.top ?? 0) + (movedObject.height ?? 0) / 2;
+        setObjectCoordinates({ x, y });
+      
+        console.log(centerX, centerY);
+      
+        if ((centerX % 5 >= -2 && centerX % 5 <= 2) && (centerY % 5 >= -2 && centerY % 5 <= 2)) {
+          console.log("도형이 5의 배수 좌표 부근에 있습니다.");
+          canvas.setBackgroundColor('aqua', canvas.requestRenderAll.bind(canvas));
+        } else {
+          console.log("도형이 5의 배수 좌표 부근에 없습니다.");
+          canvas.setBackgroundColor('', canvas.requestRenderAll.bind(canvas));
+        }
+      });
+      
+
       //도형 생성
       const handleAddRect = () => {if (canvas) {addRectToCanvas(canvas);}};
       const handleAddCircle = () => {if (canvas) { addCircleToCanvas(canvas);}};

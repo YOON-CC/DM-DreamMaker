@@ -27,6 +27,10 @@ export function handleScalingRect(activeObject: fabric.Object | null, setObjectC
         setObjectCoordinates({ x: left, y: top });
         setObjectSize({ width, height });
 
+    if (left > 450 && left < 550 && top > 200 && top < 300) {
+        console.log("hello");
+    }
+
         canvas.renderAll();
     }
 }
@@ -76,7 +80,7 @@ export function handleScalingTriangle(activeObject: fabric.Object | null, setObj
     
         setObjectCoordinates({ x: left, y: top });
         setObjectSize({ width, height });
-    
+
         canvas.renderAll();
     }
 }
