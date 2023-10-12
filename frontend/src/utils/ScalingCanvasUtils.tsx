@@ -7,6 +7,52 @@ type ObjectSize = {
     ry?: number;
     // 더 많은 프로퍼티를 여기에 추가
 };
+export function handleScalingGroup(activeObject: fabric.Object | null, setObjectCoordinates: React.Dispatch<React.SetStateAction<{ x: number; y: number }>>, setObjectSize: React.Dispatch<React.SetStateAction<ObjectSize>>, canvas: fabric.Canvas) {
+    if (activeObject instanceof fabric.Group) {
+        const scaleX = activeObject.scaleX ?? 1;
+        const scaleY = activeObject.scaleY ?? 1;
+        const left = activeObject.left ?? 0;
+        const top = activeObject.top ?? 0;
+        const width = activeObject.width ?? 0;
+        const height = activeObject.height ?? 0;
+
+        const objectsInsideGroup = activeObject.getObjects();
+
+        objectsInsideGroup.forEach(obj => {
+            const objScaleX = obj.scaleX || 1; 
+            const objScaleY = obj.scaleY || 1; 
+            const objLeft = obj.left || 0;   
+            const objTop = obj.top || 0;      
+        
+
+            obj.set({
+                left: objLeft * scaleX, 
+                top: objTop * scaleY,  
+                scaleX: objScaleX * scaleX,
+                scaleY: objScaleY * scaleY,
+            });
+        });
+        
+        activeObject.set({
+            width: width * scaleX,
+            height: height * scaleY,
+            scaleX: 1,
+            scaleY: 1
+
+        });
+
+        setObjectCoordinates({ x: left, y: top });
+        setObjectSize({ width: activeObject.width, height: activeObject.height });
+
+        if (left > 450 && left < 550 && top > 200 && top < 300) {
+            console.log("hello");
+        }
+
+        canvas.renderAll();
+    }
+}
+
+
 
 export function handleScalingRect(activeObject: fabric.Object | null, setObjectCoordinates: React.Dispatch<React.SetStateAction<{ x: number; y: number }>>, setObjectSize: React.Dispatch<React.SetStateAction<ObjectSize>>, canvas: fabric.Canvas) {
     if (activeObject instanceof fabric.Rect) {

@@ -16,14 +16,97 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
   const handleDownloadCanvasAsHtml = () => {
     if (canvas) {
       const canvasObjects = canvas.getObjects();
-      console.log("현재 켄버스의 메인 색상입니다.",canvas.backgroundColor)
-    // console.log(canvasWidth, canvasHeight)
+
+      const group = canvasObjects.find(obj => obj.type === 'group');
+
+      if (group) {
+        console.log('Found Group:', group.toObject());
+      } else {
+        console.log('Group not found');
+      }
 
     // Canvas 내용을 저장할 HTML 문자열 초기화
       let htmlContent = `<!DOCTYPE html><html><head><title>Canvas Content</title></head><body style="background:${canvas.backgroundColor}">`;
   
       // 각 객체를 순회하면서 HTML로 변환
       canvasObjects.forEach(object => {
+        if (object instanceof fabric.Group) {
+          const gw = object.width?? 0
+          const gh = object.height?? 0
+          const groupLeft = object.left?? 0; // 부모 태그로부터의 left
+          const groupTop = object.top ?? 0; // 부모 태그로부터의 top
+          
+          const angleInDegrees = - (object.angle?? 0); // 회전 각도
+          const angleInRadians = (angleInDegrees * Math.PI) / 180;
+          // 회전 중심을 div 태그의 중심으로 설정
+          const centerX = object.getCenterPoint().x;
+          const centerY = object.getCenterPoint().y;
+          // 회전 변환 후의 left와 top 계산
+          const newX = centerX + (groupLeft - centerX) * Math.cos(angleInRadians) - (groupTop - centerY) * Math.sin(angleInRadians);
+          const newY = centerY + (groupLeft - centerX) * Math.sin(angleInRadians) + (groupTop - centerY) * Math.cos(angleInRadians);
+
+          const ow = ((object.width ?? 0)) / 1000 * 100
+          const oh = ((object.height ?? 0)) / 500 * 100
+          const ol = (newX ?? 0) / 1000 * 100
+          const ot = (newY ?? 0) / 500 * 100
+          
+          htmlContent += `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; transform: rotate(${object.angle}deg);">`;
+  
+          object.forEachObject((groupObject) => {
+            if (groupObject instanceof fabric.Rect) {
+
+              const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
+              const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
+
+              const groupObjectLeft = originalLeft / gw * 100
+              const groupObjectTop = originalTop / gh * 100
+
+              const groupStrokeWidth = groupObject.strokeWidth ?? 0; // 두께
+              const groupStrokeColor = groupObject.stroke ?? 'transparent'; // 색상 (기본값: 투명)
+
+              const groupObjectWidth = (((groupObject.width ?? 0)+(groupStrokeWidth)) * (groupObject.scaleX?? 0)) / gw * 100
+              const groupObjectHight = (((groupObject.height ?? 0)+(groupStrokeWidth)) * (groupObject.scaleY?? 0)) / gh * 100
+              
+              const oinnerw = (((groupObject.width ?? 0) - groupStrokeWidth*1.76))  / (groupObject.width ?? 0) * 100 // 경계선 있을시 내부 도형
+              const oinnerh = (((groupObject.height ?? 0) - groupStrokeWidth*1.76)) / (groupObject.height ?? 0) * 100 // 경계선 있을시 내부 도형
+
+              const obr =  ((groupObject.rx ?? 0)) * 1.5;
+              const obrI =  ((groupObject.rx ?? 0));
+
+              // const ow = ((object.width?? 0)*(object.scaleX?? 0)) / 1000 * 100
+              // const oh = ((object.height?? 0) * (object.scaleY?? 0)) / 500 * 100
+
+              const osx = ((groupObject.shadow as unknown as Shadow).offsetX)*2
+              const osy = ((groupObject.shadow as unknown as Shadow).offsetY)*2
+              const osb = ((groupObject.shadow as unknown as Shadow).blur) * 2
+              const osc = (groupObject.shadow as unknown as Shadow).color
+              if (groupStrokeWidth === 0){
+                htmlContent += `<div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: ${obr}px; background-color: ${groupObject.fill};"></div>`;
+              }
+              else{
+                htmlContent+=`
+                <div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: ${obr}px; background-color: ${groupStrokeColor}; ">
+                  <div style="
+                  position: absolute; 
+                  left: 50%; 
+                  top: 50%;
+                  transform : translate(-50%, -50%); 
+                  width: ${oinnerw}%;
+                  height: ${oinnerh}%;  
+                  border-radius: ${obrI}px;
+                  background-color: ${groupObject.fill}; 
+                  ">
+                  </div>
+                </div>`;     
+              }
+            }
+          });
+  
+          // 그룹 닫기
+          htmlContent += `</div>`;
+  
+        }
+
         if (object instanceof fabric.Rect) {
           // Fabric.js에서 사각형 객체인 경우'
           const originalLeft = object.left?? 0; // 부모 태그로부터의 left
@@ -49,9 +132,9 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           const oh = ((object.height ?? 0) + strokeWidth) / 500 * 100
           const obr =  ((object.rx ?? 0)) * 1.5;
           const obrI =  ((object.rx ?? 0));
+
           const oinnerw = ((object.width ?? 0) - strokeWidth*1.76) / (object.width ?? 0) * 100 // 경계선 있을시 내부 도형
           const oinnerh = ((object.height ?? 0) - strokeWidth*1.76) / (object.height ?? 0) * 100 // 경계선 있을시 내부 도형
-          const osw = (strokeWidth ?? 0) / 500 * 100
           const osx = ((object.shadow as unknown as Shadow).offsetX)*2
           const osy = ((object.shadow as unknown as Shadow).offsetY)*2
           const osb = ((object.shadow as unknown as Shadow).blur) * 2

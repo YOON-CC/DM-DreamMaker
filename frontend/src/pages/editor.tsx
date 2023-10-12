@@ -8,7 +8,7 @@ import SaveButton from '../components/savebutton';
 import LoadButton from '../components/loadbutton';
 import DownloadButton from '../components/DownloadButton';
 import { addRectToCanvas, addCircleToCanvas, addTriangleToCanvas, addTextboxToCanvas, addImageToCanvas } from '../utils/AddCanvasUtils'; 
-import { handleScalingRect, handleScalingCircle, handleScalingTriangle, handleScalingTextbox, handleScalingImage } from '../utils/ScalingCanvasUtils';
+import { handleScalingRect, handleScalingCircle, handleScalingTriangle, handleScalingTextbox, handleScalingImage, handleScalingGroup } from '../utils/ScalingCanvasUtils';
 import { handleChangeFontSizeInput, handleFontWeightChange, handleFontToItalicChange, handleFontShadowChange } from '../utils/FontOptionUtils';
 import { applyShadow_0_0, applyShadow_0_1, applyShadow_0_2, applyShadow_1_0, applyShadow_1_1, applyShadow_1_2, applyShadow_2_0, applyShadow_2_1, applyShadow_2_2} from '../utils/ShadowUtils';
 
@@ -254,12 +254,6 @@ const Editor = () => {
         setObjectCoordinates({ x, y });
         setObjectCoordinates_center({ center_x: centerX, center_y: centerY });
         console.log(centerX, centerY);
-      
-        if ((centerX % 5 >= -2 && centerX % 5 <= 2) && (centerY % 5 >= -2 && centerY % 5 <= 2)) {
-          console.log("도형이 5의 배수 좌표 부근에 있습니다.");
-        } else {
-          console.log("도형이 5의 배수 좌표 부근에 없습니다.");
-        }
       });
       
 
@@ -293,8 +287,10 @@ const Editor = () => {
         const activeObject = e.target as fabric.Image;
         handleScalingImage(activeObject, setObjectCoordinates, setObjectSize, canvas);
       });
-
-
+      canvas.on('object:scaling', (e) => {
+        const activeObject = e.target as fabric.Group;
+        handleScalingGroup(activeObject, setObjectCoordinates, setObjectSize, canvas);
+      });
 
       const handleDeleteSelectedObjects = () => {
         const selectedObjects = canvas.getActiveObjects();
@@ -442,9 +438,21 @@ const Editor = () => {
         }
       };
       
-          
-      
-      
+      const handleObjectToGroup = () => {
+        const activeObject = canvas.getActiveObject();
+  
+        if (!activeObject) {
+          return;
+        }
+  
+        if (activeObject.type !== 'activeSelection') {
+          return;
+        }
+  
+        (activeObject as fabric.ActiveSelection).toGroup();
+        canvas.discardActiveObject();
+        canvas.requestRenderAll();
+      };
       
 
       document.addEventListener('keydown', handleCopy);
@@ -498,6 +506,9 @@ const Editor = () => {
       const fontShadowButton = document.getElementById('change-fontShadow-button');
       fontShadowButton?.addEventListener('click', handleFontShadow);
 
+      const objectToGroup = document.getElementById('object_to_group');
+      objectToGroup?.addEventListener('click', handleObjectToGroup);
+
       setCanvas(canvas);
 
 
@@ -529,7 +540,9 @@ const Editor = () => {
   return (
     <div className='body'>
       <div className='editor_header'>
-        <div className='editor_header_logo_container'></div>
+        <div className='editor_header_logo_container'>
+        <button id="object_to_group">그룹</button>
+        </div>
         <div className='editor_header_tool_container'>
           <div className='editor_header_tool_container_btn' onClick={() =>setShowTool(!showTool)}>
             <img src="../images/figures.png" style={{ width: "60%", height: "80%", marginTop:"8%", marginLeft:"19%"}} />
@@ -560,6 +573,7 @@ const Editor = () => {
         </div>
         {showTool && (<div className='editor_body_toolbox_cover'></div>)}
         <div className='editor_body_left'>
+
 
         </div>
         <div className='editor_body_center'>
