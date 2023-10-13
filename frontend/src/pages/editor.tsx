@@ -455,6 +455,72 @@ const Editor = () => {
       };
       
 
+      const handleObjectUngroup = () => {
+        const activeObject = canvas.getActiveObject();
+      
+        if (!activeObject || activeObject.type !== 'group') {
+          return;
+        }
+      
+        const group = activeObject as fabric.Group;
+        const objectsInGroup = group.getObjects();
+      
+        const groupLeft = group?.left ?? 0;
+        const groupTop = group?.top ?? 0;
+      
+        objectsInGroup.forEach((object) => {
+          const objectLeft = object?.left ?? 0;
+          const objectTop = object?.top ?? 0;
+          
+          const originalWidth = (object.scaleX??0)*100;
+          const originalHeight = (object.scaleY??0)*100;
+      
+          console.log((object.scaleX??0)*100, (object.scaleY??0)*100,"크기 입니다")
+
+          console.log("위치",group.top, group.left, "객체", object.left, object.top)
+          const relativePosition = {
+            left: objectLeft + groupLeft,
+            top: objectTop + groupTop,
+          };
+      
+      
+          console.log("원래 그룹의 위치", group.left, group.top)
+          if (object.type == 'ellipse'){
+            object.set({
+              left: relativePosition.left,
+              top: relativePosition.top,
+              rx: originalWidth/2,
+              ry: originalHeight/2,
+              scaleX: 1,
+              scaleY: 1,
+            } as fabric.Ellipse);
+          }
+          else{
+            object.set({
+              left: relativePosition.left,
+              top: relativePosition.top,
+              width: originalWidth,
+              height: originalHeight,
+              scaleX: 1,
+              scaleY: 1,
+            });
+          }
+
+          console.log(object)
+          canvas.add(object);
+        });
+      
+        canvas.remove(group);
+      
+        canvas.setActiveObject(new fabric.ActiveSelection(objectsInGroup, {
+          canvas: canvas,
+        }));
+        canvas.requestRenderAll();
+      };
+      
+
+      
+
       document.addEventListener('keydown', handleCopy);
       document.addEventListener('keydown', handlePaste);
       document.addEventListener('keydown', handleKeyDown);
@@ -497,6 +563,12 @@ const Editor = () => {
       const addImageShapeButton = document.getElementById('add-image-shape-button');
       addImageShapeButton?.addEventListener('click', handleAddImageShape);
 
+      const objectToGroup = document.getElementById('add-group-button');
+      objectToGroup?.addEventListener('click', handleObjectToGroup);
+
+      const objectUnGroup = document.getElementById('add-ungroup-button');
+      objectUnGroup?.addEventListener('click', handleObjectUngroup);
+
       const fontWeightButton = document.getElementById('change-fontWeight-button');
       fontWeightButton?.addEventListener('click', handleFontWeight);
 
@@ -506,8 +578,7 @@ const Editor = () => {
       const fontShadowButton = document.getElementById('change-fontShadow-button');
       fontShadowButton?.addEventListener('click', handleFontShadow);
 
-      const objectToGroup = document.getElementById('object_to_group');
-      objectToGroup?.addEventListener('click', handleObjectToGroup);
+
 
       setCanvas(canvas);
 
@@ -541,7 +612,6 @@ const Editor = () => {
     <div className='body'>
       <div className='editor_header'>
         <div className='editor_header_logo_container'>
-        <button id="object_to_group">그룹</button>
         </div>
         <div className='editor_header_tool_container'>
           <div className='editor_header_tool_container_btn' onClick={() =>setShowTool(!showTool)}>
@@ -552,6 +622,12 @@ const Editor = () => {
           </div>
           <div id='add-image-shape-button'>
             <img src="../images/photo.png" style={{ width: "67%", height: "80%", marginTop:"8%", marginLeft:"16%"}} />
+          </div>
+          <div id='add-group-button'>
+            <img src="../images/group.png" style={{ width: "67%", height: "80%", marginTop:"8%", marginLeft:"16%"}} />
+          </div>
+          <div id='add-ungroup-button'>
+            <img src="../images/ungroup.png" style={{ width: "67%", height: "80%", marginTop:"8%", marginLeft:"16%"}} />
           </div>
         </div>
           {/*

@@ -25,12 +25,18 @@ export function handleScalingGroup(activeObject: fabric.Object | null, setObject
             const objTop = obj.top || 0;      
         
 
-            obj.set({
-                left: objLeft * scaleX, 
-                top: objTop * scaleY,  
-                scaleX: objScaleX * scaleX,
-                scaleY: objScaleY * scaleY,
-            });
+            if (obj instanceof fabric.Textbox) {
+                // 아무것도 안하도록
+                
+            } else {
+                obj.set({
+                    left: objLeft * scaleX, 
+                    top: objTop * scaleY,  
+                    scaleX: objScaleX * scaleX,
+                    scaleY: objScaleY * scaleY,
+                });
+
+            }
         });
         
         activeObject.set({

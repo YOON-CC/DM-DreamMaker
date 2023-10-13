@@ -60,12 +60,12 @@ export const addTextboxToCanvas = (canvas: fabric.Canvas) => {
     const newTextbox = new fabric.Textbox('DreamMaker', {
     left: Math.random() * 400,
     top: Math.random() * 400,
-    width: 150, 
+    width: 100, 
     fontSize: 20,
     fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
     editable: true, 
-    fontFamily: 'Arial', // 글꼴을 지정합니다.
-    textAlign: 'center', // 가운데 정렬 설정
+    fontFamily: 'Arial', 
+    textAlign: 'center', 
     shadow: new fabric.Shadow({
         color: 'rgba(0, 0, 0, 0)', // 그림자의 색상
         offsetX: 0, // 그림자의 가로 오프셋

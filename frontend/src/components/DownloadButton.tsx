@@ -100,6 +100,72 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
                 </div>`;     
               }
             }
+            if (groupObject instanceof fabric.Ellipse) {
+              console.log("원들어옴")
+              const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
+              const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
+
+              const groupObjectLeft = originalLeft / gw * 100
+              const groupObjectTop = originalTop / gh * 100
+
+              const groupStrokeWidth = groupObject.strokeWidth ?? 0; // 두께
+              const groupStrokeColor = groupObject.stroke ?? 'transparent'; // 색상 (기본값: 투명)
+
+              const groupObjectWidth = (((groupObject.width ?? 0)+(groupStrokeWidth)) * (groupObject.scaleX?? 0)) / gw * 100
+              const groupObjectHight = (((groupObject.height ?? 0)+(groupStrokeWidth)) * (groupObject.scaleY?? 0)) / gh * 100
+              
+              const oinnerw = (((groupObject.width ?? 0) - groupStrokeWidth*1.76))  / (groupObject.width ?? 0) * 100 // 경계선 있을시 내부 도형
+              const oinnerh = (((groupObject.height ?? 0) - groupStrokeWidth*1.76)) / (groupObject.height ?? 0) * 100 // 경계선 있을시 내부 도형
+
+              const obr =  ((groupObject.rx ?? 0)) * 1.5;
+              const obrI =  ((groupObject.rx ?? 0));
+
+              // const ow = ((object.width?? 0)*(object.scaleX?? 0)) / 1000 * 100
+              // const oh = ((object.height?? 0) * (object.scaleY?? 0)) / 500 * 100
+
+              const osx = ((groupObject.shadow as unknown as Shadow).offsetX)*2
+              const osy = ((groupObject.shadow as unknown as Shadow).offsetY)*2
+              const osb = ((groupObject.shadow as unknown as Shadow).blur) * 2
+              const osc = (groupObject.shadow as unknown as Shadow).color
+              if (groupStrokeWidth === 0){
+                htmlContent += `<div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: 50%; background-color: ${groupObject.fill};"></div>`;
+              }
+              else{
+                htmlContent+=`
+                <div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: 50%; background-color: ${groupStrokeColor}; ">
+                  <div style="
+                  position: absolute; 
+                  left: 50%; 
+                  top: 50%;
+                  transform : translate(-50%, -50%); 
+                  width: ${oinnerw}%;
+                  height: ${oinnerh}%;  
+                  border-radius: 50%;
+                  background-color: ${groupObject.fill}; 
+                  ">
+                  </div>
+                </div>`;     
+              }
+            }
+            if (groupObject instanceof fabric.Textbox) {
+              console.log("글자들옴")
+              const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
+              const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
+
+              const groupObjectLeft = originalLeft / gw * 100
+              const groupObjectTop = originalTop / gh * 100
+//
+              const groupObjectWidth = ((groupObject.width ?? 0) * (groupObject.scaleX?? 0)) / gw * 100
+              const groupObjectHight = ((groupObject.height ?? 0) * (groupObject.scaleY?? 0)) / gh * 100
+
+              const fontSize = groupObject.get('fontSize') as number;
+              const newFontSize = fontSize*1.5;
+              const fontFamily = groupObject.get('fontFamily');
+              const fontColor = groupObject.fill;
+              const fontShadow = (groupObject.shadow as unknown as Shadow).color
+
+              htmlContent += `<div style="position: absolute; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; text-shadow: 1.2px 1.2px ${fontShadow}; font-family : ${fontFamily}; font-weight : ${groupObject.fontWeight}; font-size : ${newFontSize}px; font-style : ${groupObject.fontStyle}; color : ${fontColor}; display : flex; justify-content : center; align-items : center; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; color: ${groupObject.fill};">${groupObject.text}</div>`;
+            }
           });
   
           // 그룹 닫기
@@ -214,7 +280,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           }
 
           if (strokeWidth === 0){
-            const rectHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; background-color: ${object.fill}; border-radius: 50%;" transform: rotate(${object.angle}deg);"></div>>`;          
+            const rectHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; background-color: ${object.fill}; border-radius: 50%;" transform: rotate(${object.angle}deg);"></div>`;          
             htmlContent += rectHtml;
           }else{
             const rectHtml = `
