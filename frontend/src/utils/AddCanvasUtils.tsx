@@ -119,3 +119,43 @@ export const addImageToCanvas = (canvas: fabric.Canvas | null) => {
     // 파일 선택 다이얼로그 열기
     input.click();
 };
+
+export const addITextToCanvas = (canvas: fabric.Canvas) => {
+    const newText = new fabric.IText('Edit Me', {
+        left: Math.random() * 400,
+        top: Math.random() * 400,
+        width: 150,
+        fontSize: 16,
+        fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        fontFamily: 'Arial',
+        textAlign: 'left',
+        shadow: new fabric.Shadow({
+            color: 'rgba(0, 0, 0, 0)',
+            offsetX: 0,
+            offsetY: 0,
+            blur: 0,
+        }),
+    });
+
+    canvas.add(newText);
+};
+
+export const addButtonToCanvas = (canvas: fabric.Canvas) => {
+    const newRect = new fabric.Rect({
+        left: Math.random() * 400,
+        top: Math.random() * 400,
+        width: 200,
+        height: 50,
+        fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        strokeWidth: 0, 
+        shadow: new fabric.Shadow({
+            color: 'rgba(0, 0, 0, 0)', // 그림자의 색상
+            offsetX: 0, // 그림자의 가로 오프셋
+            offsetY: 0, // 그림자의 세로 오프셋
+            blur: 0, // 그림자의 흐릿함 정도
+        }),
+        name : 'button',
+    });
+
+    canvas.add(newRect);
+};

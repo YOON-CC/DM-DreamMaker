@@ -25,6 +25,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
         console.log('Group not found');
       }
 
+      
     // Canvas 내용을 저장할 HTML 문자열 초기화
       let htmlContent = `<!DOCTYPE html><html><head><title>Canvas Content</title></head><body style="background:${canvas.backgroundColor}">`;
   
@@ -174,6 +175,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
         }
 
         if (object instanceof fabric.Rect) {
+          console.log("이름 부여했습니다.", object.name)
           // Fabric.js에서 사각형 객체인 경우'
           const originalLeft = object.left?? 0; // 부모 태그로부터의 left
           const originalTop = object.top ?? 0; // 부모 태그로부터의 top
@@ -343,6 +345,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           htmlContent += TriangleHtml;
         }
         if (object instanceof fabric.Textbox) {
+          console.log("텍스트 박스")
 
           // Fabric.js에서 원 객체인 경우
           const originalLeft = object.left?? 0; // 부모 태그로부터의 left
@@ -408,6 +411,45 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           const ImgHtml = `<img src="${imageUrl}" alt="Fabric.js Image" style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; transform: rotate(${object.angle}deg);"></img>`;
           htmlContent += ImgHtml;
         }   
+        if (object instanceof fabric.IText) {
+
+          if (object.type === 'i-text') {
+              console.log("아이 텍스트")
+
+
+              // Fabric.js에서 사각형 객체인 경우'
+              const originalLeft = object.left?? 0; // 부모 태그로부터의 left
+              const originalTop = object.top ?? 0; // 부모 태그로부터의 top
+              
+              const angleInDegrees = - (object.angle?? 0); // 회전 각도
+              const angleInRadians = (angleInDegrees * Math.PI) / 180;
+
+              const strokeWidth = object.strokeWidth ?? 0; // 두께
+              console.log("경계선 두께",strokeWidth, "높이 넓이", object.width, object.height)
+              const strokeColor = object.stroke ?? 'transparent'; // 색상 (기본값: 투명)
+              // 회전 중심을 div 태그의 중심으로 설정
+              const centerX = object.getCenterPoint().x;
+              const centerY = object.getCenterPoint().y;
+              // 회전 변환 후의 left와 top 계산
+              const newX = centerX + (originalLeft - centerX) * Math.cos(angleInRadians) - (originalTop - centerY) * Math.sin(angleInRadians);
+              const newY = centerY + (originalLeft - centerX) * Math.sin(angleInRadians) + (originalTop - centerY) * Math.cos(angleInRadians);
+
+              const ol = (newX ?? 0) / 1000 * 100
+              const ot = (newY ?? 0) / 500 * 100
+              
+              const ow = ((object.width ?? 0) + strokeWidth) / 1000 * 100
+              const oh = ((object.height ?? 0) + strokeWidth) / 500 * 100
+
+              const osx = ((object.shadow as unknown as Shadow).offsetX)*2
+              const osy = ((object.shadow as unknown as Shadow).offsetY)*2
+              const osb = ((object.shadow as unknown as Shadow).blur) * 2
+              const osc = (object.shadow as unknown as Shadow).color
+
+              const rectHtml = `<input style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; color: ${object.fill}; transform: rotate(${object.angle}deg);"></input>`;          
+              htmlContent += rectHtml;
+          }
+
+        }
         // 다른 객체 유형처리 ▼▼▼▼
       });
   

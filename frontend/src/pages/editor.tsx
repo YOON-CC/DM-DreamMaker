@@ -7,7 +7,7 @@ import '../style/editor.css';
 import SaveButton from '../components/savebutton';
 import LoadButton from '../components/loadbutton';
 import DownloadButton from '../components/DownloadButton';
-import { addRectToCanvas, addCircleToCanvas, addTriangleToCanvas, addTextboxToCanvas, addImageToCanvas } from '../utils/AddCanvasUtils'; 
+import { addRectToCanvas, addCircleToCanvas, addTriangleToCanvas, addTextboxToCanvas, addImageToCanvas, addITextToCanvas, addButtonToCanvas } from '../utils/AddCanvasUtils'; 
 import { handleScalingRect, handleScalingCircle, handleScalingTriangle, handleScalingTextbox, handleScalingImage, handleScalingGroup } from '../utils/ScalingCanvasUtils';
 import { handleChangeFontSizeInput, handleFontWeightChange, handleFontToItalicChange, handleFontShadowChange } from '../utils/FontOptionUtils';
 import { applyShadow_0_0, applyShadow_0_1, applyShadow_0_2, applyShadow_1_0, applyShadow_1_1, applyShadow_1_2, applyShadow_2_0, applyShadow_2_1, applyShadow_2_2} from '../utils/ShadowUtils';
@@ -263,6 +263,8 @@ const Editor = () => {
       const handleAddTriangle = () => {if (canvas) {addTriangleToCanvas(canvas);}};
       const handleAddTextbox = () => {if (canvas) {addTextboxToCanvas(canvas);}};
       const handleAddImageShape = () => { if(canvas) {addImageToCanvas(canvas);}};
+      const handleAddITextShape = () => { if(canvas) {addITextToCanvas(canvas);}};
+      const handleAddButtonShape = () => { if(canvas) {addButtonToCanvas(canvas);}};
       
       //도형 스케일링
       canvas.on('object:scaling', (e) => {
@@ -563,6 +565,12 @@ const Editor = () => {
       const addImageShapeButton = document.getElementById('add-image-shape-button');
       addImageShapeButton?.addEventListener('click', handleAddImageShape);
 
+      const addITextShapeButton = document.getElementById('add-IText-shape-button');
+      addITextShapeButton?.addEventListener('click', handleAddITextShape);
+
+      const addButtonShapeButton = document.getElementById('add-Button-shape-button');
+      addButtonShapeButton?.addEventListener('click', handleAddButtonShape);
+
       const objectToGroup = document.getElementById('add-group-button');
       objectToGroup?.addEventListener('click', handleObjectToGroup);
 
@@ -597,6 +605,8 @@ const Editor = () => {
         addCircleButton?.removeEventListener('click', handleAddCircle);
         addTriangleButton?.removeEventListener('click', handleAddTriangle);
         addTextboxButton?.removeEventListener('click', handleAddTextbox);
+        addITextShapeButton?.removeEventListener('click', handleAddITextShape);
+        addButtonShapeButton?.removeEventListener('click', handleAddButtonShape);
         deleteButton?.removeEventListener('click', handleDeleteSelectedObjects);
         sendBackwardsButton?.removeEventListener('click', handleSendBackwards);
         bringForwardButton?.removeEventListener('click', handleBringForward);
@@ -630,9 +640,11 @@ const Editor = () => {
             <img src="../images/ungroup.png" style={{ width: "67%", height: "80%", marginTop:"8%", marginLeft:"16%"}} />
           </div>
         </div>
-          {/*
-          <button id="delete-button">Delete Selected Objects</button>
-           */}
+          
+        <div id="add-IText-shape-button">input 태그입니다.</div>
+        <div id="add-Button-shape-button">button 태그입니다.</div>
+
+          
         <div className='editor_header_button_container'>
           <LoadButton canvas={canvas}></LoadButton>
           <SaveButton canvas={canvas}></SaveButton>
