@@ -55,8 +55,76 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           htmlContent += `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; transform: rotate(${object.angle}deg);">`;
           if (object.name && object.name.startsWith('api_')){
             // 그룹의 이름이 "api_1"인 경우 alert 창 표시
-            alert("그룹의 이름이 api_1 입니다.");
+            htmlContent +=`<form id="myForm">`;
+            object.forEachObject((groupObject) => {
+              if (groupObject instanceof fabric.IText) {
+                const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
+                const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
+
+                const groupObjectLeft = originalLeft / gw * 100
+                const groupObjectTop = originalTop / gh * 100
+  //
+                const groupObjectWidth = ((groupObject.width ?? 0) * (groupObject.scaleX?? 0)) / gw * 100
+                const groupObjectHight = ((groupObject.height ?? 0) * (groupObject.scaleY?? 0)) / gh * 100
+
+                const fontSize = groupObject.get('fontSize') as number;
+                const newFontSize = fontSize*1.5;
+                const fontFamily = groupObject.get('fontFamily');
+                const fontColor = groupObject.fill;
+                const fontShadow = (groupObject.shadow as unknown as Shadow).color
+
+                htmlContent += `<input id="search" style="position: absolute; background : red; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; outline : none; border : none; text-shadow: 1.2px 1.2px ${fontShadow}; font-family : ${fontFamily}; font-weight : ${groupObject.fontWeight}; font-size : ${newFontSize}px; font-style : ${groupObject.fontStyle}; color : ${fontColor}; display : flex; justify-content : center; align-items : center; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; color: ${groupObject.fill};"></input>`;
+              }
+              if (groupObject instanceof fabric.Rect) {
+                const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
+                const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
+
+                const groupObjectLeft = originalLeft / gw * 100
+                const groupObjectTop = originalTop / gh * 100
+
+                const groupStrokeWidth = groupObject.strokeWidth ?? 0; // 두께
+                const groupStrokeColor = groupObject.stroke ?? 'transparent'; // 색상 (기본값: 투명)
+
+                const groupObjectWidth = (((groupObject.width ?? 0)+(groupStrokeWidth)) * (groupObject.scaleX?? 0)) / gw * 100
+                const groupObjectHight = (((groupObject.height ?? 0)+(groupStrokeWidth)) * (groupObject.scaleY?? 0)) / gh * 100
+                
+                const oinnerw = (((groupObject.width ?? 0) - groupStrokeWidth*1.76))  / (groupObject.width ?? 0) * 100 // 경계선 있을시 내부 도형
+                const oinnerh = (((groupObject.height ?? 0) - groupStrokeWidth*1.76)) / (groupObject.height ?? 0) * 100 // 경계선 있을시 내부 도형
+
+                const obr =  ((groupObject.rx ?? 0)) * 1.5;
+                const obrI =  ((groupObject.rx ?? 0));
+
+                // const ow = ((object.width?? 0)*(object.scaleX?? 0)) / 1000 * 100
+                // const oh = ((object.height?? 0) * (object.scaleY?? 0)) / 500 * 100
+
+                const osx = ((groupObject.shadow as unknown as Shadow).offsetX)*2
+                const osy = ((groupObject.shadow as unknown as Shadow).offsetY)*2
+                const osb = ((groupObject.shadow as unknown as Shadow).blur) * 2
+                const osc = (groupObject.shadow as unknown as Shadow).color
+                if (groupStrokeWidth === 0){
+                  htmlContent += `<button type="submit" style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: ${obr}px; background-color: ${groupObject.fill};"></button>`;
+                }
+                else{
+                  htmlContent+=`
+                  <div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: ${obr}px; background-color: ${groupStrokeColor}; ">
+                    <button type="submit" style="
+                    position: absolute; 
+                    left: 50%; 
+                    top: 50%;
+                    transform : translate(-50%, -50%); 
+                    width: ${oinnerw}%;
+                    height: ${oinnerh}%;  
+                    border-radius: ${obrI}px;
+                    background-color: ${groupObject.fill}; 
+                    ">
+                    </button>
+                  </div>`;     
+                }   
+              }
+            })
+            htmlContent +=`</form>`;
           } 
+          
           
           else{
             object.forEachObject((groupObject) => {
@@ -459,7 +527,36 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
         }
         // 다른 객체 유형처리 ▼▼▼▼
       });
+      
+      htmlContent +=`
+          <script>
+          const apiUrl = "http://localhost:8080/users/duplicated-username";
+
+          // 폼 요소를 가져오고 제출 이벤트를 처리
+          const form = document.getElementById("myForm");
+          const resultDiv = document.getElementById("result");
   
+          form.addEventListener("submit", function(event) {
+              event.preventDefault(); // 기본 폼 제출 동작을 막음
+  
+              // 사용자가 입력한 사용자 이름 가져오기
+              const username = document.getElementById("search").value;
+  
+              // GET 요청을 보내는 함수
+              const urlWithQueryString = 'http://localhost:8080/users/duplicated-username?username=happycyc'
+  
+              fetch(urlWithQueryString)
+              .then((response) => response.json())
+              .then((result) => {
+                  // 결과를 화면에 표시
+                  resultDiv.innerHTML = JSON.stringify(result, null, 2);
+              })
+              .catch((error) => {
+                  console.error('GET 요청 중 오류 발생:', error);
+              });
+          });
+        </script>      
+      `
       htmlContent += '</body></html>';
   
       // HTML 파일로 저장
