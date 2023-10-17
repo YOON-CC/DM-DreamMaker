@@ -32,6 +32,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
       // 각 객체를 순회하면서 HTML로 변환
       canvasObjects.forEach(object => {
         if (object instanceof fabric.Group) {
+          console.log("그룹이름",object.name)
           const gw = object.width?? 0
           const gh = object.height?? 0
           const groupLeft = object.left?? 0; // 부모 태그로부터의 left
@@ -52,123 +53,128 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
           const ot = (newY ?? 0) / 500 * 100
           
           htmlContent += `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; transform: rotate(${object.angle}deg);">`;
-  
-          object.forEachObject((groupObject) => {
-            if (groupObject instanceof fabric.Rect) {
+          if (object.name && object.name.startsWith('api_')){
+            // 그룹의 이름이 "api_1"인 경우 alert 창 표시
+            alert("그룹의 이름이 api_1 입니다.");
+          } 
+          
+          else{
+            object.forEachObject((groupObject) => {
+              if (groupObject instanceof fabric.Rect) {
 
-              const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
-              const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
+                const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
+                const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
 
-              const groupObjectLeft = originalLeft / gw * 100
-              const groupObjectTop = originalTop / gh * 100
+                const groupObjectLeft = originalLeft / gw * 100
+                const groupObjectTop = originalTop / gh * 100
 
-              const groupStrokeWidth = groupObject.strokeWidth ?? 0; // 두께
-              const groupStrokeColor = groupObject.stroke ?? 'transparent'; // 색상 (기본값: 투명)
+                const groupStrokeWidth = groupObject.strokeWidth ?? 0; // 두께
+                const groupStrokeColor = groupObject.stroke ?? 'transparent'; // 색상 (기본값: 투명)
 
-              const groupObjectWidth = (((groupObject.width ?? 0)+(groupStrokeWidth)) * (groupObject.scaleX?? 0)) / gw * 100
-              const groupObjectHight = (((groupObject.height ?? 0)+(groupStrokeWidth)) * (groupObject.scaleY?? 0)) / gh * 100
-              
-              const oinnerw = (((groupObject.width ?? 0) - groupStrokeWidth*1.76))  / (groupObject.width ?? 0) * 100 // 경계선 있을시 내부 도형
-              const oinnerh = (((groupObject.height ?? 0) - groupStrokeWidth*1.76)) / (groupObject.height ?? 0) * 100 // 경계선 있을시 내부 도형
+                const groupObjectWidth = (((groupObject.width ?? 0)+(groupStrokeWidth)) * (groupObject.scaleX?? 0)) / gw * 100
+                const groupObjectHight = (((groupObject.height ?? 0)+(groupStrokeWidth)) * (groupObject.scaleY?? 0)) / gh * 100
+                
+                const oinnerw = (((groupObject.width ?? 0) - groupStrokeWidth*1.76))  / (groupObject.width ?? 0) * 100 // 경계선 있을시 내부 도형
+                const oinnerh = (((groupObject.height ?? 0) - groupStrokeWidth*1.76)) / (groupObject.height ?? 0) * 100 // 경계선 있을시 내부 도형
 
-              const obr =  ((groupObject.rx ?? 0)) * 1.5;
-              const obrI =  ((groupObject.rx ?? 0));
+                const obr =  ((groupObject.rx ?? 0)) * 1.5;
+                const obrI =  ((groupObject.rx ?? 0));
 
-              // const ow = ((object.width?? 0)*(object.scaleX?? 0)) / 1000 * 100
-              // const oh = ((object.height?? 0) * (object.scaleY?? 0)) / 500 * 100
+                // const ow = ((object.width?? 0)*(object.scaleX?? 0)) / 1000 * 100
+                // const oh = ((object.height?? 0) * (object.scaleY?? 0)) / 500 * 100
 
-              const osx = ((groupObject.shadow as unknown as Shadow).offsetX)*2
-              const osy = ((groupObject.shadow as unknown as Shadow).offsetY)*2
-              const osb = ((groupObject.shadow as unknown as Shadow).blur) * 2
-              const osc = (groupObject.shadow as unknown as Shadow).color
-              if (groupStrokeWidth === 0){
-                htmlContent += `<div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: ${obr}px; background-color: ${groupObject.fill};"></div>`;
+                const osx = ((groupObject.shadow as unknown as Shadow).offsetX)*2
+                const osy = ((groupObject.shadow as unknown as Shadow).offsetY)*2
+                const osb = ((groupObject.shadow as unknown as Shadow).blur) * 2
+                const osc = (groupObject.shadow as unknown as Shadow).color
+                if (groupStrokeWidth === 0){
+                  htmlContent += `<div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: ${obr}px; background-color: ${groupObject.fill};"></div>`;
+                }
+                else{
+                  htmlContent+=`
+                  <div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: ${obr}px; background-color: ${groupStrokeColor}; ">
+                    <div style="
+                    position: absolute; 
+                    left: 50%; 
+                    top: 50%;
+                    transform : translate(-50%, -50%); 
+                    width: ${oinnerw}%;
+                    height: ${oinnerh}%;  
+                    border-radius: ${obrI}px;
+                    background-color: ${groupObject.fill}; 
+                    ">
+                    </div>
+                  </div>`;     
+                }
               }
-              else{
-                htmlContent+=`
-                <div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: ${obr}px; background-color: ${groupStrokeColor}; ">
-                  <div style="
-                  position: absolute; 
-                  left: 50%; 
-                  top: 50%;
-                  transform : translate(-50%, -50%); 
-                  width: ${oinnerw}%;
-                  height: ${oinnerh}%;  
-                  border-radius: ${obrI}px;
-                  background-color: ${groupObject.fill}; 
-                  ">
-                  </div>
-                </div>`;     
+              if (groupObject instanceof fabric.Ellipse) {
+                console.log("원들어옴")
+                const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
+                const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
+
+                const groupObjectLeft = originalLeft / gw * 100
+                const groupObjectTop = originalTop / gh * 100
+
+                const groupStrokeWidth = groupObject.strokeWidth ?? 0; // 두께
+                const groupStrokeColor = groupObject.stroke ?? 'transparent'; // 색상 (기본값: 투명)
+
+                const groupObjectWidth = (((groupObject.width ?? 0)+(groupStrokeWidth)) * (groupObject.scaleX?? 0)) / gw * 100
+                const groupObjectHight = (((groupObject.height ?? 0)+(groupStrokeWidth)) * (groupObject.scaleY?? 0)) / gh * 100
+                
+                const oinnerw = (((groupObject.width ?? 0) - groupStrokeWidth*1.76))  / (groupObject.width ?? 0) * 100 // 경계선 있을시 내부 도형
+                const oinnerh = (((groupObject.height ?? 0) - groupStrokeWidth*1.76)) / (groupObject.height ?? 0) * 100 // 경계선 있을시 내부 도형
+
+                const obr =  ((groupObject.rx ?? 0)) * 1.5;
+                const obrI =  ((groupObject.rx ?? 0));
+
+                // const ow = ((object.width?? 0)*(object.scaleX?? 0)) / 1000 * 100
+                // const oh = ((object.height?? 0) * (object.scaleY?? 0)) / 500 * 100
+
+                const osx = ((groupObject.shadow as unknown as Shadow).offsetX)*2
+                const osy = ((groupObject.shadow as unknown as Shadow).offsetY)*2
+                const osb = ((groupObject.shadow as unknown as Shadow).blur) * 2
+                const osc = (groupObject.shadow as unknown as Shadow).color
+                if (groupStrokeWidth === 0){
+                  htmlContent += `<div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: 50%; background-color: ${groupObject.fill};"></div>`;
+                }
+                else{
+                  htmlContent+=`
+                  <div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: 50%; background-color: ${groupStrokeColor}; ">
+                    <div style="
+                    position: absolute; 
+                    left: 50%; 
+                    top: 50%;
+                    transform : translate(-50%, -50%); 
+                    width: ${oinnerw}%;
+                    height: ${oinnerh}%;  
+                    border-radius: 50%;
+                    background-color: ${groupObject.fill}; 
+                    ">
+                    </div>
+                  </div>`;     
+                }
               }
-            }
-            if (groupObject instanceof fabric.Ellipse) {
-              console.log("원들어옴")
-              const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
-              const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
+              if (groupObject instanceof fabric.Textbox) {
+                console.log("글자들옴")
+                const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
+                const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
 
-              const groupObjectLeft = originalLeft / gw * 100
-              const groupObjectTop = originalTop / gh * 100
+                const groupObjectLeft = originalLeft / gw * 100
+                const groupObjectTop = originalTop / gh * 100
+  //
+                const groupObjectWidth = ((groupObject.width ?? 0) * (groupObject.scaleX?? 0)) / gw * 100
+                const groupObjectHight = ((groupObject.height ?? 0) * (groupObject.scaleY?? 0)) / gh * 100
 
-              const groupStrokeWidth = groupObject.strokeWidth ?? 0; // 두께
-              const groupStrokeColor = groupObject.stroke ?? 'transparent'; // 색상 (기본값: 투명)
+                const fontSize = groupObject.get('fontSize') as number;
+                const newFontSize = fontSize*1.5;
+                const fontFamily = groupObject.get('fontFamily');
+                const fontColor = groupObject.fill;
+                const fontShadow = (groupObject.shadow as unknown as Shadow).color
 
-              const groupObjectWidth = (((groupObject.width ?? 0)+(groupStrokeWidth)) * (groupObject.scaleX?? 0)) / gw * 100
-              const groupObjectHight = (((groupObject.height ?? 0)+(groupStrokeWidth)) * (groupObject.scaleY?? 0)) / gh * 100
-              
-              const oinnerw = (((groupObject.width ?? 0) - groupStrokeWidth*1.76))  / (groupObject.width ?? 0) * 100 // 경계선 있을시 내부 도형
-              const oinnerh = (((groupObject.height ?? 0) - groupStrokeWidth*1.76)) / (groupObject.height ?? 0) * 100 // 경계선 있을시 내부 도형
-
-              const obr =  ((groupObject.rx ?? 0)) * 1.5;
-              const obrI =  ((groupObject.rx ?? 0));
-
-              // const ow = ((object.width?? 0)*(object.scaleX?? 0)) / 1000 * 100
-              // const oh = ((object.height?? 0) * (object.scaleY?? 0)) / 500 * 100
-
-              const osx = ((groupObject.shadow as unknown as Shadow).offsetX)*2
-              const osy = ((groupObject.shadow as unknown as Shadow).offsetY)*2
-              const osb = ((groupObject.shadow as unknown as Shadow).blur) * 2
-              const osc = (groupObject.shadow as unknown as Shadow).color
-              if (groupStrokeWidth === 0){
-                htmlContent += `<div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: 50%; background-color: ${groupObject.fill};"></div>`;
+                htmlContent += `<div style="position: absolute; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; text-shadow: 1.2px 1.2px ${fontShadow}; font-family : ${fontFamily}; font-weight : ${groupObject.fontWeight}; font-size : ${newFontSize}px; font-style : ${groupObject.fontStyle}; color : ${fontColor}; display : flex; justify-content : center; align-items : center; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; color: ${groupObject.fill};">${groupObject.text}</div>`;
               }
-              else{
-                htmlContent+=`
-                <div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: 50%; background-color: ${groupStrokeColor}; ">
-                  <div style="
-                  position: absolute; 
-                  left: 50%; 
-                  top: 50%;
-                  transform : translate(-50%, -50%); 
-                  width: ${oinnerw}%;
-                  height: ${oinnerh}%;  
-                  border-radius: 50%;
-                  background-color: ${groupObject.fill}; 
-                  ">
-                  </div>
-                </div>`;     
-              }
-            }
-            if (groupObject instanceof fabric.Textbox) {
-              console.log("글자들옴")
-              const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
-              const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
-
-              const groupObjectLeft = originalLeft / gw * 100
-              const groupObjectTop = originalTop / gh * 100
-//
-              const groupObjectWidth = ((groupObject.width ?? 0) * (groupObject.scaleX?? 0)) / gw * 100
-              const groupObjectHight = ((groupObject.height ?? 0) * (groupObject.scaleY?? 0)) / gh * 100
-
-              const fontSize = groupObject.get('fontSize') as number;
-              const newFontSize = fontSize*1.5;
-              const fontFamily = groupObject.get('fontFamily');
-              const fontColor = groupObject.fill;
-              const fontShadow = (groupObject.shadow as unknown as Shadow).color
-
-              htmlContent += `<div style="position: absolute; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; text-shadow: 1.2px 1.2px ${fontShadow}; font-family : ${fontFamily}; font-weight : ${groupObject.fontWeight}; font-size : ${newFontSize}px; font-style : ${groupObject.fontStyle}; color : ${fontColor}; display : flex; justify-content : center; align-items : center; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; color: ${groupObject.fill};">${groupObject.text}</div>`;
-            }
-          });
-  
+            });
+          }
           // 그룹 닫기
           htmlContent += `</div>`;
   
@@ -415,6 +421,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
 
           if (object.type === 'i-text') {
               console.log("아이 텍스트")
+              console.log("이름 부여했습니다.", object.name)
 
 
               // Fabric.js에서 사각형 객체인 경우'

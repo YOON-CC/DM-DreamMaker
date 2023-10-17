@@ -144,17 +144,19 @@ export const addButtonToCanvas = (canvas: fabric.Canvas) => {
     const newRect = new fabric.Rect({
         left: Math.random() * 400,
         top: Math.random() * 400,
-        width: 200,
-        height: 50,
-        fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
-        strokeWidth: 0, 
+        width: 100,
+        height: 30,
+        fill: '#DFDFDF', // 안의 색상을 빨간색으로 설정
+        strokeWidth: 2, // 경계선의 너비를 5px로 설정
+        stroke: '#606060', // 경계선 색상을 aqua로 설정
+        rx: 5, // x축 모서리 반지름을 5px로 설정
+        ry: 5, // y축 모서리 반지름을 5px로 설정
         shadow: new fabric.Shadow({
             color: 'rgba(0, 0, 0, 0)', // 그림자의 색상
             offsetX: 0, // 그림자의 가로 오프셋
             offsetY: 0, // 그림자의 세로 오프셋
             blur: 0, // 그림자의 흐릿함 정도
         }),
-        name : 'button',
     });
 
     canvas.add(newRect);

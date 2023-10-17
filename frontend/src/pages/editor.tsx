@@ -523,6 +523,32 @@ const Editor = () => {
 
       
 
+      let nameCounter = 1; // 이름 카운터 변수
+
+      const handleObjectToApi = () => {
+        const activeObject = canvas.getActiveObject();
+      
+        if (!activeObject) {
+          return;
+        }
+      
+        if (activeObject.type === 'activeSelection') {
+          const group = (activeObject as fabric.ActiveSelection).toGroup();
+          group.set('name', `api_${nameCounter}`);
+          canvas.discardActiveObject();
+          canvas.requestRenderAll();
+          
+          // 이름 카운터 증가
+          nameCounter++;
+        }
+      };
+      
+      
+      
+      
+      
+      
+
       document.addEventListener('keydown', handleCopy);
       document.addEventListener('keydown', handlePaste);
       document.addEventListener('keydown', handleKeyDown);
@@ -573,6 +599,9 @@ const Editor = () => {
 
       const objectToGroup = document.getElementById('add-group-button');
       objectToGroup?.addEventListener('click', handleObjectToGroup);
+
+      const objectforapi = document.getElementById('for_api');
+      objectforapi?.addEventListener('click', handleObjectToApi);
 
       const objectUnGroup = document.getElementById('add-ungroup-button');
       objectUnGroup?.addEventListener('click', handleObjectUngroup);
@@ -643,6 +672,7 @@ const Editor = () => {
           
         <div id="add-IText-shape-button">input 태그입니다.</div>
         <div id="add-Button-shape-button">button 태그입니다.</div>
+        <button id = "for_api">api 통신객체로 지정</button>
 
           
         <div className='editor_header_button_container'>
