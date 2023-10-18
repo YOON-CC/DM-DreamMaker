@@ -529,33 +529,30 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
       });
       
       htmlContent +=`
-          <script>
-          const apiUrl = "http://localhost:8080/users/duplicated-username";
-
+        <script>
+          const apiUrl = "http://43.202.127.236/users/login";
+      
           // 폼 요소를 가져오고 제출 이벤트를 처리
           const form = document.getElementById("myForm");
-          const resultDiv = document.getElementById("result");
-  
+      
           form.addEventListener("submit", function(event) {
-              event.preventDefault(); // 기본 폼 제출 동작을 막음
-  
-              // 사용자가 입력한 사용자 이름 가져오기
-              const username = document.getElementById("search").value;
-  
-              // GET 요청을 보내는 함수
-              const urlWithQueryString = 'http://localhost:8080/users/duplicated-username?username=happycyc'
-  
-              fetch(urlWithQueryString)
-              .then((response) => response.json())
-              .then((result) => {
-                  // 결과를 화면에 표시
-                  resultDiv.innerHTML = JSON.stringify(result, null, 2);
-              })
-              .catch((error) => {
-                  console.error('GET 요청 중 오류 발생:', error);
-              });
+            event.preventDefault(); // 기본 폼 제출 동작을 막음
+      
+            // POST 요청을 보내는 함수
+            fetch("http://43.202.127.236/users/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: "yp50777trader@gmail.com",
+                name: "Yejun Oh",
+                picture: "https://lh3.googleusercontent.com/a/AAcHTtfY0KZKeicV1VYU2ZPFcBgZZ4tpTFqea27WUpJzIcid=s320",
+              }),
+            })
+              .then((data) => console.log("데이터 결과", data))
           });
-        </script>      
+        </script>
       `
       htmlContent += '</body></html>';
   

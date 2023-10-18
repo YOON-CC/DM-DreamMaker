@@ -121,22 +121,24 @@ export const addImageToCanvas = (canvas: fabric.Canvas | null) => {
 };
 
 export const addITextToCanvas = (canvas: fabric.Canvas) => {
-    const newText = new fabric.IText('Edit Me', {
-        left: Math.random() * 400,
-        top: Math.random() * 400,
-        width: 150,
-        fontSize: 16,
-        fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
-        fontFamily: 'Arial',
-        textAlign: 'left',
-        shadow: new fabric.Shadow({
-            color: 'rgba(0, 0, 0, 0)',
-            offsetX: 0,
-            offsetY: 0,
-            blur: 0,
-        }),
+    const newTextName = `INPUT_${canvas.getObjects('i-text').length + 1}`;
+  
+    const newText = new fabric.IText(newTextName, {
+      left: Math.random() * 400,
+      top: Math.random() * 400,
+      width: 150,
+      fontSize: 16,
+      fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+      fontFamily: 'Arial',
+      textAlign: 'left',
+      shadow: new fabric.Shadow({
+        color: 'rgba(0, 0, 0, 0)',
+        offsetX: 0,
+        offsetY: 0,
+        blur: 0,
+      }),
     });
-
+  
     canvas.add(newText);
 };
 

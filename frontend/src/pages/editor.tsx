@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fabric } from 'fabric';
-import { SketchPicker } from 'react-color';
 import { HexColorPicker, HexColorInput   } from 'react-colorful';
 
 import '../style/editor.css';
@@ -24,6 +23,7 @@ type ObjectSize = {
 };
 
 const Editor = () => {
+
   const copiedObjectRef = useRef<fabric.Object | null>(null);
 
   const [backgroundColorToggleBtn, setBackgroundColorToggleBtn] = useState(false); // 초기 배경색 설정
@@ -36,6 +36,38 @@ const Editor = () => {
     }
   };
 
+  //api 관련
+  const [showApiElements, setShowApiElements] = useState(true);
+  const [selectedHttpMethod, setSelectedHttpMethod] = useState(-1);
+  const [selectedHttpUrl, setSelectedHttpUrl] = useState('');
+  const [selectedHttpTransport, setSelectedHttpTransport] = useState(-1);
+  const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedHttpUrl(event.target.value);
+  };
+
+  const [divCount, setDivCount] = useState(0);
+  const generatedDivs = [];
+  console.log("반복문", divCount)
+  const addITextAndDiv = () => {
+    setDivCount(divCount + 1);
+  };
+
+  const addITextAndDivd = () => {
+    if (divCount > 0) {
+      setDivCount(divCount - 1);
+    }
+  };
+
+  for (let i = 0; i < divCount; i++) {
+    const keyName = `KEY NAME_${i + 1}`;
+    generatedDivs.push(
+      <div key={i} id='editor_body_left_input_container_info_container_frame'>
+        <div id='editor_body_left_input_container_info_container_frame_title'>{keyName}</div>
+        <input id='editor_body_left_input_container_info_container_frame_input'></input>
+      </div>
+    );
+  }//api 관련 끝
+  
 
   const [shadowOptionToggle, setShadowOptionToggle] = useState(false);
 
@@ -298,12 +330,16 @@ const Editor = () => {
         const selectedObjects = canvas.getActiveObjects();
         if (selectedObjects.length > 0) {
           selectedObjects.forEach(object => {
-            canvas.remove(object);
+            if (!(object instanceof fabric.IText)) {
+              // 선택된 객체가 IText가 아닌 경우에만 삭제
+              canvas.remove(object);
+            }
           });
-          canvas.discardActiveObject(); 
-          canvas.renderAll(); 
+          canvas.discardActiveObject();
+          canvas.renderAll();
         }
       };
+      
 
       const handleKeyboardDelete = (event: KeyboardEvent) => {
         if (event.key === 'Delete') {
@@ -542,11 +578,20 @@ const Editor = () => {
           nameCounter++;
         }
       };
+
+      const handleDeleteITextShape = () => {
+        if (canvas instanceof fabric.Canvas) {
+          const iTextObjects = canvas.getObjects('i-text');
       
+          const sortedITextObjects = [...iTextObjects].reverse();
       
-      
-      
-      
+          if (sortedITextObjects.length > 0) {
+            const latestIText = sortedITextObjects[0];
+            canvas.remove(latestIText);
+            canvas.renderAll();
+          }
+        }
+      };
       
 
       document.addEventListener('keydown', handleCopy);
@@ -594,6 +639,9 @@ const Editor = () => {
       const addITextShapeButton = document.getElementById('add-IText-shape-button');
       addITextShapeButton?.addEventListener('click', handleAddITextShape);
 
+      const deleteITextShapeButton = document.getElementById('delete-IText-shape-button');
+      deleteITextShapeButton?.addEventListener('click', handleDeleteITextShape);
+
       const addButtonShapeButton = document.getElementById('add-Button-shape-button');
       addButtonShapeButton?.addEventListener('click', handleAddButtonShape);
 
@@ -635,6 +683,7 @@ const Editor = () => {
         addTriangleButton?.removeEventListener('click', handleAddTriangle);
         addTextboxButton?.removeEventListener('click', handleAddTextbox);
         addITextShapeButton?.removeEventListener('click', handleAddITextShape);
+        addITextShapeButton?.removeEventListener('click', handleDeleteITextShape);
         addButtonShapeButton?.removeEventListener('click', handleAddButtonShape);
         deleteButton?.removeEventListener('click', handleDeleteSelectedObjects);
         sendBackwardsButton?.removeEventListener('click', handleSendBackwards);
@@ -668,11 +717,10 @@ const Editor = () => {
           <div id='add-ungroup-button'>
             <img src="../images/ungroup.png" style={{ width: "67%", height: "80%", marginTop:"8%", marginLeft:"16%"}} />
           </div>
+          <div id='add-api-button' onClick={() => {setShowApiElements(!showApiElements);}}>
+            <img src="../images/api.png" style={{ width: "67%", height: "80%", marginTop:"6%", marginLeft:"16%"}} />
+          </div>
         </div>
-          
-        <div id="add-IText-shape-button">input 태그입니다.</div>
-        <div id="add-Button-shape-button">button 태그입니다.</div>
-        <button id = "for_api">api 통신객체로 지정</button>
 
           
         <div className='editor_header_button_container'>
@@ -691,8 +739,46 @@ const Editor = () => {
         </div>
         {showTool && (<div className='editor_body_toolbox_cover'></div>)}
         <div className='editor_body_left'>
-
-
+          {showApiElements && (
+            <>
+              <div className='editor_body_left_http_container'>
+                <div className='editor_body_left_http_container_title'>HTTP 메서드</div>
+                <div className='editor_body_left_http_container_info_container'>
+                  <button className='editor_body_left_http_container_info_container_title_1' onClick={()=> setSelectedHttpMethod(0)} style={{backgroundColor: selectedHttpMethod === 0 ? '#4370FB' : 'rgb(63, 63, 63)'}}>GET</button>
+                  <button className='editor_body_left_http_container_info_container_title_2' onClick={()=> setSelectedHttpMethod(1)} style={{backgroundColor: selectedHttpMethod === 1 ? '#4370FB' : 'rgb(63, 63, 63)'}}>POST</button>
+                </div>
+              </div>
+              <div className='editor_body_left_url_container'>
+                <div className='editor_body_left_url_container_title'>URL</div>
+                <div className='editor_body_left_url_container_info_container'>
+                  <input onChange={handleUrlChange}></input>
+                </div>
+              </div>
+              <div className='editor_body_left_transport_container'>
+                <div className='editor_body_left_transport_container_title'>전송방식</div>
+                <div className='editor_body_left_transport_container_info_container'>
+                  <button className='editor_body_left_transport_container_info_container_title_1' onClick={()=> setSelectedHttpTransport(0)} style={{backgroundColor: selectedHttpTransport === 0 ? '#4370FB' : 'rgb(63, 63, 63)'}}>Body</button>
+                  <button className='editor_body_left_transport_container_info_container_title_2' onClick={()=> setSelectedHttpTransport(1)} style={{backgroundColor: selectedHttpTransport === 1 ? '#4370FB' : 'rgb(63, 63, 63)'}}>Quary String</button>
+                  <button className='editor_body_left_transport_container_info_container_title_2' onClick={()=> setSelectedHttpTransport(2)} style={{backgroundColor: selectedHttpTransport === 2 ? '#4370FB' : 'rgb(63, 63, 63)'}}>Path</button>
+                </div>
+              </div>
+              <div className='editor_body_left_input_container'>
+                <div className='editor_body_left_input_container_title'>입력요소 추가</div>
+                <div className='editor_body_left_input_container_info_container'>
+                  {generatedDivs}
+                  <div className='editor_body_left_input_container_info_container_btn_container'>
+                    <button id="add-IText-shape-button" onClick={addITextAndDiv}>추가</button>
+                    <button id="delete-IText-shape-button" onClick={addITextAndDivd}>삭제</button>
+                    <button id="add-Button-shape-button">적용</button>
+                  </div>
+                  <div className='editor_body_left_input_container_end_line'></div>
+                  <div className='editor_body_left_apply_container'>
+                    <button id = "for_api">적용하기</button>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
         <div className='editor_body_center'>
           <div className='editor_body_style_container_info_container'>
@@ -907,8 +993,6 @@ const Editor = () => {
                 <button id="change-fontShadow-button">A</button>
               </div>
             </div>
-
-
           </div>
         </div>
       </div>
