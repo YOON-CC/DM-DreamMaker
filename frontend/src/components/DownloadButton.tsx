@@ -4,7 +4,12 @@ import '../style/downloadbutton.css';
 
 interface DownloadButtonProps {
   canvas: fabric.Canvas | null;
+  selectedHttpMethod: string;
+  selectedHttpUrl: string;
+  selectedHttpTransport: number;
+  inputValues: string[];
 }
+
 interface Shadow {
   blur: number;
   color: string;
@@ -12,7 +17,12 @@ interface Shadow {
   offsetY: number;
 }
 
-const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
+const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMethod, selectedHttpUrl, selectedHttpTransport, inputValues }) => {
+  console.log("HTTP 메서드:", selectedHttpMethod);
+  console.log("URL:", selectedHttpUrl);
+  console.log("전송방식:", selectedHttpTransport);
+  console.log("KEY값:", inputValues);
+  const apple = '사과';
   const handleDownloadCanvasAsHtml = () => {
     if (canvas) {
       const canvasObjects = canvas.getObjects();
@@ -526,33 +536,35 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas }) => {
 
         }
         // 다른 객체 유형처리 ▼▼▼▼
+        
       });
-      
-      htmlContent +=`
-        <script>
-          const apiUrl = "http://43.202.127.236/users/login";
-      
-          // 폼 요소를 가져오고 제출 이벤트를 처리
-          const form = document.getElementById("myForm");
-      
-          form.addEventListener("submit", function(event) {
-            event.preventDefault(); // 기본 폼 제출 동작을 막음
-      
-            // POST 요청을 보내는 함수
-            fetch("http://43.202.127.236/users/login", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                email: "yp50777trader@gmail.com",
-                name: "Yejun Oh",
-                picture: "https://lh3.googleusercontent.com/a/AAcHTtfY0KZKeicV1VYU2ZPFcBgZZ4tpTFqea27WUpJzIcid=s320",
-              }),
-            })
-              .then((data) => console.log("데이터 결과", data))
-          });
-        </script>
+
+      htmlContent += `
+      <script>
+        const apiUrl = "${selectedHttpUrl}";
+        const apiMethod = "${selectedHttpMethod}";
+    
+        // 폼 요소를 가져오고 제출 이벤트를 처리
+        const form = document.getElementById("myForm");
+    
+        form.addEventListener("submit", function(event) {
+          event.preventDefault(); // 기본 폼 제출 동작을 막음
+    
+          // POST 요청을 보내는 함수
+          fetch(apiUrl, { 
+            method: apiMethod,
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: "yp50777trader@gmail.com",
+              name: "Yejun Oh",
+              picture: "https://lh3.googleusercontent.com/a/AAcHTtfY0KZKeicV1VYU2ZPFcBgZZ4tpTFqea27WUpJzIcid=s320",
+            }),
+          })
+            .then((data) => console.log("데이터 결과", data))
+        });
+      </script>
       `
       htmlContent += '</body></html>';
   

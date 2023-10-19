@@ -38,7 +38,7 @@ const Editor = () => {
 
   //api 관련
   const [showApiElements, setShowApiElements] = useState(true);
-  const [selectedHttpMethod, setSelectedHttpMethod] = useState(-1);
+  const [selectedHttpMethod, setSelectedHttpMethod] = useState('');
   const [selectedHttpUrl, setSelectedHttpUrl] = useState('');
   const [selectedHttpTransport, setSelectedHttpTransport] = useState(-1);
   const [inputValues, setInputValues] = useState<string[]>([]); // 배열 추가
@@ -76,8 +76,6 @@ const Editor = () => {
     );
   }
   
-  console.log("HTTP 메서드", selectedHttpMethod, "URL", selectedHttpUrl, "전송방식",selectedHttpTransport, "KEY값", inputValues)
-
   //api 관련 끝
   
 
@@ -738,7 +736,12 @@ const Editor = () => {
         <div className='editor_header_button_container'>
           <LoadButton canvas={canvas}></LoadButton>
           <SaveButton canvas={canvas}></SaveButton>
-          <DownloadButton canvas={canvas}></DownloadButton>
+          <DownloadButton canvas={canvas}
+                          selectedHttpMethod={selectedHttpMethod}
+                          selectedHttpUrl={selectedHttpUrl}
+                          selectedHttpTransport={selectedHttpTransport}
+                          inputValues={inputValues}
+          />
            
         </div>
       </div>
@@ -756,8 +759,8 @@ const Editor = () => {
               <div className='editor_body_left_http_container'>
                 <div className='editor_body_left_http_container_title'>HTTP 메서드</div>
                 <div className='editor_body_left_http_container_info_container'>
-                  <button className='editor_body_left_http_container_info_container_title_1' onClick={()=> setSelectedHttpMethod(0)} style={{backgroundColor: selectedHttpMethod === 0 ? '#4370FB' : 'rgb(63, 63, 63)'}}>GET</button>
-                  <button className='editor_body_left_http_container_info_container_title_2' onClick={()=> setSelectedHttpMethod(1)} style={{backgroundColor: selectedHttpMethod === 1 ? '#4370FB' : 'rgb(63, 63, 63)'}}>POST</button>
+                  <button className='editor_body_left_http_container_info_container_title_1' onClick={()=> setSelectedHttpMethod('GET')} style={{backgroundColor: selectedHttpMethod === 'GET' ? '#4370FB' : 'rgb(63, 63, 63)'}}>GET</button>
+                  <button className='editor_body_left_http_container_info_container_title_2' onClick={()=> setSelectedHttpMethod('POST')} style={{backgroundColor: selectedHttpMethod === 'POST' ? '#4370FB' : 'rgb(63, 63, 63)'}}>POST</button>
                 </div>
               </div>
               <div className='editor_body_left_url_container'>
