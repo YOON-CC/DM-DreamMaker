@@ -23,6 +23,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
   console.log("전송방식:", selectedHttpTransport);
   console.log("KEY값:", inputValues);
   const apple = '사과';
+  
   const handleDownloadCanvasAsHtml = () => {
     if (canvas) {
       const canvasObjects = canvas.getObjects();
@@ -83,7 +84,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
                 const fontColor = groupObject.fill;
                 const fontShadow = (groupObject.shadow as unknown as Shadow).color
 
-                htmlContent += `<input id="search" style="position: absolute; background : red; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; outline : none; border : none; text-shadow: 1.2px 1.2px ${fontShadow}; font-family : ${fontFamily}; font-weight : ${groupObject.fontWeight}; font-size : ${newFontSize}px; font-style : ${groupObject.fontStyle}; color : ${fontColor}; display : flex; justify-content : center; align-items : center; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; color: ${groupObject.fill};"></input>`;
+                htmlContent += `<input id="${groupObject.text}" style="position: absolute; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; outline : none; border : none; text-shadow: 1.2px 1.2px ${fontShadow}; font-family : ${fontFamily}; font-weight : ${groupObject.fontWeight}; font-size : ${newFontSize}px; font-style : ${groupObject.fontStyle}; color : ${fontColor}; display : flex; justify-content : center; align-items : center; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; color: ${groupObject.fill};"></input>`;
               }
               if (groupObject instanceof fabric.Rect) {
                 const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
@@ -530,7 +531,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
               const osb = ((object.shadow as unknown as Shadow).blur) * 2
               const osc = (object.shadow as unknown as Shadow).color
 
-              const rectHtml = `<input style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; color: ${object.fill}; transform: rotate(${object.angle}deg);"></input>`;          
+              const rectHtml = `<input id="${object.text} style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; color: ${object.fill}; transform: rotate(${object.angle}deg);"></input>`;          
               htmlContent += rectHtml;
           }
 
@@ -539,33 +540,55 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
         
       });
 
+      const box = ['username', 'id', 'password'];
+      const jsonObject: Record<string, string> = {}; // Define the type with specific types for values
+      
+      for (const key of box) {
+        jsonObject[key] = '';
+      }
+      
+      // 객체를 JSON 문자열로 변환합니다.
+      const jsonString = JSON.stringify(jsonObject, null, 2); // 세 번째 인수 (2)는 예쁘게 출력하기 위한 것입니다.
+      
+      console.log(jsonString);
+
       htmlContent += `
       <script>
         const apiUrl = "${selectedHttpUrl}";
         const apiMethod = "${selectedHttpMethod}";
-    
+      
         // 폼 요소를 가져오고 제출 이벤트를 처리
         const form = document.getElementById("myForm");
-    
+      
         form.addEventListener("submit", function(event) {
           event.preventDefault(); // 기본 폼 제출 동작을 막음
-    
+      
+          // JSON 데이터 만들기
+          const dataKeys = ${JSON.stringify(inputValues)};
+          let jsonData = {}; // 빈 객체 생성
+      
+          for (let i = 0; i < dataKeys.length; i++) {
+            const inputId = \`INPUT_\${i + 1}\`; // 동적으로 INPUT_1, INPUT_2, ... 생성
+            const key = dataKeys[i];
+            const inputValue = document.getElementById(inputId).value;
+            jsonData[key] = inputValue; // JSON 데이터 객체에 키-값 쌍 추가
+          }
+          
+          console.log(jsonData)
+      
           // POST 요청을 보내는 함수
           fetch(apiUrl, { 
             method: apiMethod,
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              email: "yp50777trader@gmail.com",
-              name: "Yejun Oh",
-              picture: "https://lh3.googleusercontent.com/a/AAcHTtfY0KZKeicV1VYU2ZPFcBgZZ4tpTFqea27WUpJzIcid=s320",
-            }),
+            body: JSON.stringify(jsonData),
           })
-            .then((data) => console.log("데이터 결과", data))
+          .then((data) => console.log("데이터 결과", data))
         });
       </script>
-      `
+      `;
+      
       htmlContent += '</body></html>';
   
       // HTML 파일로 저장
