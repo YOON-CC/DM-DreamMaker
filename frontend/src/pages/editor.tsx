@@ -41,8 +41,15 @@ const Editor = () => {
   const [selectedHttpMethod, setSelectedHttpMethod] = useState(-1);
   const [selectedHttpUrl, setSelectedHttpUrl] = useState('');
   const [selectedHttpTransport, setSelectedHttpTransport] = useState(-1);
+  const [inputValues, setInputValues] = useState<string[]>([]); // 배열 추가
+
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedHttpUrl(event.target.value);
+  };
+  const handleKeyInputChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const updatedTitles = [...inputValues];
+    updatedTitles[index] = event.target.value;
+    setInputValues(updatedTitles);
   };
 
   const [divCount, setDivCount] = useState(0);
@@ -52,9 +59,10 @@ const Editor = () => {
     setDivCount(divCount + 1);
   };
 
-  const addITextAndDivd = () => {
+  const addITextAndDivDelete = () => {
     if (divCount > 0) {
       setDivCount(divCount - 1);
+      setInputValues(inputValues.slice(0, -1)); // 마지막 원소 제거
     }
   };
 
@@ -63,10 +71,14 @@ const Editor = () => {
     generatedDivs.push(
       <div key={i} id='editor_body_left_input_container_info_container_frame'>
         <div id='editor_body_left_input_container_info_container_frame_title'>{keyName}</div>
-        <input id='editor_body_left_input_container_info_container_frame_input'></input>
+        <input id='editor_body_left_input_container_info_container_frame_input' onChange={(event) => handleKeyInputChange(event, i)}></input>
       </div>
     );
-  }//api 관련 끝
+  }
+  
+  console.log("HTTP 메서드", selectedHttpMethod, "URL", selectedHttpUrl, "전송방식",selectedHttpTransport, "KEY값", inputValues)
+
+  //api 관련 끝
   
 
   const [shadowOptionToggle, setShadowOptionToggle] = useState(false);
@@ -768,7 +780,7 @@ const Editor = () => {
                   {generatedDivs}
                   <div className='editor_body_left_input_container_info_container_btn_container'>
                     <button id="add-IText-shape-button" onClick={addITextAndDiv}>추가</button>
-                    <button id="delete-IText-shape-button" onClick={addITextAndDivd}>삭제</button>
+                    <button id="delete-IText-shape-button" onClick={addITextAndDivDelete}>삭제</button>
                     <button id="add-Button-shape-button">적용</button>
                   </div>
                   <div className='editor_body_left_input_container_end_line'></div>
