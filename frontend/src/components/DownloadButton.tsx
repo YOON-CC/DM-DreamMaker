@@ -84,7 +84,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
                 const fontColor = groupObject.fill;
                 const fontShadow = (groupObject.shadow as unknown as Shadow).color
 
-                htmlContent += `<input id="${groupObject.text}" style="position: absolute; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; outline : none; border : none; text-shadow: 1.2px 1.2px ${fontShadow}; font-family : ${fontFamily}; font-weight : ${groupObject.fontWeight}; font-size : ${newFontSize}px; font-style : ${groupObject.fontStyle}; color : ${fontColor}; display : flex; justify-content : center; align-items : center; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; color: ${groupObject.fill};"></input>`;
+                htmlContent += `<input id="${groupObject.text}" style="position: absolute;- width: ${groupObjectWidth}%; height: ${groupObjectHight}%; outline : none; border : none; text-shadow: 1.2px 1.2px ${fontShadow}; font-family : ${fontFamily}; font-weight : ${groupObject.fontWeight}; font-size : ${newFontSize}px; font-style : ${groupObject.fontStyle}; color : ${fontColor}; display : flex; justify-content : center; align-items : center; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; color: ${groupObject.fill};"></input>`;
               }
               if (groupObject instanceof fabric.Rect) {
                 const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left

@@ -280,6 +280,8 @@ const Editor = () => {
           })
         );
       }
+
+
       canvas.on('object:moving', (options) => {
         const target = options.target as fabric.Object;
         target.set({
@@ -287,6 +289,8 @@ const Editor = () => {
           top: Math.round(target.top! / grid) * grid,
         });
       });
+
+
       canvas.on('object:moving', (e: fabric.IEvent) => {
         const movedObject = e.target as fabric.Object;
         const x = movedObject.left ?? 0;
@@ -311,29 +315,29 @@ const Editor = () => {
       //도형 스케일링
       canvas.on('object:scaling', (e) => {
         const activeObject = e.target as fabric.Rect;
-        handleScalingRect(activeObject, setObjectCoordinates, setObjectSize, canvas);
+        handleScalingRect(activeObject, setObjectCoordinates, setObjectSize, canvas, grid);
       });
 
       canvas.on('object:scaling', (e) => {
         const activeObject = e.target as fabric.Ellipse;
-        handleScalingCircle(activeObject, setObjectCoordinates, setObjectSize, canvas);
+        handleScalingCircle(activeObject, setObjectCoordinates, setObjectSize, canvas, grid);
       });
 
       canvas.on('object:scaling', (e) => {
         const activeObject = e.target as fabric.Triangle;
-        handleScalingTriangle(activeObject, setObjectCoordinates, setObjectSize, canvas); 
+        handleScalingTriangle(activeObject, setObjectCoordinates, setObjectSize, canvas, grid); 
       });
       canvas.on('object:scaling', (e) => {
         const activeObject = e.target as fabric.Textbox;
-        handleScalingTextbox(activeObject, setObjectCoordinates, setObjectSize, canvas);
+        handleScalingTextbox(activeObject, setObjectCoordinates, setObjectSize, canvas, grid);
       });
       canvas.on('object:scaling', (e) => {
         const activeObject = e.target as fabric.Image;
-        handleScalingImage(activeObject, setObjectCoordinates, setObjectSize, canvas);
+        handleScalingImage(activeObject, setObjectCoordinates, setObjectSize, canvas, grid);
       });
       canvas.on('object:scaling', (e) => {
         const activeObject = e.target as fabric.Group;
-        handleScalingGroup(activeObject, setObjectCoordinates, setObjectSize, canvas);
+        handleScalingGroup(activeObject, setObjectCoordinates, setObjectSize, canvas, grid);
       });
 
       const handleDeleteSelectedObjects = () => {
@@ -341,6 +345,10 @@ const Editor = () => {
         if (selectedObjects.length > 0) {
           selectedObjects.forEach(object => {
             if (!(object instanceof fabric.IText)) {
+              // 선택된 객체가 IText가 아닌 경우에만 삭제
+              canvas.remove(object);
+            }
+            if ((object instanceof fabric.Textbox)) {
               // 선택된 객체가 IText가 아닌 경우에만 삭제
               canvas.remove(object);
             }

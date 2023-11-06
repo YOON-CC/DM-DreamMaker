@@ -75,6 +75,7 @@ export const addTextboxToCanvas = (canvas: fabric.Canvas) => {
   });
 
   canvas.add(newTextbox);
+  console.log("생성생성생성")
 }
 
 export const addImageToCanvas = (canvas: fabric.Canvas | null) => {
