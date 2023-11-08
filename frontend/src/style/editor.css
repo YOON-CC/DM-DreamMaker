@@ -381,10 +381,25 @@
     justify-content: center;
     align-items: center;
 }
+
 .canvas_container{
-    background-color: #ffffff;
-    width: 1000px;
+    background-color: #232323;
+    width: 1030px;
     height : 500px;
+    overflow-y: scroll; /* 세로축 스크롤만 표시 */
+    overflow-x: hidden; /* 가로축 스크롤 숨김 */
+    cursor:pointer;
+}
+.canvas_container::-webkit-scrollbar {
+    width: 12px; /* 스크롤 바 너비 */
+}
+  
+.canvas_container::-webkit-scrollbar-thumb {
+    background-color: #4370FB; /* 스크롤 바 썸 색상 */
+}
+  
+.canvas_container::-webkit-scrollbar-track {
+    background-color: #333; /* 스크롤 바 트랙 색상 */
 }
 .editor_body_right{
     background-color: #2c2c2c;
@@ -1167,6 +1182,7 @@
     width: 1000px;
     background-color: rgb(48, 48, 48);
     margin-top: -34%;
+    margin-right : 30px;
 }
 .X_value{
     background-color: rgb(255, 0, 0);
@@ -1179,7 +1195,7 @@
     width: 5px;
     background-color: rgb(48, 48, 48);
     /* margin-top: -34%; */
-    margin-right:66.5%;
+    margin-right:68.6%;
 }
 .Y_value{
     background-color: rgb(255, 0, 0);

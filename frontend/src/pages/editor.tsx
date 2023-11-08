@@ -29,6 +29,10 @@ const Editor = () => {
   const [backgroundColorToggleBtn, setBackgroundColorToggleBtn] = useState(false); // 초기 배경색 설정
 
   const [backgroundColor, setBackgroundColor] = useState('#ffffff'); // 초기 배경색 설정
+
+  
+  
+
   const handleBackgroundColorChange = (newBackgroundColor: string) => {
     setBackgroundColor(newBackgroundColor);
     if (canvas) {
@@ -258,12 +262,24 @@ const Editor = () => {
   useEffect(() => { 
     if (canvasRef.current) {
       const canvas = new fabric.Canvas(canvasRef.current);
-
+      canvas.setBackgroundColor('#ffffff', canvas.renderAll.bind(canvas));
       const canvasWidth = 1000;
-      const canvasHeight = 500;
+      const canvasHeight = 3000;
       const grid = 10;
-  
-      // create grid
+
+      
+      for (let i = 0; i <= canvasHeight / grid; i++) {
+        const isRedLine = (i % 50 === 0); // 50의 배수인 가로줄을 빨간색으로 설정
+        const lineColor = isRedLine ? '#ff9e9e' : '#f1f1f1';
+      
+        canvas.add(
+          new fabric.Line([0, i * grid, canvasWidth, i * grid], {
+            stroke: lineColor,
+            selectable: false,
+          })
+        );
+      }
+
       for (let i = 0; i <= canvasWidth / grid; i++) {
         canvas.add(
           new fabric.Line([i * grid, 0, i * grid, canvasHeight], {
@@ -272,14 +288,7 @@ const Editor = () => {
           })
         );
       }
-      for (let i = 0; i <= canvasHeight / grid; i++) {
-        canvas.add(
-          new fabric.Line([0, i * grid, canvasWidth, i * grid], {
-            stroke: '#f1f1f1',
-            selectable: false,
-          })
-        );
-      }
+
 
 
       canvas.on('object:moving', (options) => {
@@ -824,7 +833,7 @@ const Editor = () => {
               <div className='Y_value' style={{ marginTop: `${objectCoordinates_center.center_y}px` }}></div>
             </div>
           <div className='canvas_container'>
-            <canvas ref={canvasRef}  width={1000} height={500}></canvas>
+            <canvas ref={canvasRef}  width={1000} height={3000}></canvas>
           </div>
         </div>
         <div className='editor_body_right'>
