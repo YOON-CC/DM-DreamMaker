@@ -301,11 +301,11 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
           }
 
           if (strokeWidth === 0){
-            const rectHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc};  border-radius: ${obr}px; background-color: ${object.fill}; transform: rotate(${object.angle}deg);"></div>`;          
+            const rectHtml = `<div class=${object.name} style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc};  border-radius: ${obr}px; background-color: ${object.fill}; transform: rotate(${object.angle}deg);"></div>`;          
             htmlContent += rectHtml;
           }else{
             const rectHtml = `
-              <div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: ${obr}px; background-color: ${strokeColor}; transform: rotate(${object.angle}deg);">
+              <div class=${object.name} style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: ${obr}px; background-color: ${strokeColor}; transform: rotate(${object.angle}deg);">
                 <div style="
                 position: absolute; 
                 left: 50%; 
@@ -540,8 +540,113 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
         
       });
 
+      //애니메이션 처리 부분
+      htmlContent += `
+      <script>
+        const animatedElements1 = document.querySelectorAll('.animated-element1');
+        const animatedElements2 = document.querySelectorAll('.animated-element2');
+        const animatedElements3 = document.querySelectorAll('.animated-element3');
+        const animatedElements4 = document.querySelectorAll('.animated-element4');
+        const animatedElements5 = document.querySelectorAll('.animated-element5');
+
+
+        animatedElements1.forEach((animatedElement) => {
+          animatedElement.style.opacity = 0;
+          animatedElement.style.transform = 'translateY(100%)'; 
+          animatedElement.style.transition = 'opacity 2s, transform 2s';
+        });
+      
+        animatedElements2.forEach((animatedElement) => {
+          animatedElement.style.opacity = 0;
+          animatedElement.style.transition = 'opacity 2s';
+        });
+
+        animatedElements3.forEach((animatedElement) => {
+          animatedElement.style.opacity = 0;
+          animatedElement.style.transform = 'translateX(-100%)';
+          animatedElement.style.transition = 'opacity 2s, transform 2s';
+        });
+
+        animatedElements4.forEach((animatedElement) => {
+          animatedElement.style.opacity = 0;
+          animatedElement.style.transform = 'translateX(100%)';
+          animatedElement.style.transition = 'opacity 2s, transform 2s';
+        });
+
+        animatedElements5.forEach((animatedElement) => {
+          animatedElement.style.opacity = 0;
+          animatedElement.style.transform = 'translateY(-100%)'; 
+          animatedElement.style.transition = 'opacity 2s, transform 2s';
+        });
+      
+        window.addEventListener('scroll', () => {
+          animatedElements1.forEach((animatedElement) => {
+            const elementTop = animatedElement.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+      
+            if (elementTop < windowHeight) {
+              animatedElement.style.opacity = 1;
+              animatedElement.style.transform = 'translateY(0)'; 
+            } else {
+              animatedElement.style.opacity = 0;
+              animatedElement.style.transform = 'translateY(100%)';
+            }
+          });
+      
+          animatedElements2.forEach((animatedElement) => {
+            const elementTop = animatedElement.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+      
+            if (elementTop < windowHeight) {
+              animatedElement.style.opacity = 1;
+            }
+          });
+
+          animatedElements3.forEach((animatedElement) => {
+            const elementTop = animatedElement.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+      
+            if (elementTop < windowHeight) {
+              animatedElement.style.opacity = 1;
+              animatedElement.style.transform = 'translateX(0)'; 
+            } else {
+              animatedElement.style.opacity = 0;
+              animatedElement.style.transform = 'translateX(-100%)';
+            }
+          });
+
+          animatedElements4.forEach((animatedElement) => {
+            const elementTop = animatedElement.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+      
+            if (elementTop < windowHeight) {
+              animatedElement.style.opacity = 1;
+              animatedElement.style.transform = 'translateX(0)'; 
+            } else {
+              animatedElement.style.opacity = 0;
+              animatedElement.style.transform = 'translateX(100%)';
+            }
+          });
+
+          animatedElements5.forEach((animatedElement) => {
+            const elementTop = animatedElement.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+      
+            if (elementTop < windowHeight) {
+              animatedElement.style.opacity = 1;
+              animatedElement.style.transform = 'translateY(0)'; 
+            } else {
+              animatedElement.style.opacity = 0;
+              animatedElement.style.transform = 'translateY(-100%)';
+            }
+          });
+
+        });
+      </script>
+      `
+
       const box = ['username', 'id', 'password'];
-      const jsonObject: Record<string, string> = {}; // Define the type with specific types for values
+      const jsonObject: Record<string, string> = {}; 
       
       for (const key of box) {
         jsonObject[key] = '';
@@ -554,6 +659,8 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
 
       htmlContent += `
       <script>
+
+
         const apiUrl = "${selectedHttpUrl}";
         const apiMethod = "${selectedHttpMethod}";
       

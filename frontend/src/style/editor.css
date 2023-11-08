@@ -97,14 +97,14 @@
     filter: brightness(120%);
     background-color: #2c2c2c;
 }
-#add-api-button{
+#add-animation-button{
     height : 100%;
     width : 33.3%;
     border-left: 1px solid #232323; /* 왼쪽 테두리 색상 및 두께 설정 */
     border-right: 1px solid #232323; /* 오른쪽 테두리 색상 및 두께 설정 */
     cursor: pointer;
 }
-#add-api-button:hover{
+#add-animation-button:hover{
     /* background-color: aqua; */
     filter: brightness(120%);
     background-color: #2c2c2c;

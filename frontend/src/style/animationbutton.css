@@ -1,0 +1,31 @@
+.Animation_container{
+    position: absolute;
+    background-color:rgb(63, 63, 63);/*까만색(0,0,0) 80% 불투명도*/
+    width: 35%;
+    height:9.7%;
+    z-index: 2;
+    
+    top: 13.1%;
+    left: 50.05%;
+    transform: translate(-50%, -50%);
+
+    flex-wrap: wrap;
+}
+.Animation_container button{
+    background-color: #232323;
+    width: 125.3px;
+    height : 25px;
+    margin-top: 6.5px;
+    margin-left: 6px;
+    border-radius: 3px;
+    border: none;
+    font-size: 10px;
+    color: white;
+    
+
+}
+.Animation_container button:hover{
+    filter: brightness(90%);
+    cursor: pointer;
+    color : grey;
+}

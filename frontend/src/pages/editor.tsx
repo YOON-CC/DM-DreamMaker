@@ -6,6 +6,7 @@ import '../style/editor.css';
 import SaveButton from '../components/savebutton';
 import LoadButton from '../components/loadbutton';
 import DownloadButton from '../components/DownloadButton';
+import Animation from '../components/Animation';
 import { addRectToCanvas, addCircleToCanvas, addTriangleToCanvas, addTextboxToCanvas, addImageToCanvas, addITextToCanvas, addButtonToCanvas } from '../utils/AddCanvasUtils'; 
 import { handleScalingRect, handleScalingCircle, handleScalingTriangle, handleScalingTextbox, handleScalingImage, handleScalingGroup } from '../utils/ScalingCanvasUtils';
 import { handleChangeFontSizeInput, handleFontWeightChange, handleFontToItalicChange, handleFontShadowChange } from '../utils/FontOptionUtils';
@@ -31,7 +32,17 @@ const Editor = () => {
   const [backgroundColor, setBackgroundColor] = useState('#ffffff'); // 초기 배경색 설정
 
   
+  const handleSetElementName = () => {
+    if (canvas) {
+      const activeObject = canvas.getActiveObject();
   
+      if (activeObject) {
+        // 선택된 객체의 이름을 "animated-element"로 설정
+        activeObject.set('name', 'animated-element');
+        canvas.renderAll();
+      }
+    }
+  };
 
   const handleBackgroundColorChange = (newBackgroundColor: string) => {
     setBackgroundColor(newBackgroundColor);
@@ -40,8 +51,10 @@ const Editor = () => {
     }
   };
 
+  //애니메이션 관련
+  const [showAnimation, setShowAnimation] = useState(false);
+
   //api 관련
-  const [showApiElements, setShowApiElements] = useState(true);
   const [selectedHttpMethod, setSelectedHttpMethod] = useState('');
   const [selectedHttpUrl, setSelectedHttpUrl] = useState('');
   const [selectedHttpTransport, setSelectedHttpTransport] = useState(-1);
@@ -264,7 +277,7 @@ const Editor = () => {
       const canvas = new fabric.Canvas(canvasRef.current);
       canvas.setBackgroundColor('#ffffff', canvas.renderAll.bind(canvas));
       const canvasWidth = 1000;
-      const canvasHeight = 3000;
+      const canvasHeight = 2000;
       const grid = 10;
 
       
@@ -725,6 +738,7 @@ const Editor = () => {
 
   return (
     <div className='body'>
+      {showAnimation && (<Animation canvas={canvas}></Animation>)}
       <div className='editor_header'>
         <div className='editor_header_logo_container'>
         </div>
@@ -738,14 +752,14 @@ const Editor = () => {
           <div id='add-image-shape-button'>
             <img src="../images/photo.png" style={{ width: "67%", height: "80%", marginTop:"8%", marginLeft:"16%"}} />
           </div>
+          <div id='add-animation-button' onClick={() => setShowAnimation(!showAnimation)}>
+            <img src="../images/animation.png" style={{ width: "67%", height: "80%", marginTop:"6%", marginLeft:"16%"}} />
+          </div>
           <div id='add-group-button'>
             <img src="../images/group.png" style={{ width: "67%", height: "80%", marginTop:"8%", marginLeft:"16%"}} />
           </div>
           <div id='add-ungroup-button'>
             <img src="../images/ungroup.png" style={{ width: "67%", height: "80%", marginTop:"8%", marginLeft:"16%"}} />
-          </div>
-          <div id='add-api-button' onClick={() => {setShowApiElements(!showApiElements);}}>
-            <img src="../images/api.png" style={{ width: "67%", height: "80%", marginTop:"6%", marginLeft:"16%"}} />
           </div>
         </div>
 
@@ -771,49 +785,47 @@ const Editor = () => {
         </div>
         {showTool && (<div className='editor_body_toolbox_cover'></div>)}
         <div className='editor_body_left'>
-          {showApiElements && (
-            <>
-              <div className='editor_body_left_http_container'>
-                <div className='editor_body_left_http_container_title'>HTTP 메서드</div>
-                <div className='editor_body_left_http_container_info_container'>
-                  <button className='editor_body_left_http_container_info_container_title_1' onClick={()=> setSelectedHttpMethod('GET')} style={{backgroundColor: selectedHttpMethod === 'GET' ? '#4370FB' : 'rgb(63, 63, 63)'}}>GET</button>
-                  <button className='editor_body_left_http_container_info_container_title_2' onClick={()=> setSelectedHttpMethod('POST')} style={{backgroundColor: selectedHttpMethod === 'POST' ? '#4370FB' : 'rgb(63, 63, 63)'}}>POST</button>
-                </div>
+          <div className='editor_body_left_http_container'>
+            <div className='editor_body_left_http_container_title'>HTTP 메서드</div>
+            <div className='editor_body_left_http_container_info_container'>
+              <button className='editor_body_left_http_container_info_container_title_1' onClick={()=> setSelectedHttpMethod('GET')} style={{backgroundColor: selectedHttpMethod === 'GET' ? '#4370FB' : 'rgb(63, 63, 63)'}}>GET</button>
+              <button className='editor_body_left_http_container_info_container_title_2' onClick={()=> setSelectedHttpMethod('POST')} style={{backgroundColor: selectedHttpMethod === 'POST' ? '#4370FB' : 'rgb(63, 63, 63)'}}>POST</button>
+            </div>
+          </div>
+          <div className='editor_body_left_url_container'>
+            <div className='editor_body_left_url_container_title'>URL</div>
+            <div className='editor_body_left_url_container_info_container'>
+              <input onChange={handleUrlChange}></input>
+            </div>
+          </div>
+          <div className='editor_body_left_transport_container'>
+            <div className='editor_body_left_transport_container_title'>전송방식</div>
+            <div className='editor_body_left_transport_container_info_container'>
+              <button className='editor_body_left_transport_container_info_container_title_1' onClick={()=> setSelectedHttpTransport(0)} style={{backgroundColor: selectedHttpTransport === 0 ? '#4370FB' : 'rgb(63, 63, 63)'}}>Body</button>
+              <button className='editor_body_left_transport_container_info_container_title_2' onClick={()=> setSelectedHttpTransport(1)} style={{backgroundColor: selectedHttpTransport === 1 ? '#4370FB' : 'rgb(63, 63, 63)'}}>Quary String</button>
+              <button className='editor_body_left_transport_container_info_container_title_2' onClick={()=> setSelectedHttpTransport(2)} style={{backgroundColor: selectedHttpTransport === 2 ? '#4370FB' : 'rgb(63, 63, 63)'}}>Path</button>
+            </div>
+          </div>
+          <div className='editor_body_left_input_container'>
+            <div className='editor_body_left_input_container_title'>입력요소 추가</div>
+            <div className='editor_body_left_input_container_info_container'>
+              {generatedDivs}
+              <div className='editor_body_left_input_container_info_container_btn_container'>
+                <button id="add-IText-shape-button" onClick={addITextAndDiv}>추가</button>
+                <button id="delete-IText-shape-button" onClick={addITextAndDivDelete}>삭제</button>
+                <button id="add-Button-shape-button">적용</button>
               </div>
-              <div className='editor_body_left_url_container'>
-                <div className='editor_body_left_url_container_title'>URL</div>
-                <div className='editor_body_left_url_container_info_container'>
-                  <input onChange={handleUrlChange}></input>
-                </div>
+              <div className='editor_body_left_input_container_end_line'></div>
+              <div className='editor_body_left_apply_container'>
+                <button id = "for_api">적용하기</button>
               </div>
-              <div className='editor_body_left_transport_container'>
-                <div className='editor_body_left_transport_container_title'>전송방식</div>
-                <div className='editor_body_left_transport_container_info_container'>
-                  <button className='editor_body_left_transport_container_info_container_title_1' onClick={()=> setSelectedHttpTransport(0)} style={{backgroundColor: selectedHttpTransport === 0 ? '#4370FB' : 'rgb(63, 63, 63)'}}>Body</button>
-                  <button className='editor_body_left_transport_container_info_container_title_2' onClick={()=> setSelectedHttpTransport(1)} style={{backgroundColor: selectedHttpTransport === 1 ? '#4370FB' : 'rgb(63, 63, 63)'}}>Quary String</button>
-                  <button className='editor_body_left_transport_container_info_container_title_2' onClick={()=> setSelectedHttpTransport(2)} style={{backgroundColor: selectedHttpTransport === 2 ? '#4370FB' : 'rgb(63, 63, 63)'}}>Path</button>
-                </div>
-              </div>
-              <div className='editor_body_left_input_container'>
-                <div className='editor_body_left_input_container_title'>입력요소 추가</div>
-                <div className='editor_body_left_input_container_info_container'>
-                  {generatedDivs}
-                  <div className='editor_body_left_input_container_info_container_btn_container'>
-                    <button id="add-IText-shape-button" onClick={addITextAndDiv}>추가</button>
-                    <button id="delete-IText-shape-button" onClick={addITextAndDivDelete}>삭제</button>
-                    <button id="add-Button-shape-button">적용</button>
-                  </div>
-                  <div className='editor_body_left_input_container_end_line'></div>
-                  <div className='editor_body_left_apply_container'>
-                    <button id = "for_api">적용하기</button>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
+            </div>
+          </div>
         </div>
         <div className='editor_body_center'>
+
           <div className='editor_body_style_container_info_container'>
+
             <div className='editor_body_style_container_info_container_title'>background color</div>
             <div className='editor_body_style_container_info_container_frame'>
               <HexColorInput className="editor_body_style_container_info_container_container_info" color={backgroundColor} onChange={handleBackgroundColorChange} />
@@ -833,7 +845,7 @@ const Editor = () => {
               <div className='Y_value' style={{ marginTop: `${objectCoordinates_center.center_y}px` }}></div>
             </div>
           <div className='canvas_container'>
-            <canvas ref={canvasRef}  width={1000} height={3000}></canvas>
+            <canvas ref={canvasRef}  width={1000} height={2000}></canvas>
           </div>
         </div>
         <div className='editor_body_right'>
