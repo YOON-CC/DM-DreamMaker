@@ -63,7 +63,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
           const ol = (newX ?? 0) / 1000 * 100
           const ot = (newY ?? 0) / 500 * 100
           
-          htmlContent += `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; transform: rotate(${object.angle}deg);">`;
+          htmlContent += `<div class=${object.name} style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; transform: rotate(${object.angle}deg);">`;
           if (object.name && object.name.startsWith('api_')){
             // 그룹의 이름이 "api_1"인 경우 alert 창 표시
             htmlContent +=`<form id="myForm">`;
@@ -465,7 +465,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
             }
           }
           
-          const TextboxHtml = `<div style="position: absolute; text-shadow: 1.2px 1.2px ${fontShadow};
+          const TextboxHtml = `<div class=${object.name} style="position: absolute; text-shadow: 1.2px 1.2px ${fontShadow};
           left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; display : flex; justify-content : center; align-items : center; font-family : ${fontFamily}; font-weight : ${object.fontWeight}; font-size : ${newFontSize}px; font-style : ${object.fontStyle};color : ${fontColor};  transform: rotate(${object.angle}deg);">${object.text}</div>`;
           htmlContent += TextboxHtml;
         }       
@@ -493,7 +493,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
 
           console.log("dd", (object.width?? 0)*(object.scaleX?? 0), (object.height?? 0) * (object.scaleY?? 0))
 
-          const ImgHtml = `<img src="${imageUrl}" alt="Fabric.js Image" style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; transform: rotate(${object.angle}deg);"></img>`;
+          const ImgHtml = `<img class=${object.name} src="${imageUrl}" alt="Fabric.js Image" style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; transform: rotate(${object.angle}deg);"></img>`;
           htmlContent += ImgHtml;
         }   
         if (object instanceof fabric.IText) {
@@ -548,19 +548,23 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
         const animatedElements3 = document.querySelectorAll('.animated-element3');
         const animatedElements4 = document.querySelectorAll('.animated-element4');
         const animatedElements5 = document.querySelectorAll('.animated-element5');
+        const animatedElements6 = document.querySelectorAll('.animated-element6');
+        const animatedElements7 = document.querySelectorAll('.animated-element7');
+        const animatedElements8 = document.querySelectorAll('.animated-element8');
+        const animatedElements9 = document.querySelectorAll('.animated-element9');
 
 
         animatedElements1.forEach((animatedElement) => {
+          animatedElement.style.opacity = 0;
+          animatedElement.style.transition = 'opacity 2s';
+        });
+
+        animatedElements2.forEach((animatedElement) => {
           animatedElement.style.opacity = 0;
           animatedElement.style.transform = 'translateY(100%)'; 
           animatedElement.style.transition = 'opacity 2s, transform 2s';
         });
       
-        animatedElements2.forEach((animatedElement) => {
-          animatedElement.style.opacity = 0;
-          animatedElement.style.transition = 'opacity 2s';
-        });
-
         animatedElements3.forEach((animatedElement) => {
           animatedElement.style.opacity = 0;
           animatedElement.style.transform = 'translateX(-100%)';
@@ -578,9 +582,50 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
           animatedElement.style.transform = 'translateY(-100%)'; 
           animatedElement.style.transition = 'opacity 2s, transform 2s';
         });
-      
+
+        animatedElements6.forEach((animatedElement) => {
+          animatedElement.style.opacity = 0;
+          animatedElement.style.filter = 'blur(10px)'; // 초기 블러 효과 적용
+          animatedElement.style.transition = 'opacity 2s, filter 2s';
+        });
+
+        animatedElements7.forEach((animatedElement) => {
+          animatedElement.style.opacity = 0;
+          animatedElement.style.transform = 'scaleX(2)';
+          animatedElement.style.filter = 'blur(10px)'; // 초기 블러 효과 적용
+          animatedElement.style.transition = 'opacity 2s, transform 2s, filter 2s';
+        });
+
+        animatedElements8.forEach((animatedElement) => {
+          animatedElement.style.opacity= 0;
+          animatedElement.style.transform= 'scale(0.5)'; /* 초기에 전체적으로 축소된 상태로 시작 */
+          animatedElement.style.transition= 'opacity 2s, transform 2s, filter 2s';
+        });
+
+
+        //animatedElements9의 옵션
+        let state = false;
+        let Yindex = window.innerHeight;
+        console.log(Yindex)
+        let temp = Yindex;
+        let originalPosition;
+        animatedElements8.forEach((animatedElement) => {
+          originalPosition = animatedElement9.style.top;
+        });
+
+
         window.addEventListener('scroll', () => {
+
           animatedElements1.forEach((animatedElement) => {
+            const elementTop = animatedElement.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+      
+            if (elementTop < windowHeight) {
+              animatedElement.style.opacity = 1;
+            }
+          });
+
+          animatedElements2.forEach((animatedElement) => {
             const elementTop = animatedElement.getBoundingClientRect().top;
             const windowHeight = window.innerHeight;
       
@@ -593,15 +638,6 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
             }
           });
       
-          animatedElements2.forEach((animatedElement) => {
-            const elementTop = animatedElement.getBoundingClientRect().top;
-            const windowHeight = window.innerHeight;
-      
-            if (elementTop < windowHeight) {
-              animatedElement.style.opacity = 1;
-            }
-          });
-
           animatedElements3.forEach((animatedElement) => {
             const elementTop = animatedElement.getBoundingClientRect().top;
             const windowHeight = window.innerHeight;
@@ -638,6 +674,67 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
             } else {
               animatedElement.style.opacity = 0;
               animatedElement.style.transform = 'translateY(-100%)';
+            }
+          });
+
+          animatedElements6.forEach((animatedElement) => {
+            const elementTop = animatedElement.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+      
+            if (elementTop < windowHeight) {
+              animatedElement.style.opacity = 1;
+              animatedElement.style.filter = 'blur(0)'; // 블러 효과 해제
+            } else {
+              animatedElement.style.opacity = 0;
+              animatedElement.style.filter = 'blur(30px)'; // 다시 블러 효과 적용
+            }
+          });
+
+          animatedElements7.forEach((animatedElement) => {
+            const elementTop = animatedElement.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+      
+            if (elementTop < windowHeight) {
+              animatedElement.style.opacity = 1;
+              animatedElement.style.filter = 'blur(0)'; 
+              animatedElement.style.transform = 'scaleX(1)';
+            } else {
+              animatedElement.style.opacity = 0;
+              animatedElement.style.filter = 'blur(10px)'; 
+              animatedElement.style.transform = 'scaleX(2)'; 
+            }
+          });
+
+          animatedElements8.forEach((animatedElement) => {
+            const elementTop = animatedElement.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+      
+            if (elementTop < windowHeight) {
+              animatedElement.style.opacity = 1;
+              animatedElement.style.transform = 'scale(1)'; 
+            } else {
+              animatedElement.style.opacity = 0;
+              animatedElement.style.transform = 'scale(0.5)';
+            }
+          });
+
+          animatedElements9.forEach((animatedElement) => {
+            const elementTop = animatedElement.getBoundingClientRect().top;
+            const elementBottom = animatedElement.getBoundingClientRect().bottom;
+            const windowHeight = window.innerHeight;
+      
+      
+            if (!state && elementTop <= windowHeight / 2 && window.scrollY - Yindex < 500) {
+              animatedElement.style.position = 'absolute';
+              animatedElement.style.opacity = 1;
+              animatedElement.style.top = \`\${window.scrollY + windowHeight / 2}px\`;
+            } else if (window.scrollY - Yindex > 500) {
+              animatedElement.style.opacity = 1;
+              animatedElement.style.top = \`\${originalPosition}%\`;
+              Yindex = temp;
+              state = true;
+            } else {
+              state = false;
             }
           });
 

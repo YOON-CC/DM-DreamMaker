@@ -2,10 +2,10 @@
     position: absolute;
     background-color:rgb(63, 63, 63);/*까만색(0,0,0) 80% 불투명도*/
     width: 35%;
-    height:9.7%;
+    height:13.5%;
     z-index: 2;
     
-    top: 13.1%;
+    top: 15%;
     left: 50.05%;
     transform: translate(-50%, -50%);
 
