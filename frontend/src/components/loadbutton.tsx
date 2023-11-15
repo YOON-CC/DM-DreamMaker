@@ -13,8 +13,40 @@ const LoadButton: React.FC<LoadButtonProps> = ({ canvas }) => {
         canvas?.renderAll();
 
         const objectsJson = localStorage.getItem('canvasObjects');
+        const backgroundColor = localStorage.getItem('canvasBackgroundColor');
+        const canvasWidth = 1000;
+        const canvasHeight = 2000;
+        const grid = 10;
+  
+        //배경색 및 점선 정렬 불러오기
+        for (let i = 0; i <= canvasHeight / grid; i++) {
+          const isRedLine = (i % 50 === 0); // 50의 배수인 가로줄을 빨간색으로 설정
+          const lineColor = isRedLine ? '#ff9e9e' : '#f1f1f1';
+        
+          canvas?.add(
+            new fabric.Line([0, i * grid, canvasWidth, i * grid], {
+              stroke: lineColor,
+              selectable: false,
+            })
+          );
+        }
+  
+        for (let i = 0; i <= canvasWidth / grid; i++) {
+          canvas?.add(
+            new fabric.Line([i * grid, 0, i * grid, canvasHeight], {
+              stroke: '#f1f1f1',
+              selectable: false,
+            })
+          );
+        }
+
+        if (backgroundColor) {
+            canvas?.setBackgroundColor(backgroundColor as string, canvas.renderAll.bind(canvas));
+          }
+
         if (objectsJson) {
             const parsedObjects = JSON.parse(objectsJson);
+
 
             parsedObjects.forEach((objInfo: any) => {
                 let fabricObject;
@@ -40,7 +72,40 @@ const LoadButton: React.FC<LoadButtonProps> = ({ canvas }) => {
                                 canvas.add(fabricObject);
                             }
                         };
-                        break;      
+                        break;     
+                    case 'group':
+                        if (objInfo.objects && objInfo.objects.length > 0) {
+                            const groupObjects: fabric.Object[] | undefined = [];
+                            objInfo.objects.forEach((groupObjInfo: any) => {
+                                switch (groupObjInfo.type) {
+                                    case 'rect':
+                                        groupObjects.push(new fabric.Rect(groupObjInfo));
+                                        break;
+                                    case 'ellipse':
+                                        groupObjects.push(new fabric.Ellipse(groupObjInfo));
+                                        break;
+                                    case 'triangle':
+                                        
+                                        groupObjects.push(new fabric.Triangle(groupObjInfo));
+                                        break;   
+                                    case 'textbox':
+                                        groupObjects.push(new fabric.Textbox(groupObjInfo.text, groupObjInfo));
+                                        break;    
+                                    case 'image':
+                                        console.log(groupObjInfo.src)
+                                        const imgElement = new Image();
+
+                                        imgElement.src = groupObjInfo.src;
+                                        groupObjects.push(new fabric.Image(imgElement, groupObjInfo)); // 그룹에 이미지를 push
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            });
+            
+                            fabricObject = new fabric.Group(groupObjects, objInfo);
+                        }
+                        break;
                     default:
                         break;
                 }

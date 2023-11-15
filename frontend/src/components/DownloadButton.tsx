@@ -597,9 +597,9 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
         });
 
         animatedElements8.forEach((animatedElement) => {
-          animatedElement.style.opacity= 0;
-          animatedElement.style.transform= 'scale(0.5)'; /* 초기에 전체적으로 축소된 상태로 시작 */
-          animatedElement.style.transition= 'opacity 2s, transform 2s, filter 2s';
+          animatedElement.style.opacity = 0;
+          animatedElement.style.transform = 'scale(0.5)'; /* 초기에 전체적으로 축소된 상태로 시작 */
+          animatedElement.style.transition = 'opacity 2s, transform 2s';
         });
 
 
@@ -609,8 +609,8 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
         console.log(Yindex)
         let temp = Yindex;
         let originalPosition;
-        animatedElements8.forEach((animatedElement) => {
-          originalPosition = animatedElement9.style.top;
+        animatedElements9.forEach((animatedElement) => {
+          originalPosition = animatedElement.style.top;
         });
 
 
@@ -724,11 +724,11 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
             const windowHeight = window.innerHeight;
       
       
-            if (!state && elementTop <= windowHeight / 2 && window.scrollY - Yindex < 500) {
+            if (!state && elementTop <= windowHeight / 2 && window.scrollY - Yindex < 1000) {
               animatedElement.style.position = 'absolute';
               animatedElement.style.opacity = 1;
               animatedElement.style.top = \`\${window.scrollY + windowHeight / 2}px\`;
-            } else if (window.scrollY - Yindex > 500) {
+            } else if (window.scrollY - Yindex > 1000) {
               animatedElement.style.opacity = 1;
               animatedElement.style.top = \`\${originalPosition}%\`;
               Yindex = temp;
