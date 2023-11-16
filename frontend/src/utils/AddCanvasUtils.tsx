@@ -6,7 +6,7 @@ export const addRectToCanvas = (canvas: fabric.Canvas) => {
         top: Math.random() * 400,
         width: 100,
         height: 100,
-        fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        fill: '#4370FB',
         strokeWidth: 0, 
         shadow: new fabric.Shadow({
             color: 'rgba(0, 0, 0, 0)', // 그림자의 색상
@@ -25,7 +25,7 @@ export const addCircleToCanvas = (canvas: fabric.Canvas) => {
         top: Math.random() * 400,
         rx: 50, // 가로 반지름
         ry: 50, // 세로 반지름
-        fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        fill: '#4370FB',
         strokeWidth: 0, 
         shadow: new fabric.Shadow({
             color: 'rgba(0, 0, 0, 0)', // 그림자의 색상
@@ -44,7 +44,7 @@ export const addTriangleToCanvas = (canvas: fabric.Canvas) => {
         top: Math.random() * 400,
         width: 100,
         height: 100,
-        fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        fill: '#4370FB',
         shadow: new fabric.Shadow({
             color: 'rgba(0, 0, 0, 0)', // 그림자의 색상
             offsetX: 0, // 그림자의 가로 오프셋
@@ -62,7 +62,7 @@ export const addTextboxToCanvas = (canvas: fabric.Canvas) => {
     top: Math.random() * 400,
     width: 100, 
     fontSize: 20,
-    fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+    fill: '#4370FB',
     editable: true, 
     fontFamily: 'Arial', 
     textAlign: 'center', 
@@ -129,7 +129,7 @@ export const addITextToCanvas = (canvas: fabric.Canvas) => {
       top: Math.random() * 400,
       width: 150,
       fontSize: 16,
-      fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+      fill: '#4370FB',
       fontFamily: 'Arial',
       textAlign: 'left',
       shadow: new fabric.Shadow({

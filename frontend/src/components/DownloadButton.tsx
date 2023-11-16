@@ -383,11 +383,11 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
           }
 
           if (strokeWidth === 0){
-            const rectHtml = `<div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; background-color: ${object.fill}; border-radius: 50%;" transform: rotate(${object.angle}deg);"></div>`;          
+            const rectHtml = `<div class=${object.name} style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; background-color: ${object.fill}; border-radius: 50%;" transform: rotate(${object.angle}deg);"></div>`;          
             htmlContent += rectHtml;
           }else{
             const rectHtml = `
-              <div style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: 50%; background-color: ${strokeColor}; transform: rotate(${object.angle}deg);">
+              <div class=${object.name} style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: 50%; background-color: ${strokeColor}; transform: rotate(${object.angle}deg);">
                 <div style="
                 position: absolute; 
                 left: 50%; 
@@ -439,7 +439,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
           }
 
           const TriangleHtml = `
-          <div style = "position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; filter: drop-shadow(${osx}px ${osy}px ${osb}px ${osc});">
+          <div class=${object.name} style = "position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; filter: drop-shadow(${osx}px ${osy}px ${osb}px ${osc});">
           <div style=" width: 100%; height: 100%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; background-color: ${object.fill}; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); transform: rotate(${object.angle}deg);"></div>
           </div>
           `;
