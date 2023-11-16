@@ -233,6 +233,32 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
                   </div>`;     
                 }
               }
+              if (groupObject instanceof fabric.Triangle) {
+                // Fabric.js에서 원 객체인 경우
+                const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
+                const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
+
+                const groupObjectLeft = originalLeft / gw * 100
+                const groupObjectTop = originalTop / gh * 100
+
+                const groupStrokeWidth = groupObject.strokeWidth ?? 0; // 두께
+
+                const groupObjectWidth = (((groupObject.width ?? 0)+(groupStrokeWidth)) * (groupObject.scaleX?? 0)) / gw * 100
+                const groupObjectHight = (((groupObject.height ?? 0)+(groupStrokeWidth)) * (groupObject.scaleY?? 0)) / gh * 100
+                
+
+                const osx = ((groupObject.shadow as unknown as Shadow).offsetX)*2
+                const osy = ((groupObject.shadow as unknown as Shadow).offsetY)*2
+                const osb = ((groupObject.shadow as unknown as Shadow).blur) * 2
+                const osc = (groupObject.shadow as unknown as Shadow).color
+                
+                const TriangleHtml = `
+                <div style = "position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; filter: drop-shadow(${osx}px ${osy}px ${osb}px ${osc});">
+                <div style=" width: 100%; height: 100%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; background-color: ${groupObject.fill}; clip-path: polygon(50% 0%, 0% 100%, 100% 100%);"></div>
+                </div>
+                `;
+                htmlContent += TriangleHtml;
+              }
               if (groupObject instanceof fabric.Textbox) {
                 console.log("글자들옴")
                 const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
