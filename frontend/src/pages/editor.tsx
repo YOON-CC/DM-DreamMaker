@@ -328,6 +328,12 @@ const Editor = () => {
     if (borderColorToggle === true){
       setBorderColorToggle(!borderColorToggle)
     }
+    if (shadowToggle === true){
+      setShadowToggle(!shadowToggle)
+    }
+    if (shadowOptionToggle === true){
+      setShadowOptionToggle(!shadowOptionToggle)
+    }
     if (shadowColorToggle === true){
       setShadowColorToggle(!shadowColorToggle)
     }
@@ -434,7 +440,7 @@ const Editor = () => {
           }
           canvas.renderAll(); 
         }
-        else if (activeObject && (activeObject.type === 'rect' || activeObject.type === 'ellipse' || activeObject.type === 'triangle')) {
+        else if (activeObject && (activeObject.type === 'rect')) {
 
           for (let i = 0; i < Elements1.length; i++) {
             if (i === 4 || i === 5){
@@ -449,7 +455,36 @@ const Editor = () => {
           }
           canvas.renderAll(); 
         }
+        else if (activeObject && (activeObject.type === 'ellipse')) {
 
+          for (let i = 0; i < Elements1.length; i++) {
+            if (i === 0 || i === 4 || i === 5){
+              Elements1[i].style.display = 'none'; 
+            }
+          }
+
+          for (let i = 0; i < Elements2.length; i++) {
+            if (i === 3){
+              Elements2[i].style.display = 'none'; 
+            }
+          }
+          canvas.renderAll(); 
+        }
+        else if (activeObject && (activeObject.type === 'triangle')) {
+
+          for (let i = 0; i < Elements1.length; i++) {
+            if (i === 0 || i === 1 || i === 4 || i === 5){
+              Elements1[i].style.display = 'none'; 
+            }
+          }
+
+          for (let i = 0; i < Elements2.length; i++) {
+            if (i === 1 ||i === 3){
+              Elements2[i].style.display = 'none'; 
+            }
+          }
+          canvas.renderAll(); 
+        }
       });
       
       
