@@ -398,9 +398,8 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
           const osy = ((object.shadow as Shadow)?.offsetY) ?? 0 * 2;
           const osb = ((object.shadow as Shadow)?.blur) ?? 0 * 2;
           const osc = (object.shadow as Shadow)?.color ?? 'transparent';
-          
           if (strokeWidth === 0) {
-            const rectHtml = `<div class="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; background-color: ${object.fill}; border-radius: 50%; transform: rotate(${object.angle}deg);"></div>`;          
+            const rectHtml = `<div class=${object.name} style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; background-color: ${object.fill}; border-radius: 50%; transform: rotate(${object.angle}deg);"></div>`;          
             htmlContent += rectHtml;
           } else {
             const rectHtml = `
