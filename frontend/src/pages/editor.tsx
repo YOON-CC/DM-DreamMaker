@@ -702,8 +702,8 @@ const Editor = () => {
       };
       
       const handleObjectToGroup = () => {
-        const activeObject = canvas.getActiveObject();
-  
+        const activeObject = canvas.getActiveObject() as fabric.ActiveSelection;
+
         if (!activeObject) {
           return;
         }
@@ -711,7 +711,24 @@ const Editor = () => {
         if (activeObject.type !== 'activeSelection') {
           return;
         }
-  
+
+        if (activeObject) {
+          const groupNum = activeObject.getObjects().filter(obj => obj?.type === 'group').length;
+    
+          if (groupNum > 0) {
+            Swal.fire({
+              title: '그룹설정 실패',
+              text: '기존의 그룹은 다른 그룹으로 묶일 수 없습니다.',
+              icon: 'warning',
+              confirmButtonText: '확인',
+              customClass: {
+                confirmButton: 'custom-confirm-button-class'
+              }
+            });
+            return;
+          }
+        }
+
         (activeObject as fabric.ActiveSelection).toGroup();
         canvas.discardActiveObject();
         canvas.requestRenderAll();
