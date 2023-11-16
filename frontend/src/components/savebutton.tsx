@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fabric } from 'fabric';
 import '../style/savebutton.css';
+import Swal from "sweetalert2";
 
 interface SaveButtonProps {
   canvas: fabric.Canvas | null;
@@ -25,10 +26,21 @@ const SaveButton: React.FC<SaveButtonProps> = ({ canvas }) => {
       const backgroundColor = canvas.backgroundColor || '#ffffff';
       localStorage.setItem('canvasBackgroundColor', backgroundColor.toString());
     }
+    Swal.fire({
+      title: '임시저장 완료',
+      text: 'HTTP(S), 애니메이션을 제외하고 저장되었습니다.',
+      icon: 'success',
+      confirmButtonText: '확인',
+      customClass: {
+        confirmButton: 'custom-confirm-button-class'
+      }
+    });
   };
 
+  
   return (
     <button className='savebutton' onClick={handleSaveToLocalStorage}>임시저장</button>
+    
   );
 };
 

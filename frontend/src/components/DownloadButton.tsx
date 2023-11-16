@@ -84,7 +84,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
                 const fontColor = groupObject.fill;
                 const fontShadow = (groupObject.shadow as unknown as Shadow).color
 
-                htmlContent += `<input id="${groupObject.text}" style="position: absolute;- width: ${groupObjectWidth}%; height: ${groupObjectHight}%; outline : none; border : none; text-shadow: 1.2px 1.2px ${fontShadow}; font-family : ${fontFamily}; font-weight : ${groupObject.fontWeight}; font-size : ${newFontSize}px; font-style : ${groupObject.fontStyle}; color : ${fontColor}; display : flex; justify-content : center; align-items : center; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; color: ${groupObject.fill};"></input>`;
+                htmlContent += `<input id="${groupObject.text}" style="position: absolute; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; outline : none; border : none; text-shadow: 1.2px 1.2px ${fontShadow}; font-family : ${fontFamily}; font-weight : ${groupObject.fontWeight}; font-size : ${newFontSize}px; font-style : ${groupObject.fontStyle}; color : ${fontColor}; display : flex; justify-content : center; align-items : center; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; color: ${groupObject.fill};"></input>`;
               }
               if (groupObject instanceof fabric.Rect) {
                 const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
@@ -252,6 +252,22 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
 
                 htmlContent += `<div style="position: absolute; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; text-shadow: 1.2px 1.2px ${fontShadow}; font-family : ${fontFamily}; font-weight : ${groupObject.fontWeight}; font-size : ${newFontSize}px; font-style : ${groupObject.fontStyle}; color : ${fontColor}; display : flex; justify-content : center; align-items : center; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; color: ${groupObject.fill};">${groupObject.text}</div>`;
               }
+              if (groupObject instanceof fabric.Image) {
+                // Fabric.js에서 image 객체인 경우
+                const imageUrl = groupObject.getSrc(); // 이미지 URL 가져오기
+      
+                const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
+                const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
+
+                const groupObjectLeft = originalLeft / gw * 100
+                const groupObjectTop = originalTop / gh * 100
+
+                const groupObjectWidth = ((groupObject.width ?? 0) * (groupObject.scaleX?? 0)) / gw * 100
+                const groupObjectHight = ((groupObject.height ?? 0) * (groupObject.scaleY?? 0)) / gh * 100
+      
+                const ImgHtml = `<img src="${imageUrl}" alt="Fabric.js Image" style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; "></img>`;
+                htmlContent += ImgHtml;
+              }   
             });
           }
           // 그룹 닫기
@@ -742,56 +758,102 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
       </script>
       `
 
-      const box = ['username', 'id', 'password'];
-      const jsonObject: Record<string, string> = {}; 
+      if (selectedHttpMethod === 'GET') {
+        const box = [];
+        box.push(...inputValues);
+        const params = new URLSearchParams();
       
-      for (const key of box) {
-        jsonObject[key] = '';
+        for (const key of box) {
+          params.append(key, ''); 
+        }
+      
+        const queryString = params.toString();
+      
+        const apiUrl = `${selectedHttpUrl}?${queryString}`;
+      
+        htmlContent += `
+        <script>
+          const apiUrl = "${apiUrl}";
+          const apiMethod = "${selectedHttpMethod}";
+      
+          // 폼 요소를 가져오고 제출 이벤트를 처리
+          const form = document.getElementById("myForm");
+      
+          form.addEventListener("submit", function(event) {
+            event.preventDefault(); // 기본 폼 제출 동작을 막음
+      
+            // Authorization 헤더에 추가할 토큰 또는 값
+      
+            // GET 요청을 보내는 함수
+            fetch(apiUrl, {
+              method: apiMethod,
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+            .then(response => response.json())
+            .then(data => console.log("데이터 결과", data))
+            .catch(error => console.error("에러 발생", error));
+          });
+        </script>
+        `;
       }
       
-      // 객체를 JSON 문자열로 변환합니다.
-      const jsonString = JSON.stringify(jsonObject, null, 2); // 세 번째 인수 (2)는 예쁘게 출력하기 위한 것입니다.
       
-      console.log(jsonString);
+      if (selectedHttpMethod === 'POST'){
+        const box = [];
+        box.push(...inputValues)
+        const jsonObject: Record<string, string> = {}; 
+        
+        for (const key of box) {
+          jsonObject[key] = '';
+        }
+        
+        // 객체를 JSON 문자열로 변환합니다.
+        const jsonString = JSON.stringify(jsonObject, null, 2); // 세 번째 인수 (2)는 예쁘게 출력하기 위한 것입니다.
+        
+        console.log(jsonString);
 
-      htmlContent += `
-      <script>
+        htmlContent += `
+        <script>
+  
+  
+          const apiUrl = "${selectedHttpUrl}";
+          const apiMethod = "${selectedHttpMethod}";
+        
+          // 폼 요소를 가져오고 제출 이벤트를 처리
+          const form = document.getElementById("myForm");
+        
+          form.addEventListener("submit", function(event) {
+            event.preventDefault(); // 기본 폼 제출 동작을 막음
+        
+            // JSON 데이터 만들기
+            const dataKeys = ${JSON.stringify(inputValues)};
+            let jsonData = {}; // 빈 객체 생성
+        
+            for (let i = 0; i < dataKeys.length; i++) {
+              const inputId = \`INPUT_\${i + 1}\`; // 동적으로 INPUT_1, INPUT_2, ... 생성
+              const key = dataKeys[i];
+              const inputValue = document.getElementById(inputId).value;
+              jsonData[key] = inputValue; // JSON 데이터 객체에 키-값 쌍 추가
+            }
+            
+            console.log(jsonData)
+        
+            // POST 요청을 보내는 함수
+            fetch(apiUrl, { 
+              method: apiMethod,
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(jsonData),
+            })
+            .then((data) => console.log("데이터 결과", data))
+          });
+        </script>
+        `;
+      }
 
-
-        const apiUrl = "${selectedHttpUrl}";
-        const apiMethod = "${selectedHttpMethod}";
-      
-        // 폼 요소를 가져오고 제출 이벤트를 처리
-        const form = document.getElementById("myForm");
-      
-        form.addEventListener("submit", function(event) {
-          event.preventDefault(); // 기본 폼 제출 동작을 막음
-      
-          // JSON 데이터 만들기
-          const dataKeys = ${JSON.stringify(inputValues)};
-          let jsonData = {}; // 빈 객체 생성
-      
-          for (let i = 0; i < dataKeys.length; i++) {
-            const inputId = \`INPUT_\${i + 1}\`; // 동적으로 INPUT_1, INPUT_2, ... 생성
-            const key = dataKeys[i];
-            const inputValue = document.getElementById(inputId).value;
-            jsonData[key] = inputValue; // JSON 데이터 객체에 키-값 쌍 추가
-          }
-          
-          console.log(jsonData)
-      
-          // POST 요청을 보내는 함수
-          fetch(apiUrl, { 
-            method: apiMethod,
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(jsonData),
-          })
-          .then((data) => console.log("데이터 결과", data))
-        });
-      </script>
-      `;
       
       htmlContent += '</body></html>';
   

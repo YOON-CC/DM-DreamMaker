@@ -92,9 +92,7 @@ const LoadButton: React.FC<LoadButtonProps> = ({ canvas }) => {
                                         groupObjects.push(new fabric.Textbox(groupObjInfo.text, groupObjInfo));
                                         break;    
                                     case 'image':
-                                        console.log(groupObjInfo.src)
                                         const imgElement = new Image();
-
                                         imgElement.src = groupObjInfo.src;
                                         groupObjects.push(new fabric.Image(imgElement, groupObjInfo)); // 그룹에 이미지를 push
                                         break;

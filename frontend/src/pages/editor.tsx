@@ -11,8 +11,8 @@ import { addRectToCanvas, addCircleToCanvas, addTriangleToCanvas, addTextboxToCa
 import { handleScalingRect, handleScalingCircle, handleScalingTriangle, handleScalingTextbox, handleScalingImage, handleScalingGroup } from '../utils/ScalingCanvasUtils';
 import { handleChangeFontSizeInput, handleFontWeightChange, handleFontToItalicChange, handleFontShadowChange } from '../utils/FontOptionUtils';
 import { applyShadow_0_0, applyShadow_0_1, applyShadow_0_2, applyShadow_1_0, applyShadow_1_1, applyShadow_1_2, applyShadow_2_0, applyShadow_2_1, applyShadow_2_2} from '../utils/ShadowUtils';
-
 import { ChangeBorderWidthUtils } from '../utils/ChangeBorderWidthUtils';
+import Swal from "sweetalert2";
 
 
 type ObjectSize = {
@@ -60,6 +60,7 @@ const Editor = () => {
   const [selectedHttpTransport, setSelectedHttpTransport] = useState(-1);
   const [inputValues, setInputValues] = useState<string[]>([]); // 배열 추가
 
+  console.log(inputValues)
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedHttpUrl(event.target.value);
   };
@@ -72,8 +73,22 @@ const Editor = () => {
   const [divCount, setDivCount] = useState(0);
   const generatedDivs = [];
   console.log("반복문", divCount)
+
   const addITextAndDiv = () => {
-    setDivCount(divCount + 1);
+    if (divCount === 10){
+      Swal.fire({
+        title: '생성불가',
+        text: '최대 10개까지만 생성 가능합니다!',
+        icon: 'warning',
+        confirmButtonText: '확인',
+        customClass: {
+          confirmButton: 'custom-confirm-button-class'
+        }
+      });
+    }
+    else{
+      setDivCount(divCount + 1);
+    }
   };
 
   const addITextAndDivDelete = () => {
@@ -92,6 +107,45 @@ const Editor = () => {
       </div>
     );
   }
+
+  const [showComplete, setShowComplete] = useState(false);
+
+  const handleResetApiLogic = () => {
+    setSelectedHttpMethod('');
+    setSelectedHttpUrl('');
+    setInputValues([]);
+    setDivCount(0);
+    setShowComplete(false);
+    
+    const inputElement = document.getElementById('urlInput')  as HTMLInputElement;
+    if (inputElement && inputElement.value) {
+      inputElement.value = '';
+    }
+
+  
+    if (canvas) {
+      canvas.forEachObject((object) => {
+        if (object.type === 'group' && object.name && object.name.startsWith('api_')) {
+          console.log("여기들어왔음");
+          canvas.remove(object);
+        }
+      });
+  
+      canvas.requestRenderAll();
+    }
+
+    Swal.fire({
+      title: '초기화 되었습니다.',
+      text: 'api객체가 초기화 되었습니다.',
+      icon: 'success',
+      confirmButtonText: '확인',
+      customClass: {
+        confirmButton: 'custom-confirm-button-class'
+      }
+    });
+  };
+  
+  
   
   //api 관련 끝
   
@@ -232,9 +286,15 @@ const Editor = () => {
       activeObject.set('fontFamily', newFontFamily);
       canvas?.renderAll();
     }
+    if (activeObject instanceof fabric.IText) {
+      setFontFamily(newFontFamily);
+      activeObject.set('fontFamily', newFontFamily);
+      canvas?.renderAll();
+    }
   };
   const [color, setColor] = useState('#000');
   const [borderColor, setBorderColor] = useState('#000');
+
 
   const [backgroundColorToggle, setBackgroundColorToggle] = useState(false);
   const [borderColorToggle, setBorderColorToggle] = useState(false);
@@ -250,7 +310,29 @@ const Editor = () => {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
-
+  
+  // 토글 닫기
+  canvas?.on('mouse:up', (options) => {
+    if (showTool === false){
+      setShowTool(!showTool)
+    }
+    if (showAnimation === true){
+      setShowAnimation(!showAnimation)
+    }
+    if (backgroundColorToggleBtn === true){
+      setBackgroundColorToggleBtn(!backgroundColorToggleBtn)
+    }
+    if (backgroundColorToggle === true){
+      setBackgroundColorToggle(!backgroundColorToggle)
+    }
+    if (borderColorToggle === true){
+      setBorderColorToggle(!borderColorToggle)
+    }
+    if (shadowColorToggle === true){
+      setShadowColorToggle(!shadowColorToggle)
+    }
+  });
+  
   const handleChangeComplete = (newColor: string) => {
     const activeObject = canvas?.getActiveObject();
   
@@ -302,7 +384,75 @@ const Editor = () => {
         );
       }
 
+      //변경
+      canvas.on('mouse:up', (options) => {
 
+        const activeObject = canvas.getActiveObject();
+
+        //기존에 미리 다 보이게 
+        const Elements1 = document.getElementsByClassName('editor_body_right_style_container_1_info_container') as HTMLCollectionOf<HTMLElement>;
+        const Elements2 = document.getElementsByClassName('editor_body_right_style_container_2_info_container') as HTMLCollectionOf<HTMLElement>;
+
+        for (let i = 0; i < Elements1.length; i++) {
+            Elements1[i].style.display = 'flex';
+        }
+
+        for (let i = 0; i < Elements2.length; i++) {
+          Elements2[i].style.display = 'flex'; 
+        }
+
+
+        //객체
+        if (activeObject && activeObject.type === 'textbox') {
+          for (let i = 0; i < Elements1.length; i++) {
+            if (i === 0 || i === 1 || i === 2 || i === 3)
+            Elements1[i].style.display = 'none';
+          }
+          for (let i = 0; i < Elements2.length; i++) {
+            if (i === 1 || i === 2)
+            Elements2[i].style.display = 'none';
+          }
+          canvas.renderAll(); 
+        }
+        else if (activeObject && activeObject.type === 'i-text') {
+          for (let i = 0; i < Elements1.length; i++) {
+            if (i === 0 || i === 1 || i === 2 || i === 3)
+            Elements1[i].style.display = 'none';
+          }
+          for (let i = 0; i < Elements2.length; i++) {
+            if (i === 1 || i === 2)
+            Elements2[i].style.display = 'none';
+          }
+          canvas.renderAll(); 
+        }
+        else if (activeObject && (activeObject.type === 'image' || activeObject.type === 'group')) {
+          for (let i = 0; i < Elements1.length; i++) {
+            Elements1[i].style.display = 'none';
+          }
+          for (let i = 0; i < Elements2.length; i++) {
+            Elements2[i].style.display = 'none';
+          }
+          canvas.renderAll(); 
+        }
+        else if (activeObject && (activeObject.type === 'rect' || activeObject.type === 'ellipse' || activeObject.type === 'triangle')) {
+
+          for (let i = 0; i < Elements1.length; i++) {
+            if (i === 4 || i === 5){
+              Elements1[i].style.display = 'none'; 
+            }
+          }
+
+          for (let i = 0; i < Elements2.length; i++) {
+            if (i === 3){
+              Elements2[i].style.display = 'none'; 
+            }
+          }
+          canvas.renderAll(); 
+        }
+
+      });
+      
+      
 
       canvas.on('object:moving', (options) => {
         const target = options.target as fabric.Object;
@@ -602,22 +752,55 @@ const Editor = () => {
       let nameCounter = 1; // 이름 카운터 변수
 
       const handleObjectToApi = () => {
-        const activeObject = canvas.getActiveObject();
-      
-        if (!activeObject) {
-          return;
-        }
-      
-        if (activeObject.type === 'activeSelection') {
-          const group = (activeObject as fabric.ActiveSelection).toGroup();
-          group.set('name', `api_${nameCounter}`);
-          canvas.discardActiveObject();
-          canvas.requestRenderAll();
+        try {
+          const activeObject = canvas.getActiveObject() as fabric.ActiveSelection;
+          console.log(activeObject)
           
-          // 이름 카운터 증가
-          nameCounter++;
+          if (!activeObject) {
+            return;
+          }
+      
+          if (activeObject) {
+            const numIText = activeObject.getObjects().filter(obj => obj?.type === 'i-text').length;
+            const numRect = activeObject.getObjects().filter(obj => obj?.type === 'rect').length;
+      
+            if (numIText < 1 || numRect !== 1) {
+              throw new Error();
+            }
+          }
+      
+          if (activeObject.type === 'activeSelection') {
+            const group = (activeObject as fabric.ActiveSelection).toGroup();
+            group.set('name', `api_${nameCounter}`);
+            canvas.discardActiveObject();
+            canvas.requestRenderAll();
+      
+            // 이름 카운터 증가
+            nameCounter++;
+            Swal.fire({
+              title: 'api객체 생성',
+              text: 'api객체가 생성되었습니다.',
+              icon: 'success',
+              confirmButtonText: '확인',
+              customClass: {
+                confirmButton: 'custom-confirm-button-class'
+              }
+            });
+            setShowComplete(!showComplete);
+          }
+        } catch (error) {
+          Swal.fire({
+            title: '생성실패',
+            text: '생성조건 : 입력요소 1개 이상 / 버튼 1개만',
+            icon: 'error',
+            confirmButtonText: '확인',
+            customClass: {
+              confirmButton: 'custom-confirm-button-class'
+            }
+          });
         }
       };
+      
 
       const handleDeleteITextShape = () => {
         if (canvas instanceof fabric.Canvas) {
@@ -784,9 +967,43 @@ const Editor = () => {
           <img id="add-triangle-button"  src="../images/triangle.png"/>
         </div>
         {showTool && (<div className='editor_body_toolbox_cover'></div>)}
+
         <div className='editor_body_left'>
+          {showComplete && (
+            <div className="apiComplete">
+              <div className="apiComplete_title">API객체 생성완료</div>
+              <div className="apiComplete_HttpMethod">
+                <div className='apiComplete_HttpMethod_icon'></div>
+                <div className='apiComplete_HttpMethod_text'>Method</div>
+              </div>
+              <div className='apiComplete_HttpMethod_content'>
+                <div>{selectedHttpMethod}</div>
+              </div>
+              
+              
+              <div className="apiComplete_URL">
+                <div className='apiComplete_URL_icon'></div>
+                <div className='apiComplete_URL_text'>Url</div>
+              </div>
+              <div className='apiComplete_URL_content'>
+                <div>{selectedHttpUrl}</div>
+              </div>
+
+              <div className="apiComplete_inputValue">
+                <div className='apiComplete_inputValue_icon'></div>
+                <div className='apiComplete_inputValue_text'>Key</div>
+              </div>
+              <div className='apiComplete_inputValue_list'>
+                  {inputValues.map((value, index) => (
+                    <div key={index}>{value}</div>
+                  ))}
+              </div>
+              <div className='apiCompleteToClear' onClick={handleResetApiLogic}>초기화</div>
+            </div>
+          )}
+          
           <div className='editor_body_left_http_container'>
-            <div className='editor_body_left_http_container_title'>HTTP 메서드</div>
+            <div className='editor_body_left_http_container_title'>HTTP(S) 메서드</div>
             <div className='editor_body_left_http_container_info_container'>
               <button className='editor_body_left_http_container_info_container_title_1' onClick={()=> setSelectedHttpMethod('GET')} style={{backgroundColor: selectedHttpMethod === 'GET' ? '#4370FB' : 'rgb(63, 63, 63)'}}>GET</button>
               <button className='editor_body_left_http_container_info_container_title_2' onClick={()=> setSelectedHttpMethod('POST')} style={{backgroundColor: selectedHttpMethod === 'POST' ? '#4370FB' : 'rgb(63, 63, 63)'}}>POST</button>
@@ -795,17 +1012,17 @@ const Editor = () => {
           <div className='editor_body_left_url_container'>
             <div className='editor_body_left_url_container_title'>URL</div>
             <div className='editor_body_left_url_container_info_container'>
-              <input onChange={handleUrlChange}></input>
+              <input id = "urlInput"onChange={handleUrlChange}></input>
             </div>
           </div>
-          <div className='editor_body_left_transport_container'>
+          {/* <div className='editor_body_left_transport_container'>
             <div className='editor_body_left_transport_container_title'>전송방식</div>
             <div className='editor_body_left_transport_container_info_container'>
               <button className='editor_body_left_transport_container_info_container_title_1' onClick={()=> setSelectedHttpTransport(0)} style={{backgroundColor: selectedHttpTransport === 0 ? '#4370FB' : 'rgb(63, 63, 63)'}}>Body</button>
               <button className='editor_body_left_transport_container_info_container_title_2' onClick={()=> setSelectedHttpTransport(1)} style={{backgroundColor: selectedHttpTransport === 1 ? '#4370FB' : 'rgb(63, 63, 63)'}}>Quary String</button>
               <button className='editor_body_left_transport_container_info_container_title_2' onClick={()=> setSelectedHttpTransport(2)} style={{backgroundColor: selectedHttpTransport === 2 ? '#4370FB' : 'rgb(63, 63, 63)'}}>Path</button>
             </div>
-          </div>
+          </div> */}
           <div className='editor_body_left_input_container'>
             <div className='editor_body_left_input_container_title'>입력요소 추가</div>
             <div className='editor_body_left_input_container_info_container'>
@@ -813,11 +1030,21 @@ const Editor = () => {
               <div className='editor_body_left_input_container_info_container_btn_container'>
                 <button id="add-IText-shape-button" onClick={addITextAndDiv}>추가</button>
                 <button id="delete-IText-shape-button" onClick={addITextAndDivDelete}>삭제</button>
-                <button id="add-Button-shape-button">적용</button>
+              </div>
+              <div className='editor_body_left_input_container_end_line'></div>
+              <div className='editor_body_left_input_container_title' style={{ marginTop: `10px` }}>버튼 추가</div>
+              <div className='editor_body_left_input_container_info_container_btn_container2'>
+                <button id="add-Button-shape-button">추가</button>
               </div>
               <div className='editor_body_left_input_container_end_line'></div>
               <div className='editor_body_left_apply_container'>
-                <button id = "for_api">적용하기</button>
+
+              {(selectedHttpMethod === '' || selectedHttpUrl === '' || inputValues.length === 0 || inputValues.length !== divCount || inputValues.some(value => value.trim().length === 0))  && (
+                <div className='api_btn_cover'>생성하기</div>
+              )}
+
+              <button id="for_api">생성하기</button>
+
               </div>
             </div>
           </div>
@@ -838,12 +1065,12 @@ const Editor = () => {
               </section>
             )}
 
-            <div className='X_line'>
+            {/* <div className='X_line'>
               <div className='X_value' style={{ marginLeft: `${objectCoordinates_center.center_x}px` }}></div>
             </div>
             <div className='Y_line'>
               <div className='Y_value' style={{ marginTop: `${objectCoordinates_center.center_y}px` }}></div>
-            </div>
+            </div> */}
           <div className='canvas_container'>
             <canvas ref={canvasRef}  width={1000} height={2000}></canvas>
           </div>
@@ -876,6 +1103,13 @@ const Editor = () => {
           </div>
           <div className='editor_body_right_style_container'>
             <div className='editor_body_right_style_container_title'>스타일</div>
+            <div className='editor_body_right_style_container_2_info_container'>
+              <div className='editor_body_right_style_container_2_info_container_title'>background color</div>
+              <div className='editor_body_right_style_container_2_info_container_frame'>
+                <HexColorInput className="editor_body_right_style_container_2_info_container_info" color={color} onChange={handleChangeComplete} />
+                <div className='editor_select_color_btn' onClick={()=> setBackgroundColorToggle(!backgroundColorToggle)}></div>
+              </div>
+            </div>
             <div className='editor_body_right_style_container_1_info_container'>
               <div className='editor_body_right_style_container_1_info_container_title'>border radius</div>
               <div className='editor_body_right_style_container_1_info_container_btn'>
@@ -888,6 +1122,14 @@ const Editor = () => {
               <div className='editor_body_right_style_container_1_info_container_btn'>
                 <input id="borderwidth-input" maxLength={3}/>
                 <button id="change-borderwidth-input-button">적용</button>
+              </div>
+            </div>
+
+            <div className='editor_body_right_style_container_2_info_container'>
+              <div className='editor_body_right_style_container_2_info_container_title'>border color</div>
+              <div className='editor_body_right_style_container_2_info_container_frame'>
+                <HexColorInput className="editor_body_right_style_container_2_info_container_info" color={borderColor} onChange={handleChangeBorderColor} />
+                <div className='editor_select_color_btn' onClick={()=> setBorderColorToggle(!borderColorToggle)}></div>
               </div>
             </div>
 
@@ -963,13 +1205,6 @@ const Editor = () => {
               </div>
             )}
 
-            <div className='editor_body_right_style_container_2_info_container'>
-              <div className='editor_body_right_style_container_2_info_container_title'>border color</div>
-              <div className='editor_body_right_style_container_2_info_container_frame'>
-                <HexColorInput className="editor_body_right_style_container_2_info_container_info" color={borderColor} onChange={handleChangeBorderColor} />
-                <div className='editor_select_color_btn' onClick={()=> setBorderColorToggle(!borderColorToggle)}></div>
-              </div>
-            </div>
             {borderColorToggle && (
               <section className="color_controller1">
                 <HexColorPicker color={borderColor} onChange={handleChangeBorderColor}/>
@@ -977,13 +1212,7 @@ const Editor = () => {
             )}
 
 
-            <div className='editor_body_right_style_container_2_info_container'>
-              <div className='editor_body_right_style_container_2_info_container_title'>background color</div>
-              <div className='editor_body_right_style_container_2_info_container_frame'>
-                <HexColorInput className="editor_body_right_style_container_2_info_container_info" color={color} onChange={handleChangeComplete} />
-                <div className='editor_select_color_btn' onClick={()=> setBackgroundColorToggle(!backgroundColorToggle)}></div>
-              </div>
-            </div>
+
             {backgroundColorToggle && (
               <section className="color_controller2">
                 <HexColorPicker color={color} onChange={handleChangeComplete} />
@@ -994,12 +1223,12 @@ const Editor = () => {
             <div className='editor_body_right_style_container_2_info_container'>
               <div className='editor_body_right_style_container_2_info_container_title'>shadow color</div>
               <div className='editor_body_right_style_container_2_info_container_frame'>
-                <HexColorInput className="editor_body_right_style_container_2_info_container_info" color={borderColor} onChange={handleShadowColorChange} />
+                <HexColorInput className="editor_body_right_style_container_2_info_container_info" color={shadowColor} onChange={handleShadowColorChange} />
                 <div className='editor_select_color_btn' onClick={()=> setShadowColorToggle(!shadowColorToggle)}></div>
               </div>
             </div>
             {shadowColorToggle && (
-              <section className="color_controller1">
+              <section className="color_controller3">
                 <HexColorPicker color={shadowColor} onChange={handleShadowColorChange}/>
               </section>
             )}

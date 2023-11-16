@@ -13,3 +13,7 @@
     filter: brightness(120%);
     cursor: pointer;
 }
+.custom-confirm-button-class {
+    background-color: #4370FB !important;
+    color: #ffffff !important; 
+}

@@ -3,6 +3,7 @@
     background-color: #232323;
     height: 100vh;
     width: 100%;
+    overflow: hidden;
 }
 .editor_header{
     position: relative;
@@ -161,14 +162,231 @@
     cursor: pointer;
 }
 
-.editor_body_left{
+.editor_body_left {
     background-color: #2c2c2c;
     height: 100%;
     width: 13%;  
+    overflow-y: auto; 
+    scrollbar-width: thin;  
+    scrollbar-color: transparent transparent; 
+}
+.apiComplete{
+    position: absolute;
+    background-color: rgb(0, 0, 0, 0.85);
+    height: 100%;
+    width: 13%;  
+    overflow-y: auto; 
+    scrollbar-width: thin;  
+    scrollbar-color: transparent transparent;  
+    z-index: 1;
+}
+.apiComplete_title{
+    width: 100%;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 17px;
+}
+.apiComplete_HttpMethod{
+    /* background-color: red; */
+    width: 90%;
+    height: 2%;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+
+}
+.apiComplete_HttpMethod_icon{
+    background-color: rgb(0, 255, 0);
+    width: 8%;
+    height: 100%;
+    border-radius: 50%;
+}
+.apiComplete_HttpMethod_text{
+    color: white;
+    font-size: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 3%;
+}
+.apiComplete_HttpMethod_content{
+    position: absolute;
+    width: 20%;
+    height: 1.9%;
+    color: rgb(0, 255, 0);
+    border-radius: 4px;
+    border: 1px solid rgb(0, 255, 0);
+    font-size: 10px;
+    padding: 2.3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 38%;
+    left: 17%;
+    transform: translate(-50%, -50%);
+}
+.apiComplete_URL{
+    /* background-color: rgb(0, 255, 110); */
+    width: 90%;
+    height: 2%;
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+}
+.apiComplete_URL_icon{
+    background-color: rgb(0, 136, 255);
+    width: 8%;
+    height: 100%;
+    border-radius: 50%;
+}
+.apiComplete_URL_text{
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    margin-left: 3%;
+}
+.apiComplete_URL_content {
+    position: absolute;
+    width: 87%;
+    height: 10%;
+    height: 5%; /* 높이를 자동으로 조절하여 여러 줄이 가능하도록 설정 */
+    border-radius: 4px;
+    border: 1px solid rgb(0, 136, 255);
+    font-size: 10px;
+    padding: 2.3px;
+    top: 46.6%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow-wrap: break-word; /* 단어가 길 경우 줄 바꿈 */
+    overflow-y: auto;
+
+}
+.apiComplete_URL_content::-webkit-scrollbar {
+    width: 3px; 
+}
+
+.apiComplete_URL_content::-webkit-scrollbar-thumb {
+    background-color: rgb(0, 136, 255);
+}
+
+.apiComplete_URL_content::-webkit-scrollbar-track {
+    background-color: transparent; 
+}
+.apiComplete_URL_content div{
+    color:rgb(0, 136, 255);
+    width: 94%;
+    margin-top: 1%;
+    margin-left: 3%;
+}
+
+.apiComplete_inputValue{
+    /* background-color: rgb(156, 156, 156); */
+    width: 90%;
+    height: 7%;
+    position: absolute;
+    top: 52.2%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+}
+.apiComplete_inputValue_icon{
+    background-color: rgb(255, 238, 0);
+    width: 8%;
+    height: 28%;
+    margin-top: 9.5%;
+    border-radius: 50%;
+
+}
+.apiComplete_inputValue_text{
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    margin-left: 3%;
+}
+.apiComplete_inputValue_list{
+    position: absolute;
+    background-color: rgb(0, 0, 0, 0.4);
+    height: 6.5%;
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    margin-left: 3%;
+    top: 57.3%;
+    left: 47%;
+    transform: translate(-50%, -50%);
+    border-radius: 4px;
+    border: 1px solid rgb(158, 155, 53);
+    overflow-y: auto;
+}
+.apiComplete_inputValue_list div{
+    color: rgb(255, 238, 0);
+    font-size: 12px;
+    margin-top: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.apiComplete_inputValue_list::-webkit-scrollbar {
+    width: 3px; 
+}
+
+.apiComplete_inputValue_list::-webkit-scrollbar-thumb {
+    background-color: rgb(255, 238, 0);
+}
+
+.apiComplete_inputValue_list::-webkit-scrollbar-track {
+    background-color: transparent; 
+}
+.apiCompleteToClear{
+    position: absolute;
+    width: 85%;
+    background-color: white;
+    top: 64%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 3%;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.apiCompleteToClear:hover{
+    cursor: pointer;
+    filter: brightness(90%);
+
+}
+
+.editor_body_left::-webkit-scrollbar {
+    width: 0px; 
+}
+
+.editor_body_left::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+.editor_body_left::-webkit-scrollbar-track {
+    background-color: transparent; 
 }
 /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 .editor_body_left_http_container{
-    /* background-color: blue; */
     width: 90%;
     height : 8%;
     margin-left : 5%;
@@ -191,13 +409,13 @@
 .editor_body_left_http_container_info_container button{
     background-color: rgb(63, 63, 63);
 
-    width: 49%;
+    width: 48.5%;
     height: 100%;
     font-size: 10px;
     color: #ffffff;
     
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     padding-top: 1%;
 }
 .editor_body_left_http_container_info_container button:hover{
@@ -310,7 +528,7 @@
 .editor_body_left_input_container_info_container_btn_container button{
     background-color: rgb(63, 63, 63);
 
-    width: 31%;
+    width: 48.5%;
     height: 100%;
     font-size: 10px;
     color: #ffffff;
@@ -322,6 +540,38 @@
 .editor_body_left_input_container_info_container button:hover{
     background-color: #454545;
     cursor: pointer;
+}
+.editor_body_left_input_container_info_container_btn_container2{
+    /* background-color: red; */
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    height:30%;
+    margin-top: 4%;
+}
+.editor_body_left_input_container_info_container_btn_container2 button{
+    background-color: rgb(63, 63, 63);
+
+    width: 100%;
+    height: 100%;
+    font-size: 10px;
+    color: #ffffff;
+    
+    border: none;
+    border-radius: 4px;
+    padding-top: 1%;
+}
+#temp_add_btn{
+    position: absolute;
+    width: 3.65%;
+    height: 3.8%;
+    background-color: rgb(53, 53, 53);
+    color: #626262;
+    margin-left: 8.05%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 3px;
 }
 .editor_body_left_input_container_end_line{
     border-bottom: 2px solid #232323;
@@ -356,6 +606,7 @@
     /* background-color: blue; */
     margin-top: 5%;
     height: 50px;
+    
 }
 #for_api{
     background-color: #4370FB;
@@ -610,7 +861,6 @@
     height : 65%;
     margin-left : 5%;
     margin-top: 5%;
-    border-bottom: 2px solid #232323;
 
 }
 .editor_body_right_style_container_title{
@@ -726,6 +976,7 @@
     color: #ffffff;
     border-radius: 5px 0px 0px 5px;
 }
+
 .editor_select_color_btn{
     background: linear-gradient(135deg, red,orange,yellow,green,blue,navy,purple);
     height: 100%;
@@ -738,7 +989,7 @@
     /* background-color: rgb(106, 255, 0); */
     width: 11.6%;
     height: 25%;
-    margin-top: -13%;
+    margin-top: -17.4%;
 }
 .color_controller1 .react-colorful {
     padding: 6%;
@@ -780,7 +1031,7 @@
     /* background-color: rgb(106, 255, 0); */
     width: 11.6%;
     height: 25%;
-    margin-top: -13%;
+    top: 8.5%;
 }
 .color_controller2 .react-colorful {
     padding: 6%;
@@ -814,6 +1065,49 @@
 
 .color_controller2 .react-colorful__hue-pointer,
 .color_controller2 .react-colorful__alpha-pointer {
+    width: 10%;
+    height: 100%;
+}
+/**/
+.color_controller3{
+    position: absolute;
+    background-color: rgb(106, 255, 0);
+    width: 11.6%;
+    height: 25%;
+    margin-top: -13.05%;
+}
+.color_controller3 .react-colorful {
+    padding: 6%;
+    border-radius: 5px;
+    background: #232323;
+    background: #ffffff;
+
+    width: 88%;
+    height: 90%;
+    cursor: pointer;
+}
+
+.color_controller3 .react-colorful__saturation {
+    margin: 5% 0;
+    border-radius: 5px;
+    border-bottom: none;
+}
+
+.color_controller3 .react-colorful__hue {
+    order: -1;
+}
+.color_controller3 .react-colorful__saturation-pointer {
+    width: 15px;
+    height: 15px;
+}
+.color_controller3 .react-colorful__hue,
+.color_controller3 .react-colorful__alpha {
+    height: 10%;
+    border-radius: 5px;
+}
+
+.color_controller3 .react-colorful__hue-pointer,
+.color_controller3 .react-colorful__alpha-pointer {
     width: 10%;
     height: 100%;
 }
@@ -1198,7 +1492,23 @@
     margin-right:68.6%;
 }
 .Y_value{
-    background-color: rgb(255, 0, 0);
+    background-color:#2c2c2c;
     width: 100%;
     height: 2px;
+}
+
+/*api cover*/
+.api_btn_cover{
+    position: absolute;
+    background-color: rgb(53, 53, 53);
+    width: 11.7%;
+    height: 7.4%;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 3px;
+    border: none;
+    color: #626262;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
