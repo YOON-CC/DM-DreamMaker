@@ -638,6 +638,10 @@ const Editor = () => {
       //복사 붙여넣기
       const handleCopyObject = () => {
         const activeObject = canvas?.getActiveObject();
+        if (activeObject?.type === 'activeSelection'){ // activeSelection인 객체는 복사 안되도록하는 로직
+          return;
+        }
+        console.log(activeObject?.type)
         if (activeObject) {
           activeObject.clone((clonedObject: fabric.Object) => {
             clonedObject.set({
@@ -648,6 +652,7 @@ const Editor = () => {
           });
         }
       };
+
       const handlePasteObject = () => {
         const copiedObject = copiedObjectRef.current;
         if (copiedObject) {
