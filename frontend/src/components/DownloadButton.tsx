@@ -187,37 +187,37 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
                 }
               }
               if (groupObject instanceof fabric.Ellipse) {
-                console.log("원들어옴")
-                const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
-                const originalTop = (groupObject.top ?? 0)+(gh/2); // 부모 태그로부터의 top
-
-                const groupObjectLeft = originalLeft / gw * 100
-                const groupObjectTop = originalTop / gh * 100
-
+                console.log("원들어옴");
+                const originalLeft = (groupObject.left ?? 0) + (gw / 2); // 부모 태그로부터의 left
+                const originalTop = (groupObject.top ?? 0) + (gh / 2); // 부모 태그로부터의 top
+              
+                const groupObjectLeft = (originalLeft / gw) * 100;
+                const groupObjectTop = (originalTop / gh) * 100;
+              
                 const groupStrokeWidth = groupObject.strokeWidth ?? 0; // 두께
                 const groupStrokeColor = groupObject.stroke ?? 'transparent'; // 색상 (기본값: 투명)
-
-                const groupObjectWidth = (((groupObject.width ?? 0)+(groupStrokeWidth)) * (groupObject.scaleX?? 0)) / gw * 100
-                const groupObjectHight = (((groupObject.height ?? 0)+(groupStrokeWidth)) * (groupObject.scaleY?? 0)) / gh * 100
-                
-                const oinnerw = (((groupObject.width ?? 0) - groupStrokeWidth*1.76))  / (groupObject.width ?? 0) * 100 // 경계선 있을시 내부 도형
-                const oinnerh = (((groupObject.height ?? 0) - groupStrokeWidth*1.76)) / (groupObject.height ?? 0) * 100 // 경계선 있을시 내부 도형
-
-                const obr =  ((groupObject.rx ?? 0)) * 1.5;
-                const obrI =  ((groupObject.rx ?? 0));
-
+              
+                const groupObjectWidth = (((groupObject.width ?? 0) + groupStrokeWidth) * (groupObject.scaleX ?? 0)) / gw * 100;
+                const groupObjectHight = (((groupObject.height ?? 0) + groupStrokeWidth) * (groupObject.scaleY ?? 0)) / gh * 100;
+              
+                const oinnerw = (((groupObject.width ?? 0) - groupStrokeWidth * 1.76)) / (groupObject.width ?? 0) * 100; // 경계선 있을시 내부 도형
+                const oinnerh = (((groupObject.height ?? 0) - groupStrokeWidth * 1.76)) / (groupObject.height ?? 0) * 100; // 경계선 있을시 내부 도형
+              
+                const obr = ((groupObject.rx ?? 0)) * 1.5;
+                const obrI = ((groupObject.rx ?? 0));
+              
                 // const ow = ((object.width?? 0)*(object.scaleX?? 0)) / 1000 * 100
                 // const oh = ((object.height?? 0) * (object.scaleY?? 0)) / 500 * 100
-
-                const osx = ((groupObject.shadow as unknown as Shadow).offsetX)*2
-                const osy = ((groupObject.shadow as unknown as Shadow).offsetY)*2
-                const osb = ((groupObject.shadow as unknown as Shadow).blur) * 2
-                const osc = (groupObject.shadow as unknown as Shadow).color
-                if (groupStrokeWidth === 0){
+              
+                const osx = ((groupObject.shadow as Shadow)?.offsetX ?? 0) * 2;
+                const osy = ((groupObject.shadow as Shadow)?.offsetY ?? 0) * 2;
+                const osb = ((groupObject.shadow as Shadow)?.blur ?? 0) * 2;
+                const osc = (groupObject.shadow as Shadow)?.color ?? 'transparent';
+              
+                if (groupStrokeWidth === 0) {
                   htmlContent += `<div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: 50%; background-color: ${groupObject.fill};"></div>`;
-                }
-                else{
-                  htmlContent+=`
+                } else {
+                  htmlContent += `
                   <div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: 50%; background-color: ${groupStrokeColor}; ">
                     <div style="
                     position: absolute; 
@@ -230,9 +230,10 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
                     background-color: ${groupObject.fill}; 
                     ">
                     </div>
-                  </div>`;     
+                  </div>`;
                 }
               }
+              
               if (groupObject instanceof fabric.Triangle) {
                 // Fabric.js에서 원 객체인 경우
                 const originalLeft = (groupObject.left?? 0)+(gw/2) // 부모 태그로부터의 left
@@ -366,12 +367,12 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
         }
         if (object instanceof fabric.Ellipse && typeof object.rx !== 'undefined' && typeof object.ry !== 'undefined') {
           // Fabric.js에서 원 객체인 경우
-          const originalLeft = object.left?? 0; // 부모 태그로부터의 left
+          const originalLeft = object.left ?? 0; // 부모 태그로부터의 left
           const originalTop = object.top ?? 0; // 부모 태그로부터의 top
           
-          const angleInDegrees = - (object.angle?? 0); // 회전 각도
+          const angleInDegrees = -(object.angle ?? 0); // 회전 각도
           const angleInRadians = (angleInDegrees * Math.PI) / 180;
-
+  
           const centerX = object.getCenterPoint().x;
           const centerY = object.getCenterPoint().y;
           
@@ -379,41 +380,31 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
           const newX = centerX + (originalLeft - centerX) * Math.cos(angleInRadians) - (originalTop - centerY) * Math.sin(angleInRadians);
           const newY = centerY + (originalLeft - centerX) * Math.sin(angleInRadians) + (originalTop - centerY) * Math.cos(angleInRadians);
           
-          const ol = (newX ?? 0) / 1000 * 100
-          const ot = (newY ?? 0) / 500 * 100
-          // const ow = (object.width ?? 0) / 1000 * 100
-          // const oh = (object.height ?? 0) / 500 * 100
-
+          const ol = (newX ?? 0) / 1000 * 100;
+          const ot = (newY ?? 0) / 500 * 100;
           const strokeWidth = object.strokeWidth ?? 0; // 두께
-          console.log("경계선 두께",strokeWidth, "높이 넓이", object.width, object.height)
-          const strokeColor = object.stroke ?? 'transparent'; // 색상 (기본값: 투명)
-
-          const ow = ((object.width ?? 0) + strokeWidth) / 1000 * 100
-          const oh = ((object.height ?? 0) + strokeWidth) / 500 * 100
-          const oinnerw = ((object.width ?? 0) - strokeWidth*1.76) / (object.width ?? 0) * 100 // 경계선 있을시 내부 도형
-          const oinnerh = ((object.height ?? 0) - strokeWidth*1.76) / (object.height ?? 0) * 100 // 경계선 있을시 내부 도형
-          const osw = (strokeWidth ?? 0) / 500 * 100
-
-          const osx = ((object.shadow as unknown as Shadow).offsetX)*2
-          const osy = ((object.shadow as unknown as Shadow).offsetY)*2
-          const osb = ((object.shadow as unknown as Shadow).blur) * 2
-          const osc = (object.shadow as unknown as Shadow).color
-
-          console.log(object.width, object.height, strokeWidth)
-
-          //색상 오류 해결
-          if (typeof object.fill === 'string') {
-            if (object.fill.length < 7){
-              object.fill = '#000000';
-            }
-          }
-
-          if (strokeWidth === 0){
-            const rectHtml = `<div class=${object.name} style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; background-color: ${object.fill}; border-radius: 50%;" transform: rotate(${object.angle}deg);"></div>`;          
+          
+          console.log("경계선 두께", strokeWidth, "높이 넓이", object.width, object.height);
+          
+          const ow = ((object.width ?? 0) + strokeWidth) / 1000 * 100;
+          const oh = ((object.height ?? 0) + strokeWidth) / 500 * 100;
+          const oinnerw = ((object.width ?? 0) - strokeWidth * 1.76) / (object.width ?? 0) * 100; // 경계선 있을시 내부 도형
+          const oinnerh = ((object.height ?? 0) - strokeWidth * 1.76) / (object.height ?? 0) * 100; // 경계선 있을시 내부 도형
+          const osw = (strokeWidth ?? 0) / 500 * 100;
+          
+          console.log((object.shadow as Shadow)?.offsetX ?? 0);
+          
+          const osx = ((object.shadow as Shadow)?.offsetX) ?? 0 * 2;
+          const osy = ((object.shadow as Shadow)?.offsetY) ?? 0 * 2;
+          const osb = ((object.shadow as Shadow)?.blur) ?? 0 * 2;
+          const osc = (object.shadow as Shadow)?.color ?? 'transparent';
+          
+          if (strokeWidth === 0) {
+            const rectHtml = `<div class="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; background-color: ${object.fill}; border-radius: 50%; transform: rotate(${object.angle}deg);"></div>`;          
             htmlContent += rectHtml;
-          }else{
+          } else {
             const rectHtml = `
-              <div class=${object.name} style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: 50%; background-color: ${strokeColor}; transform: rotate(${object.angle}deg);">
+              <div class=${object.name} style="position: absolute; left: ${ol}%; top: ${ot}%; width: ${ow}%; height: ${oh}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: 50%; background-color: ${object.stroke}; transform: rotate(${object.angle}deg);">
                 <div style="
                 position: absolute; 
                 left: 50%; 
@@ -429,6 +420,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
             htmlContent += rectHtml;
           }
         }
+  
         if (object instanceof fabric.Triangle) {
           // Fabric.js에서 원 객체인 경우
           const originalLeft = object.left?? 0; // 부모 태그로부터의 left
