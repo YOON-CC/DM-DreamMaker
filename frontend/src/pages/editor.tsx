@@ -978,9 +978,14 @@ const Editor = () => {
 
   return (
     <div className='body'>
+      <div className='body_cover'>
+        <img className = "body_cover_logo" src="../images/logo.png"/>
+        <div className="body_cover_text">전체화면 그리고 화면비율을 🔍축소해서 사용해주세요.</div>
+      </div>
       {showAnimation && (<Animation canvas={canvas}></Animation>)}
       <div className='editor_header'>
         <div className='editor_header_logo_container'>
+          <img src="../images/dreammakerLogo.png" style={{ width: "70%", height: "80%" , marginLeft: "5%", marginTop:'1.5%'}} />
         </div>
         <div className='editor_header_tool_container'>
           <div className='editor_header_tool_container_btn' onClick={() =>setShowTool(!showTool)}>
