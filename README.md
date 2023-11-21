@@ -21,7 +21,7 @@
 
 </br>
 
-## 🌈프로젝트 사작 계기
+## 🌈프로젝트 시작 계기
 <div align="center" >
 
 1. 게시판의 확장이라는 웹 프론트엔드의 한계를 극복하고 싶었습니다. 오직 프론트엔드 기술만을 사용하여, 저의 기술적 성장과 노력의 한계를 뚫고 싶었습니다. 사용자가 웹을 사용할 때, 새로운 경험을 보여주고 싶었습니다.
@@ -37,10 +37,11 @@
 </br>
 </br>
 
-## 🌈DreamMaker에 대해서
+## 🌈DreamMaker 소개영상
 <div align="center" >
+</br>
 
-
+[DreamMaker 소개영상](https://www.youtube.com/watch?v=EQPHejw7oTk)
 
 </div>
 
@@ -86,7 +87,7 @@
 
 
 
-## 🌈사용기술, 개발자
+## 🌈개발자, 사용기술 
   
 <div align = "center">
 
