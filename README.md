@@ -15,6 +15,7 @@
 
   
 </br>
+![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/335a727a-93d0-4ac5-be07-494f6ce87662)
 
 `2023/08/12 ~ 2023/11/17`
 </div>
@@ -53,12 +54,13 @@
 |:---------------:|:---------------:|
 | ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/9e80a019-ddbe-4861-a041-17e72d60f16d)| ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/604e94de-edbc-485a-99b2-37c006bb02fc) |
 
-| 애니메이션 기능 | 인터렉티브 웹사이트 기능 |
+| [애니메이션 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/3b5e3411-613d-4300-a561-8efa02938f10) | [인터렉티브 웹사이트 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/c70efef3-6cdd-49b8-9f82-6f0d11faaaaa) |
 |:---------------:|:---------------:|
-| ![애니메이션 적용](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/3b5e3411-613d-4300-a561-8efa02938f10) | ![인터렉티브](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/c70efef3-6cdd-49b8-9f82-6f0d11faaaaa) |
+| ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/efb92786-d4ab-4d66-8fd3-623cbff7e8cf) | ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/712c4894-d914-4c2d-9afe-fc3ec7ff5ad6) |
 
-| 임시저장 및 불러오기 기능 | 다운로드 기능 |
+| [임시저장 및 불러오기 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/e9471a76-0464-46f8-902a-1d7fe47c774b) | [다운로드 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/9d46a709-d57c-4eed-bd50-9e832dcd6912) |
 |:---------------:|:---------------:|
-| ![임시저장](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/e9471a76-0464-46f8-902a-1d7fe47c774b) | ![다운로드](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/9d46a709-d57c-4eed-bd50-9e832dcd6912) |
+| ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/94aa1e60-b02d-4bda-8a0b-0c18704521a5) | ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/3d5ceec0-647f-4e8e-a320-bba17ef57641)
+ |
 
 </div>
