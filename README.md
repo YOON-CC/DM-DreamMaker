@@ -1,6 +1,6 @@
 <div align="center" >
 
-# 🌈DREAMMAKER
+# 🌈DREAMMAKER🌈
 
 ![logo-removebg-preview (2)](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/d3037bce-521b-4d18-ba8f-483e93c98388)
 
@@ -15,7 +15,6 @@
 
   
 </br>
-![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/335a727a-93d0-4ac5-be07-494f6ce87662)
 
 `2023/08/12 ~ 2023/11/17`
 </div>
@@ -38,29 +37,76 @@
 </br>
 </br>
 
-
-
-
-
-
-## 🌈DreamMaker의 기능
+## 🌈DreamMaker에 대해서
 <div align="center" >
 
-| [사용자 도형 지정 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/9256df61-067c-468a-a97e-2df319d60a2d) | [사용자 도형 스타일 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/d376257a-0583-4f6b-8591-5233b32a5eef) |
-|:--------------:|:---------------:|
-| ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/388ad2d9-5255-4a61-b0ca-3b21ebf29419) | ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/c46f6dd8-97f4-468d-899c-9881cfd8dbc9)|
 
-| [사용자 API 적용 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/53741107-7831-4ab9-945c-ffbb7bd03945) | [정렬 및 그룹화 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/62767d16-1db5-4f8f-8504-d01355fa990a) |
-|:---------------:|:---------------:|
-| ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/9e80a019-ddbe-4861-a041-17e72d60f16d)| ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/604e94de-edbc-485a-99b2-37c006bb02fc) |
 
-| [애니메이션 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/3b5e3411-613d-4300-a561-8efa02938f10) | [인터렉티브 웹사이트 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/c70efef3-6cdd-49b8-9f82-6f0d11faaaaa) |
-|:---------------:|:---------------:|
-| ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/efb92786-d4ab-4d66-8fd3-623cbff7e8cf) | ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/712c4894-d914-4c2d-9afe-fc3ec7ff5ad6) |
+</div>
 
-| [임시저장 및 불러오기 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/e9471a76-0464-46f8-902a-1d7fe47c774b) | [다운로드 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/9d46a709-d57c-4eed-bd50-9e832dcd6912) |
-|:---------------:|:---------------:|
-| ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/94aa1e60-b02d-4bda-8a0b-0c18704521a5) | ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/3d5ceec0-647f-4e8e-a320-bba17ef57641)
- |
+</br>
+</br>
 
+## 🌈DreamMaker의 기능
+<div align="flex" >
+
+
+[사용자 도형 지정 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/9256df61-067c-468a-a97e-2df319d60a2d) </br>
+- 사용자가 직접 도형을 선택하며, canvas에 배치할 수 있습니다. 이후 웹페이지에 동작할 태그 역할을 합니다.
+
+[사용자 도형 스타일 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/d376257a-0583-4f6b-8591-5233b32a5eef) </br>
+- 사용자가 배치한 도형에 스타일을 적용할 수 있습니다. 색상, radius, shadow 폰트 스타일 등 다양한 스타일 기능이 있습니다.
+
+[사용자 API 적용 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/53741107-7831-4ab9-945c-ffbb7bd03945) </br>
+- get방식 post방식을 key값 입력을 통해 api 통신이 가능합니다. 프로그래밍에 특화된 DreamMaker는 사용자가 직접 개발에 적용가능한 api 설계를 도와줍니다.
+  
+[정렬 및 그룹화 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/62767d16-1db5-4f8f-8504-d01355fa990a) </br>
+- 이후 다운로드시, 웹페이지의 도형 객체의 위치를 동일하게 적용하기 위해, 정렬 기능이 구현되어 있으며, 그룹화 기능을 통해 빠른 웹 개발이 가능합니다.
+
+[애니메이션 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/3b5e3411-613d-4300-a561-8efa02938f10) </br>
+- 사용자경험을 고려해 지루한 정적 웹페이지가 아닌, 인터렉티브 웹사이트를 위한 다양한 애니메이션적용이 가능합니다.
+  
+[인터렉티브 웹사이트 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/c70efef3-6cdd-49b8-9f82-6f0d11faaaaa) </br>
+- 적용한 애니메이션은 다운로드시 스크롤 반응에 따라 적용이 되며, 인터렉티브 웹사이트 제작이 가능합니다.
+
+[임시저장 및 불러오기 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/e9471a76-0464-46f8-902a-1d7fe47c774b) </br>
+- 사용자가 작업한 내용을 임시저장이 가능하며, 이후 불로오기를 통해 다시 작업을 할 수 있습니다.
+
+[다운로드 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/9d46a709-d57c-4eed-bd50-9e832dcd6912) </br>
+- 다운로드시, html/css/js 코드로 변환이 되며, html 파일로 다운이 됩니다. 이후 ide를 통해 프로그래밍을 계속 할 수 있습니다.
+
+---
+기존의 프론트엔드 로그인 기능을 DreamMaker를 사용하면, 1분안에 구현이 가능합니다.</br>
+메인페이지의 인터렉트브 웹사이트 또한 5분안에 구현이 가능합니다.
+   
+</div>
+
+</br>
+</br>
+
+
+
+## 🌈사용기술, 개발자
+  
+<div align = "center">
+
+|조윤찬|
+|:---:|
+|<img width="230px" src="https://avatars.githubusercontent.com/u/87313979?v=4"/>|
+|[@YOON-CC](https://github.com/YOON-CC)|
+|Frontend Develop, UX/UI designer, Planner|
+  
+<img src="https://img.shields.io/badge/typescript-3178C6.svg?&style=for-the-badge&logo=typescript&logoColor=white">
+<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white">
+</div>
+
+</br>
+</br>
+
+## 🌈이후 계획
+<div align="center" >
+ 
+```bash
+지속적인 리펙토링을 통해 코드 분할을 통한 최적화를 진행할 예정입니다.
+```
 </div>
