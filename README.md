@@ -45,13 +45,13 @@
 ## 🌈DreamMaker의 기능
 <div align="center" >
 
-| 사용자 도형 지정 기능 | 사용자 도형 스타일 기능 |
+| [사용자 도형 지정 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/9256df61-067c-468a-a97e-2df319d60a2d) | [사용자 도형 스타일 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/d376257a-0583-4f6b-8591-5233b32a5eef) |
 |:--------------:|:---------------:|
-| ![사용자도형지정](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/9256df61-067c-468a-a97e-2df319d60a2d) | ![사용자 도형 스타일](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/d376257a-0583-4f6b-8591-5233b32a5eef) |
+| ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/388ad2d9-5255-4a61-b0ca-3b21ebf29419) | ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/c46f6dd8-97f4-468d-899c-9881cfd8dbc9)|
 
-| 사용자 API 적용 기능 | 정렬 및 그룹화 기능 |
+| [사용자 API 적용 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/53741107-7831-4ab9-945c-ffbb7bd03945) | [정렬 및 그룹화 기능](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/62767d16-1db5-4f8f-8504-d01355fa990a) |
 |:---------------:|:---------------:|
-| ![사용자 api 객체](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/53741107-7831-4ab9-945c-ffbb7bd03945) | ![그룹 및 정렬](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/62767d16-1db5-4f8f-8504-d01355fa990a)|
+| ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/9e80a019-ddbe-4861-a041-17e72d60f16d)| ![image](https://github.com/YOON-CC/DM-DreamMaker/assets/87313979/604e94de-edbc-485a-99b2-37c006bb02fc) |
 
 | 애니메이션 기능 | 인터렉티브 웹사이트 기능 |
 |:---------------:|:---------------:|
