@@ -15,7 +15,6 @@ export const addRectToCanvas = (canvas: fabric.Canvas) => {
             blur: 0, // 그림자의 흐릿함 정도
         }),
     });
-
     canvas.add(newRect);
 };
 

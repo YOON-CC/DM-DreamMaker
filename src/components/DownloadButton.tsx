@@ -114,7 +114,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, selectedHttpMet
                 const osc = (groupObject.shadow as unknown as Shadow).color
                 if (groupStrokeWidth === 0){
                   htmlContent += `<button type="submit" style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%; box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: ${obr}px; background-color: ${groupObject.fill};"></button>`;
-                }
+                } 
                 else{
                   htmlContent+=`
                   <div style="position: absolute; left: ${groupObjectLeft}%; top: ${groupObjectTop}%; width: ${groupObjectWidth}%; height: ${groupObjectHight}%;  box-shadow: ${osx}px ${osy}px ${osb}px ${osc}; border-radius: ${obr}px; background-color: ${groupStrokeColor}; ">
