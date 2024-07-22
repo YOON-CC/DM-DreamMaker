@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Editor from "./pages/editor";
-// import Splash from "./pages/Splash";
 import Splash from "@/pages/Splash";
 
 function App() {

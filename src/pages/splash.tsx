@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../styles/splash.css";
+import "@/styles/splash.css";
 
 export default function Splash() {
   const [typedText, setTypedText] = useState("");

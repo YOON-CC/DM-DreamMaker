@@ -6,7 +6,7 @@ import "../styles/editor.css";
 import SaveButton from "../components/savebutton";
 import LoadButton from "../components/loadbutton";
 import DownloadButton from "../components/DownloadButton";
-import Animation from "../components/Animation";
+import Animation from "@/utils/animation/Animation";
 import {
   addRectToCanvas,
   addCircleToCanvas,
