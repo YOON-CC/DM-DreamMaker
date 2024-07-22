@@ -1,6 +1,6 @@
 import React from 'react';
 import { fabric } from 'fabric';
-import '../style/animationbutton.css';
+import '../styles/animationbutton.css';
 
 
 interface LoadButtonProps {

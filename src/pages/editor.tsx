@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { fabric } from 'fabric';
 import { HexColorPicker, HexColorInput   } from 'react-colorful';
 
-import '../style/editor.css';
+import '../styles/editor.css';
 import SaveButton from '../components/savebutton';
 import LoadButton from '../components/loadbutton';
 import DownloadButton from '../components/DownloadButton';

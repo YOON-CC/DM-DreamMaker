@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import '../style/splash.css';
+import React, { useState, useEffect } from "react";
+import "../styles/splash.css";
 
 const Splash = () => {
-  const [typedText, setTypedText] = useState('');
+  const [typedText, setTypedText] = useState("");
 
   useEffect(() => {
-    const targetText = '나의 꿈을 DREAMMAKER에서 시작하다';
+    const targetText = "나의 꿈을 DREAMMAKER에서 시작하다";
     let index = 0;
 
     const typingInterval = setInterval(() => {
@@ -15,12 +15,12 @@ const Splash = () => {
       } else {
         clearInterval(typingInterval);
       }
-    }, 100); 
-  }, []); 
+    }, 100);
+  }, []);
 
   return (
-    <div className='splash_container'>
-      <div className='splash_container_text'>{typedText}_</div>
+    <div className="splash_container">
+      <div className="splash_container_text">{typedText}_</div>
     </div>
   );
 };
